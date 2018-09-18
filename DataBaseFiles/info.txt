@@ -1,0 +1,1 @@
+change database engine: ALTER TABLE Rent ENGINE = InnoDB; //so it can support relations
