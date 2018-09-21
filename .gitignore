@@ -1,6 +1,3 @@
 # User-specific stuff:
-.idea/Soen343Project.iml
-.idea/misc.xml
-.idea/modules.xml
-.idea/vcs.xml
-.idea/dictionaries
+.idea/
+*.iml
