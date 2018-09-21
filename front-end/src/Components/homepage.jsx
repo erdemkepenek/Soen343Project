@@ -23,21 +23,6 @@ import {
 } from 'semantic-ui-react'
 import DataTable from '../Components/Common/table/table'
 
-const menuStyle = {
-    border: 'none',
-    borderRadius: 0,
-    boxShadow: 'none',
-    /*marginBottom: '1em',*/
-    /*marginTop: '4em',*/
-    backgroundColor: '#e2670f',
-    transition: 'box-shadow 0.5s ease, padding 0.5s ease',
-}
-
-const fixedMenuStyle = {
-    backgroundColor: '#e2670f',
-    border: '1px solid #ddd',
-    boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)',
-}
 class HomepageLayout extends Component {
     constructor(props) {
         super(props);
