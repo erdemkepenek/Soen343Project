@@ -8,7 +8,7 @@
 }
 
 .App-header {
-  background-color: #222;
+  background-color: #e2670f;
   height: 150px;
   padding: 20px;
   color: white;
@@ -21,8 +21,47 @@
 .App-intro {
   font-size: large;
 }
+.main-container{
+  min-height: 100vh;
+  overflow: auto;
+}
 
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+.MainContainer{
+  width: 80%;
+  margin: auto;
+  min-height: 80vh;
+  margin-top: 10vh;
+}
+.footer{
+  background-color: #e2670f !important;
+  padding: 2% !important;
+}
+.footer > div > div > a{
+  color: #fff !important;
+}
+.menuStyle {
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background-color: #e2670f !important;
+  transition: box-shadow 0.5s ease, padding 0.5s ease !important;
+}
+
+.fixedMenuStyle{
+  background-color: #fff !important;
+  border: 1px solid #ddd !important;
+  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2) !important;
+}
+.menuStyle > div > a, .menuStyle > div > div > div, .menuStyle> div  > .item  {
+  color: #fff !important;
+}
+.fixedMenuStyle> div  >a , .fixedMenuStyle > div > div > div , .fixedMenuStyle> div  > .item {
+  color: #e2670f !important;
+}
+.tableHeader{
+  margin-top: 10%;
 }
