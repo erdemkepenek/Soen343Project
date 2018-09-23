@@ -15,6 +15,10 @@ app.get('/api/customers', (req, res) => {
   res.json(customers);
 });
 
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname+'/client/build/index.html'));
+});
+
 const port = process.env.PORT || 5000;
 
 app.listen(port, () => `Server running on port ${port}`);
