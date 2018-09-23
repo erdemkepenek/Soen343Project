@@ -1,6 +1,9 @@
 const express = require('express');
-
+const path = require('path');
 const app = express();
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, 'front-end/build')));
 
 app.get('/api/customers', (req, res) => {
   const customers = [
