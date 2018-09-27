@@ -1,4 +1,11 @@
 # User-specific stuff:
 .idea/
 *.iml
-node_modules
+.idea/Soen343Project.iml
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/dictionaries
+node_modules/
+front-end/node_modules/
+front-end/build/
