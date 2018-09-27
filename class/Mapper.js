@@ -1,18 +1,26 @@
-import 
+const TDG = require("./TDG.js");
 class Mapper {
-	
-	// var myTDG = new TDG();
-	constructor(){
-		console.log("from Mapper");
-		this.myTDG = new TDG();
-	}
+  constructor() {
+    console.log("from Mapper");
+    this.myTDG = new TDG();
+  }
 
-	login (email, pwd) {
-		myTDG.login
-	}
+  registerUser(email, firstName, lastName, address, phone, isAdmin, password) {
+    return this.myTDG.registerUser(
+      email,
+      firstName,
+      lastName,
+      address,
+      phone,
+      isAdmin,
+      password
+    );
+  }
 
-	viewUsers () {
+  login(email, pwd) {
+    return this.myTDG.login(email, pwd);
+  }
 
-	}
+  viewUsers() {}
 }
 module.exports = Mapper;
