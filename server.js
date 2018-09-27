@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
 const app = express();
+const TDG = require("./class/TDG.js");
+new TDG();
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'front-end/build')));
