@@ -5,7 +5,7 @@ import {connect} from 'react-redux'
 import {withRouter} from 'react-router-dom'
 import {Container,Dropdown, Icon, Menu, Visibility,} from 'semantic-ui-react'
 
-class HeaderComponent extends Component {
+class HeaderComponent extends Component { //
     constructor(props) {
         super(props);
         this.state = {
