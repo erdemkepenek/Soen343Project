@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react'
+import { Button, Form, Grid, Header, Image, Message, Segment,Icon} from 'semantic-ui-react'
 import HeaderComponent from './Common/header/header'
 import FooterComponent from './Common/footer/footer'
 import {Carousel} from "antd";
@@ -9,6 +9,7 @@ import Movie from "../images/movie.png";
 import Book from "../images/book.jpg";
 import {withRouter} from "react-router-dom";
 import connect from "react-redux/es/connect/connect";
+import { notification } from 'antd';
 
 class Signup extends Component {
     constructor(props) {
@@ -77,9 +78,35 @@ class Signup extends Component {
             }
 
         }else{
+            let data={
+                firstName: firstName,
+                lastName: lastName,
+                phone: phone,
+                address: address,
+                email: email,
+                password: password
+            }
+            console.log(data)
+            const token = data.token;
+            localStorage.setItem('jwtToken',token);
 
+            this.signupConfirmation();
+            this.props.history.push(`/login`);
         }
     }
+    signupConfirmation = () => {
+        notification.success({
+            message: 'Sucess',
+            description: 'Your account has been created!',
+            duration:6,
+        });
+    };
+/*<Alert
+message="Coming Soon"
+description="This functionality will be released soon."
+type="info"
+showIcon
+/>*/
     render() {
 
         return (<div className='main-container'>
@@ -105,7 +132,7 @@ class Signup extends Component {
                                     <Form.Input
                                         icon='user'
                                         iconPosition='left'
-                                        placeholder='Dyson'
+                                        placeholder='Dylon'
                                         label='Last Name:'
                                         value={this.state.lastName}
                                         error={this.state.errorLastName}
