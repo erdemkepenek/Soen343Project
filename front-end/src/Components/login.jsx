@@ -2,23 +2,63 @@ import React, {Component} from 'react'
 import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react'
 import HeaderComponent from './Common/header/header'
 import FooterComponent from './Common/footer/footer'
-import {Carousel} from "antd";
+import {Carousel, notification} from "antd";
 import Magazine from "../images/magazine.jpg";
 import Music from "../images/music.jpg";
 import Movie from "../images/movie.png";
 import Book from "../images/book.jpg";
 import {withRouter} from "react-router-dom";
 import connect from "react-redux/es/connect/connect";
-
+import Controller from '../class/controller'
+let controller = new Controller;
 class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            email:'',
+            password: '',
+            errorEmail:false,
+            errorPassword:false,
         }
     }
+    changeEmail=(e)=>{
+        this.setState({email:e.target.value})
+        this.setState({errorEmail: false})
+    }
+    changePassword=(e)=>{
+        this.setState({password:e.target.value})
+        this.setState({errorPassword: false})
+    }
+    login=()=>{
+        let {email, password } = this.state;
+        if(!email || !password){
+            if(!email){
+                this.setState({errorEmail: true})
+            }
+            if(!password){
+                this.setState({errorPassword: true})
+            }
+
+        }else{
+            let data={
+                email: email,
+                password: password
+            }
+            console.log(controller)
+            controller.hello(data);
+            this.loginConfirmation();
+            this.props.history.push(`/dashboard`);
+        }
+    }
+    loginConfirmation = () => {
+        notification.success({
+            message: 'Hello!',
+            description: 'Welcome to your Dashboard!',
+            duration: 6,
+        });
+    };
     signup=()=> this.props.history.push(`/signup`);
     render() {
-
         return (<div className='main-container'>
         <HeaderComponent/>
         <div className='MainContainer-ant-carousel'>
@@ -29,16 +69,26 @@ class Login extends Component {
                             <Segment stacked>
                                 <Header as='h2' className='login-Header' textAlign='center'>Log-in to your account
                                 </Header>
-                                <Form.Input fluid icon='user' iconPosition='left' placeholder='E-mail address' />
+                                <Form.Input
+                                    fluid
+                                    icon='user'
+                                    iconPosition='left'
+                                    placeholder='E-mail address'
+                                    value={this.state.email}
+                                    error={this.state.errorEmail}
+                                    onChange={this.changeEmail}/>
                                 <Form.Input
                                     fluid
                                     icon='lock'
                                     iconPosition='left'
                                     placeholder='Password'
                                     type='password'
+                                    value={this.state.password}
+                                    error={this.state.errorPassword}
+                                    onChange={this.changePassword}
                                 />
 
-                                <Button className='login-button' fluid size='large'>
+                                <Button className='login-button' fluid size='large' onClick={this.login}>
                                     Login
                                 </Button>
                             </Segment>

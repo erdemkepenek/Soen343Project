@@ -7,6 +7,7 @@ import { BrowserRouter , Route, Switch ,HashRouter,withRouter, Link} from 'react
 import HomePage from './Components/homepage.jsx'
 import Login from './Components/login'
 import Signup from './Components/signup'
+import Dashboard from './Components/dashboard'
 class App extends Component {
   render() {
     return (
@@ -15,6 +16,7 @@ class App extends Component {
         <Route exact path="/" component={HomePage} />
         <Route exact path="/login" component={Login} />
         <Route exact path="/signup" component={Signup} />
+        <Route exact path="/dashboard" component={Dashboard} />
           </Switch>
           </BrowserRouter>
     );

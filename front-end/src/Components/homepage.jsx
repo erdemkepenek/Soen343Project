@@ -19,9 +19,7 @@ class HomepageLayout extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            menuFixed: false,
             customers: '',
-            login: false,
         }
         this.openProfile = this.openProfile.bind(this);
     }
@@ -39,11 +37,6 @@ class HomepageLayout extends Component {
         );
     }
     login=()=> this.props.history.push(`/login`);
-
-    stickTopMenu = () => this.setState({ menuFixed: true })
-
-
-    unStickTopMenu = () => this.setState({ menuFixed: false })
     openProfile(data){
         console.log(data)
     }

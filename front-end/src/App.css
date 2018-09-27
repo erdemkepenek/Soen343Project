@@ -26,7 +26,7 @@ img.ui.image{
   height: 90vh !important;
   width: 100% !important;
   margin: auto;
-  opacity: 0.8 !important;
+  opacity: 0.9 !important;
   filter: blur(1px) !important;
 }
 .ant-carousel .slick-slide h3 {
@@ -62,7 +62,7 @@ img.ui.image{
 }
 .MainContainer-ant-carousel> .ui.button{
   position: absolute !important;
-  top: 55% !important;
+  top: 45% !important;
   left: 45% !important;
   z-index: 1000;
   color: #ffffff !important;
@@ -73,7 +73,7 @@ img.ui.image{
 }
 .MainContainer-ant-carousel-div{
   position: absolute !important;
-  top: 47% !important;
+  top: 37% !important;
   left: 35% !important;
   z-index: 1001;
   width: 30%!important;
@@ -88,7 +88,7 @@ img.ui.image{
 }
 .MainContainer-ant-carousel> .ui.button:hover{
   position: absolute !important;
-  top: 55% !important;
+  top: 45% !important;
   left: 45% !important;
   z-index: 1000;
   color: #ffffff !important;
