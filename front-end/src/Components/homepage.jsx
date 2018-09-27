@@ -3,37 +3,28 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import {connect} from 'react-redux'
 import { Route, Redirect } from 'react-router'
-import {
-    withRouter
-} from 'react-router-dom'
-import AdminReducer from "../reducers/adminReducer";
+import Book from '../images/book.jpg'
+import Music from '../images/music.jpg'
+import Magazine from '../images/magazine.jpg'
+import Movie from '../images/movie.png'
+import { Carousel } from 'antd';
+import HeaderComponent from './Common/header/header'
+import FooterComponent from './Common/footer/footer'
+import {withRouter} from 'react-router-dom'
 import _ from 'lodash'
-import {
-    Container,
-    Divider,
-    Dropdown,
-    Grid,
-    Header,
-    Icon,
-    Image,
-    List,
-    Menu,
-    Segment,
-    Visibility,
-} from 'semantic-ui-react'
+import {Button, Image} from 'semantic-ui-react'
 import DataTable from '../Components/Common/table/table'
 
 class HomepageLayout extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            menuFixed: false,
             customers: '',
         }
         this.openProfile = this.openProfile.bind(this);
     }
 
-    componentDidMount() {
+    componentDidMount() { //sds
         axios.get('/api/customers').then(
             function (response, err) {
                 console.log(response)
@@ -45,18 +36,13 @@ class HomepageLayout extends Component {
             }.bind(this)
         );
     }
-
-    stickTopMenu = () => this.setState({ menuFixed: true })
-
-
-    unStickTopMenu = () => this.setState({ menuFixed: false })
+    login=()=> this.props.history.push(`/login`);
     openProfile(data){
         console.log(data)
     }
 
     render() {
-        const { menuFixed} = this.state
-        if(this.props.users) {
+       if(this.props.users) {
             let columnItems =[
                 {value : 'User ID', render : 'User ID', type : 'number'},
                 {value : 'First Name', render : 'First Name', type : 'text'},
@@ -81,65 +67,30 @@ class HomepageLayout extends Component {
             })
             return (
                 <div className='main-container'>
+                    <HeaderComponent />
+                    <div className='MainContainer-ant-carousel'>
+                        <div className='MainContainer-ant-carousel-div'>Online Library</div>
+                        <Button content='Discover'
+                                size={'huge'}
+                                onClick={this.login}
+                        />
+                        <Carousel autoplay effect="fade">
+                            <Image src={Magazine} />
+                            <Image src={Music} />
+                            <Image src={Movie}/>
+                            <Image src={Book} />
+                        </Carousel>
 
-                    <Visibility
-                        onBottomPassed={this.stickTopMenu}
-                        onBottomVisible={this.unStickTopMenu}
-                        once={false}
-                    >
-                        <Menu
-                            borderless
-                            fixed={'top'}
-                            className={menuFixed ? 'fixedMenuStyle' : 'menuStyle'}
-                        >
-                            <Container text>
-                                <Menu.Item > <Icon name='film' /> <Icon name='book' />  <Icon name='newspaper outline' />  <Icon name='music' /> </Menu.Item>
-                                <Menu.Item as='a'><Icon name='home' />Home</Menu.Item>
-                                <Menu.Item as='a'><Icon name='globe' />E-Catalog</Menu.Item>
-                                <Menu.Item as='a'><Icon name='signup' />Sign Up</Menu.Item>
-
-                                <Menu.Menu position='right'>
-                                    <Dropdown text='User Name' icon='user circle 'pointing className='link item'>
-                                        <Dropdown.Menu>
-                                            <Dropdown.Item icon='cart' text='Cart' />
-                                            <Dropdown.Item icon='inbox' text='Rentals' />
-                                            <Dropdown.Item icon='cog' text='Settings' />
-                                            <Dropdown.Item icon='user' text='Users' />
-                                            <Dropdown.Item icon='log out' text='Logout' />
-                                        </Dropdown.Menu>
-                                    </Dropdown>
-                                </Menu.Menu>
-                            </Container>
-                        </Menu>
-                    </Visibility>
-                    <div className='MainContainer'>
-                        <div className='tableHeader'>
+                        {/*<div className='tableHeader'>
                             <DataTable
                             columnItems={columnItems}
                             data={tableItems}
                             itemsPerPage={10}
                             clickRow={this.openProfile}/>
-                        </div>
+                        </div>*/}
                     </div>
 
-                    <Segment inverted className='footer' vertical>
-                        <Container textAlign='center'>
-                            <List horizontal inverted divided link>
-                                <List.Item as='a' href='#'>
-                                    Github
-                                </List.Item>
-                                <List.Item as='a' href='#'>
-                                    Contact Us
-                                </List.Item>
-                                <List.Item as='a' href='#'>
-                                    Terms and Conditions
-                                </List.Item>
-                                <List.Item as='a' href='#'>
-                                    Privacy Policy
-                                </List.Item>
-                            </List>
-                        </Container>
-                    </Segment>
+                    <FooterComponent />
                 </div>
             )
         }else{

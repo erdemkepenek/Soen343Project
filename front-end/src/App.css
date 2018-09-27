@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css?family=Fahkwang');
 .App {
   text-align: center;
 }
@@ -8,12 +9,29 @@
 }
 
 .App-header {
-  background-color: #e2670f;
+  background-color: #12555B;
   height: 150px;
   padding: 20px;
   color: white;
 }
+.ant-carousel .slick-slide {
+  text-align: center;
+  height: 80vh;
+  line-height: 80vh;
+  background-color: #EDE3D9 !important;
+  overflow: hidden;
+}
 
+img.ui.image{
+  height: 90vh !important;
+  width: 100% !important;
+  margin: auto;
+  opacity: 0.9 !important;
+  filter: blur(1px) !important;
+}
+.ant-carousel .slick-slide h3 {
+  color: #fff;
+}
 .App-title {
   font-size: 1.5em;
 }
@@ -24,6 +42,7 @@
 .main-container{
   min-height: 100vh;
   overflow: auto;
+  background-color: #BBCFD1 !important;
 }
 
 @keyframes App-logo-spin {
@@ -33,11 +52,52 @@
 .MainContainer{
   width: 80%;
   margin: auto;
-  min-height: 80vh;
+  min-height: 85vh;
   margin-top: 10vh;
 }
+.MainContainer-ant-carousel{
+  width: 100%;
+  min-height: 90vh;
+  margin-top: 4.5vh
+}
+.MainContainer-ant-carousel> .ui.button{
+  position: absolute !important;
+  top: 45% !important;
+  left: 45% !important;
+  z-index: 1000;
+  color: #ffffff !important;
+  background-color: #12555B !important;
+  min-width: 10% !important;
+  opacity: 0.7;
+
+}
+.MainContainer-ant-carousel-div{
+  position: absolute !important;
+  top: 37% !important;
+  left: 35% !important;
+  z-index: 1001;
+  width: 30%!important;
+  color: #12555B !important;
+  font-size: 40px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  text-align: center;
+  font-family: 'Fahkwang', sans-serif;
+  opacity: 1;
+}
+.MainContainer-ant-carousel> .ui.button:hover{
+  position: absolute !important;
+  top: 45% !important;
+  left: 45% !important;
+  z-index: 1000;
+  color: #ffffff !important;
+  background-color: #12555B !important;
+  opacity: 0.85;
+}
+
 .footer{
-  background-color: #e2670f !important;
+  background-color: #12555B !important;
   padding: 2% !important;
 }
 .footer > div > div > a{
@@ -47,7 +107,7 @@
   border: none !important;
   border-radius: 0 !important;
   box-shadow: none !important;
-  background-color: #e2670f !important;
+  background-color: #12555B !important;
   transition: box-shadow 0.5s ease, padding 0.5s ease !important;
 }
 
@@ -60,8 +120,38 @@
   color: #fff !important;
 }
 .fixedMenuStyle> div  >a , .fixedMenuStyle > div > div > div , .fixedMenuStyle> div  > .item {
-  color: #e2670f !important;
+  color: #12555B !important;
 }
 .tableHeader{
   margin-top: 10%;
+}
+.login-form{
+  position: absolute !important;
+  top: 40% !important;
+  z-index: 1000;
+  width: 100% !important;
+}
+.signup-form{
+  position: absolute !important;
+  top: 30% !important;
+  z-index: 1000;
+  width: 100% !important;
+}
+.login-button{
+  background-color: #12555B !important;
+  color: #ffffff !important;
+}
+.login-button:hover{
+  background-color: #0c3c3f !important;
+}
+.login-Header{
+  color: #12555B !important;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  text-align: center;
+  font-family: 'Fahkwang', sans-serif;
+}
+.ui.form .field>label{
+  text-align: left;
 }
