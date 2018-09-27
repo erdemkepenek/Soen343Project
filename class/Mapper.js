@@ -1,8 +1,11 @@
 const TDG = require("./TDG.js");
+const IdentityMap = require("./IdentityMap.js");
 class Mapper {
   constructor() {
     console.log("from Mapper");
     this.myTDG = new TDG();
+    this.IDMap = new IdentityMap();
+    // this.users = new Array();
   }
 
   registerUser(email, firstName, lastName, address, phone, isAdmin, password) {
@@ -21,6 +24,15 @@ class Mapper {
     return this.myTDG.login(email, pwd);
   }
 
-  viewUsers() {}
+  viewUsers() {
+    if (this.IDMap.usersAlreadyFetched()) {
+      console.log("already fetch");
+      return this.IDMap.fetchUsers();
+    } else {
+      let users = this.myTDG.fetchUsers();
+      this.IDMap.addUsers(users);
+      return users;
+    }
+  }
 }
 module.exports = Mapper;
