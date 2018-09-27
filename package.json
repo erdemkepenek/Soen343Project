@@ -7,11 +7,11 @@
     "client-install": "cd client && npm install",
     "start": "node server.js",
     "server": "nodemon server.js",
+    "heroku-postbuild": "cd front-end && npm install && npm run build",
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
-  "author": "Brad Traversy",
-  "license": "MIT",
+  "author": "Team 8",
   "devDependencies": {
     "nodemon": "^1.14.6"
   },

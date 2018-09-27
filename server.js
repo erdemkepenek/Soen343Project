@@ -1,6 +1,11 @@
 const express = require('express');
-
+const path = require('path');
 const app = express();
+const TDG = require("./class/TDG.js");
+new TDG();
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, 'front-end/build')));
 
 app.get('/api/customers', (req, res) => {
   const customers = [
@@ -12,6 +17,10 @@ app.get('/api/customers', (req, res) => {
   res.json(customers);
 });
 
-const port = 5000;
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname+'/client/build/index.html'));
+});
+
+const port = process.env.PORT || 5000;
 
 app.listen(port, () => `Server running on port ${port}`);
