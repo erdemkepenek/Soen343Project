@@ -9,7 +9,7 @@
 }
 
 .App-header {
-  background-color: #12555B;
+  background-color: #e2670f;
   height: 150px;
   padding: 20px;
   color: white;
@@ -26,7 +26,7 @@ img.ui.image{
   height: 90vh !important;
   width: 100% !important;
   margin: auto;
-  opacity: 0.9 !important;
+  opacity: 1 !important;
   filter: blur(1px) !important;
 }
 .ant-carousel .slick-slide h3 {
@@ -42,7 +42,7 @@ img.ui.image{
 .main-container{
   min-height: 100vh;
   overflow: auto;
-  background-color: #cacacc !important;
+  background-color: rgba(255, 130, 83, 0.09) !important;
 }
 
 @keyframes App-logo-spin {
@@ -82,57 +82,57 @@ img.ui.image{
     line-height: normal;
     letter-spacing: normal;
     text-align: left;
-    color: #34495e;
+    color: #e2670f;
 }
 
 .MainContainer-upper-container-second-text {
     font-size: 1em;
     line-height: 1.25;
-    color: #34495e;
+    color: #e2670f;
 }
 .MainContainer-ant-carousel{
   width: 100%;
   min-height: 90vh;
   margin-top: 4.5vh
 }
-.MainContainer-ant-carousel> .ui.button{
-  position: absolute !important;
-  top: 45% !important;
-  left: 45% !important;
+.MainContainer-ant-carousel-div> .ui.button{
   z-index: 1000;
   color: #ffffff !important;
-  background-color: #12555B !important;
+  background-color: #e2670f !important;
   min-width: 10% !important;
-  opacity: 0.7;
+  opacity: 0.9 !important;
+    margin-top: 5%;
+    margin-bottom: 5%;
 
 }
 .MainContainer-ant-carousel-div{
   position: absolute !important;
-  top: 37% !important;
-  left: 35% !important;
+  top: 45% !important;
+  left: 40% !important;
   z-index: 1001;
-  width: 30%!important;
-  color: #12555B !important;
+  width: 20%!important;
+    min-height: 15vh;
+  color: #e2670f !important;
   font-size: 40px;
+    border-radius: 10px;
   font-weight: bold;
   font-stretch: normal;
   font-style: normal;
   text-align: center;
   font-family: 'Fahkwang', sans-serif;
-  opacity: 1;
+  opacity: 0.9;
+    background-color: #ffffff;
+
 }
-.MainContainer-ant-carousel> .ui.button:hover{
-  position: absolute !important;
-  top: 45% !important;
-  left: 45% !important;
+.MainContainer-ant-carousel-div> .ui.button:hover{
   z-index: 1000;
   color: #ffffff !important;
-  background-color: #12555B !important;
-  opacity: 0.85;
+  background-color: #e2670f !important;
+  opacity: 1 !important;
 }
 
 .footer{
-  background-color: #12555B !important;
+  background-color: #e2670f !important;
   padding: 2% !important;
 }
 .footer > div > div > a{
@@ -142,7 +142,7 @@ img.ui.image{
   border: none !important;
   border-radius: 0 !important;
   box-shadow: none !important;
-  background-color: #12555B !important;
+  background-color: #e2670f !important;
   transition: box-shadow 0.5s ease, padding 0.5s ease !important;
 }
 
@@ -155,7 +155,7 @@ img.ui.image{
   color: #fff !important;
 }
 .fixedMenuStyle> div  >a , .fixedMenuStyle > div > div > div , .fixedMenuStyle> div  > .item {
-  color: #12555B !important;
+  color: #e2670f !important;
 }
 .tableHeader{
   margin-top: 10%;
@@ -173,14 +173,14 @@ img.ui.image{
   width: 100% !important;
 }
 .login-button{
-  background-color: #12555B !important;
+  background-color: rgba(238, 105, 15, 0.95) !important;
   color: #ffffff !important;
 }
 .login-button:hover{
-  background-color: #0c3c3f !important;
+  background-color: #de660f !important;
 }
 .login-Header{
-  color: #12555B !important;
+  color: #e2670f !important;
   font-weight: bold;
   font-stretch: normal;
   font-style: normal;
@@ -195,19 +195,21 @@ img.ui.image{
     margin-top: 4% !important;
     width: 40% !important;
     cursor: pointer;
+    border: solid 1px #ffffff !important;
 }
 .iconsDashboard:hover{
     margin-top: 4% !important;
     border-radius: 5px;
-    background-color: rgba(18, 85, 91, 0.37);
+    background-color: rgba(255, 130, 83, 0.09);
+    border: solid 1px #e2670f !important;
 }
 .iconsDashboard > i{
     font-size: 150px !important;
-    color: #12555B !important;
+    color: #e2670f !important;
 }
 .iconsDashboard > p{
     font-size: 40px !important;
-    color: #12555B !important;
+    color: #e2670f !important;
 }
 .SettingsForm{
     width: 90% !important;
