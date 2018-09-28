@@ -25,7 +25,7 @@ class HomepageLayout extends Component {
     }
 
     componentDidMount() { //sds
-        axios.get('/api/customers').then(
+        axios.get('/api/client').then(
             function (response, err) {
                 console.log(response)
                 if(response.data){
