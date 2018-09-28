@@ -1,31 +1,64 @@
+const mysql = require('mysql');
+const express = require('express');
+var app = express();
+const bodyparser = require('body-parser');
+
 class TDG {
-	constructor(){}
-	login (email, password){
-		let data;
-		if (email=="hello" && password == "bye"){
-			data = {status:"success", FirstName:"Jess", LastName:"Gess", message:"Login successful"};
-		}
-		else{
-			data = {status:"unsuccesful", message:"invalid login"};
-		}
-		return data;
+	constructor(){
+		this.mysqlConnection = mysql.createConnection({
+			host: '192.185.72.57',
+			user: 'arti17co_soen343',
+			password: 'hy.$EA)MS4_.',
+			database: 'arti17co_soen343',
+			multipleStatements: true
+		});
+		this.returnData;
+		this.mysqlConnection.connect((err) => {
+			if (!err)
+				console.log('DB connection succeded.');
+			else
+				console.log('DB connection failed \n Error : ' + JSON.stringify(err, undefined, 2));
+		});
 	}
-	registerUser(email, firstName, lastName, address, phone, isAdmin, password){
-		let register = true
-		if(register){
-			return true;
-		}
-		else{
-			return false;
-		}
+	login (email, password,callback){
+		this.mysqlConnection.query("SELECT FirstName,LastName, Address, email, phone, type  FROM Client WHERE email ='"+email+"' AND password = '"+password+"';", (err, rows, fields) => {
+			if (!err)
+				 callback(JSON.stringify(rows));
+			else
+				console.log(err);
+		})
 	}
-	fetchUsers(){
-		let users = new Array();
-		let user1 = {email:"yet@host.com", firstName:"Bakery", lastName:"Jesser", address:"school", phone:"438-514-1234", isAdmin:true};
-		let user2 = {email:"hess@you.com", firstName:"Bread", lastName:"Nemko", address:"neighbor", phone:"1234-438-514", isAdmin:false};
-		users.push(user1);
-		users.push(user2);
-		return users;
+
+
+	registerUser(FirstName, LastName, Address, email, phone, type, password){
+
+		var sql = "INSERT INTO Client (FirstName, LastName, Address, email, phone, type, password) VALUES ('"+FirstName+"' , '"+LastName+"' ,'"+Address+"' '"+email+"' ,'"+phone+"' ,'"+type+"' ,'"+password+"' )";
+
+		this.mysqlConnection.query(sql, (err, rows, fields) => {
+			if (!err)
+			{
+				console.log('hello');
+				return true;
+			}
+				 
+			else{
+				console.log('failed');
+				return false;
+			}
+				
+		})
+	}
+
+
+	fetchUsers(callback){
+		this.mysqlConnection.query('SELECT * FROM Client', (err, rows, fields) => {
+			if (!err)
+				 callback(JSON.stringify(rows));
+			else
+				callback("{}")
+				console.log(err);
+		})
 	}
 }
 module.exports = TDG;
+

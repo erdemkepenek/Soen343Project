@@ -2,6 +2,16 @@ const express = require("express");
 const path = require("path");
 const app = express();
 Mapper = require("./class/Mapper.js");
+const TDG = require("./class/TDG.js");
+ let myTDG = new TDG();
+myTDG.fetchUsers(function(data){
+  console.log(data);
+});
+myTDG.login('Anthony@concordia.ca','9b71d224bd62f3785d96d46ad3ea3d73319bfbc2890caadae2dff72519673ca72323c3d99ba5c11d7c7acc6e14b8c5da0c4663475c2e5c3adef46f73bcdec043',function(data){
+  console.log(data);
+});
+myTDG.registerUser('Anthony','Iatropoulos','00019 Concordia University, Montreal, Quebec','Anthony@concordia.ca',2147483647,1,'9b71d224bd62f3785d96d46ad3ea3d73319bfbc2890caadae2dff72519673ca72323c3d99ba5c11d7c7acc6e14b8c5da0c4663475c2e5c3adef46f73bcdec043');
+
 myMapper = new Mapper();
 
 
