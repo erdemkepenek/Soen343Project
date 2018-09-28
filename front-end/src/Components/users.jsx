@@ -15,7 +15,13 @@ class Users extends Component {
         this.state = {
         }
     }
-
+    componentDidMount() {
+        axios.get('/client').then(
+            function (response, err) {
+                console.log(response)
+            }.bind(this)
+        );
+    }
     render() {
         if(!this.props.userProfile) {
             return (<Redirect to={'/'}/>);
