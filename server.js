@@ -2,12 +2,13 @@ const express = require("express");
 const path = require("path");
 const app = express();
 Mapper = require("./class/Mapper.js");
-// myMapper = new Mapper();
+myMapper = new Mapper();
 
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, "front-end/build")));
 // by default the index.js file is fetched
 app.use(require('./controllers'));
-// Serve static files from the React app
-// app.use(express.static(path.join(__dirname, "front-end/build")));
 
 
 app.get("/api/customers", (req, res) => {
