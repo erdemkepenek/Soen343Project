@@ -24,8 +24,8 @@ class HomepageLayout extends Component {
         this.openProfile = this.openProfile.bind(this);
     }
 
-    componentDidMount() { //sds
-        axios.get('/api/customers').then(
+    componentDidMount() {
+       /* axios.get('/api/customers').then(
             function (response, err) {
                 console.log(response)
                 if(response.data){
@@ -34,7 +34,9 @@ class HomepageLayout extends Component {
                     });
                 }
             }.bind(this)
-        );
+        );*/
+        /*    this.props.dispatch({type: 'addUserProfile', data: JSON.parse(localStorage.getItem('jwtToken'))});*/
+
     }
     login=()=> this.props.history.push(`/login`);
     openProfile(data){
@@ -42,8 +44,8 @@ class HomepageLayout extends Component {
     }
 
     render() {
-       if(this.props.users) {
-            let columnItems =[
+       if(this.props.userProfile) {
+            /*let columnItems =[
                 {value : 'User ID', render : 'User ID', type : 'number'},
                 {value : 'First Name', render : 'First Name', type : 'text'},
                 {value : 'Last Name', render : 'Last Name', type : 'text'},
@@ -64,43 +66,41 @@ class HomepageLayout extends Component {
                 ]
                 tableItems.push(arrData);
 
-            })
-            return (
-                <div className='main-container'>
-                    <HeaderComponent />
-                    <div className='MainContainer-ant-carousel'>
-                        <div className='MainContainer-ant-carousel-div'>Online Library</div>
-                        <Button content='Discover'
-                                size={'huge'}
-                                onClick={this.login}
-                        />
-                        <Carousel autoplay effect="fade">
-                            <Image src={Magazine} />
-                            <Image src={Music} />
-                            <Image src={Movie}/>
-                            <Image src={Book} />
-                        </Carousel>
+            })*/
+            return (<Redirect to={'/dashboard'}/>);
+        }else{
+            return(<div className='main-container'>
+                <HeaderComponent />
+                <div className='MainContainer-ant-carousel'>
+                    <div className='MainContainer-ant-carousel-div'>Online Library</div>
+                    <Button content='Discover'
+                            size={'huge'}
+                            onClick={this.login}
+                    />
+                    <Carousel autoplay effect="fade">
+                        <Image src={Magazine} />
+                        <Image src={Music} />
+                        <Image src={Movie}/>
+                        <Image src={Book} />
+                    </Carousel>
 
-                        {/*<div className='tableHeader'>
+                    {/*<div className='tableHeader'>
                             <DataTable
                             columnItems={columnItems}
                             data={tableItems}
                             itemsPerPage={10}
                             clickRow={this.openProfile}/>
                         </div>*/}
-                    </div>
-
-                    <FooterComponent />
                 </div>
-            )
-        }else{
-            return(<div>No Data</div>)
+
+                <FooterComponent />
+            </div>)
         }
     }
 }
 function mapStateToProps(state){
     return {
-        users: state.AdminReducer.userProfile
+        userProfile: state.AdminReducer.userProfile
     };
 
 }

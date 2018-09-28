@@ -299,111 +299,128 @@ class DataTable extends Component {
 
     render() {
         const {column, direction} = this.state;
-        if (dataItems.length === 0 && !this.state.filterText && !this.state.reset) {
-            dataItems = this.props.data;
-            this.handleOptions();
-            indexOfLastTodo = this.state.currentPage * this.props.itemsPerPage;
-            indexOfFirstTodo = indexOfLastTodo - this.props.itemsPerPage;
-            currentTodos = dataItems.slice(indexOfFirstTodo, indexOfLastTodo);
-        }
-        let filterColumnIndex = 0;
-        return (
-            <div className="table-Container">
-                <div className='table-Search-Container'>
-                    <div className='table-Search-Bar'>
-                        {this.state.search ?
-                            <Input type="text" placeholder="Type to Search..." value={this.state.filterText}
-                                   onChange={(e) => this.handleUserInput(e)}/> : ''}
+        if(this.props.data && this.props.columnItems) {
+            if (dataItems.length === 0 && !this.state.filterText && !this.state.reset) {
+                dataItems = this.props.data;
+                this.handleOptions();
+                indexOfLastTodo = this.state.currentPage * this.props.itemsPerPage;
+                indexOfFirstTodo = indexOfLastTodo - this.props.itemsPerPage;
+                currentTodos = dataItems.slice(indexOfFirstTodo, indexOfLastTodo);
+            }
+            let filterColumnIndex = 0;
+            return (
+                <div className="table-Container">
+                    <div className='table-Search-Container'>
+                        <div className='table-Search-Bar'>
+                            {this.state.search ?
+                                <Input type="text" placeholder="Type to Search..." value={this.state.filterText}
+                                       onChange={(e) => this.handleUserInput(e)}/> : ''}
+                        </div>
+
+                        <div className='table-Filter-Dropdown-Container'>
+                            <div className='table-filter-title'>Add Filters</div>
+                            <div className='table-filter-list'>
+                                {this.props.columnItems.map((columnData) => {
+                                    filterColumnIndex = filterColumnIndex + 1;
+                                    let dropDownValue = optionsValue[filterColumnIndex - 1]
+                                    return (
+                                        <Dropdown inline
+                                                  className='table-filter-list-item'
+                                                  placeholder={columnData.value}
+                                                  options={options[filterColumnIndex - 1]}
+                                                  onChange={(e, {value}) => this.handleChangeDropdown(e, {value}, columnData)}
+                                                  value={!this.state.reset ? '' : dropDownValue}/>
+                                    );
+                                })}
+                                <Button position='right'
+                                        content='Reset'
+                                        basic
+                                        onClick={this.resetFilterOptions}
+                                />
+                            </div>
+                        </div>
+
                     </div>
 
-                    <div className='table-Filter-Dropdown-Container'>
-                        <div className='table-filter-title'>Add Filters </div>
-                        <div className='table-filter-list'>
-                            {this.props.columnItems.map((columnData) => {
-                                filterColumnIndex = filterColumnIndex + 1;
-                                let dropDownValue = optionsValue[filterColumnIndex - 1]
+                    <Table sortable celled fixed selectable singleLine className="common-Table">
+                        <Table.Header>
+                            <Table.Row>
+                                {this.props.columnItems.map((columnData, key) => {
+                                    return (
+                                        <Table.HeaderCell
+                                            key={key}
+                                            sorted={column === columnData ? direction : null}
+                                            onClick={this.handleSort(columnData)}>
+                                            {columnData.render}
+                                        </Table.HeaderCell>
+                                    );
+                                })}
+                            </Table.Row>
+                        </Table.Header>
+                        <Table.Body>
+                            {currentTodos.map((rowData, key) => {
+                                let index = 0;
                                 return (
-                                    <Dropdown inline
-                                              className='table-filter-list-item'
-                                    placeholder={columnData.value}
-                                    options={options[filterColumnIndex - 1]}
-                                    onChange={(e, {value}) => this.handleChangeDropdown(e, {value}, columnData)}
-                                    value={!this.state.reset ? '' : dropDownValue}/>
+                                    <Table.Row key={key} onClick={() => this.clickRow(rowData[rowData.length - 1])}>
+                                        {rowData.map((eachColumn, key) => {
+                                            if (rowData.length - 1 !== index) {
+                                                index = index + 1;
+                                                return (<Table.Cell key={key}>
+                                                        {eachColumn.render}
+                                                    </Table.Cell>
+                                                );
+                                            }
+                                        })}
+                                    </Table.Row>
                                 );
                             })}
-                            <Button position='right'
-                                     content='Reset'
-                                     basic
-                                     onClick={this.resetFilterOptions}
-                            />
-                        </div>
-                    </div>
+
+                        </Table.Body>
+                        {this.props.footerContent ?
+                            <Table.Footer>
+                                <Table.Row>
+                                    <Table.HeaderCell/>
+                                    <Table.HeaderCell/>
+                                    <Table.HeaderCell/>
+                                    <Table.HeaderCell/>
+                                    <Table.HeaderCell/>
+                                    <Table.HeaderCell
+                                        className="centralize-tables">{this.props.footerContent}
+                                    </Table.HeaderCell>
+                                </Table.Row>
+                            </Table.Footer>
+                            : ''}
+                    </Table>
+
+                    <Pagination totalPages={Math.ceil(dataItems.length / this.props.itemsPerPage)}
+                                onPageChange={(e, data) => this.pageChange(e, data)}
+                                ellipsisItem={{content: <Icon name='ellipsis horizontal'/>, icon: true}}
+                                firstItem={{content: <Icon name='angle double left'/>, icon: true}}
+                                lastItem={{content: <Icon name='angle double right'/>, icon: true}}
+                                prevItem={{content: <Icon name='angle left'/>, icon: true}}
+                                nextItem={{content: <Icon name='angle right'/>, icon: true}}
+                                activePage={this.state.currentPage}
+                                className="common-Pagination"
+                    />
 
                 </div>
-
-                <Table sortable celled fixed selectable singleLine className="common-Table">
-                    <Table.Header>
-                        <Table.Row>
-                            {this.props.columnItems.map((columnData, key) => {
-                                return (
-                                    <Table.HeaderCell
-                                        key={key}
-                                        sorted={column === columnData ? direction : null}
-                                        onClick={this.handleSort(columnData)}>
-                                        {columnData.render}
-                                    </Table.HeaderCell>
-                                );
-                            })}
-                        </Table.Row>
-                    </Table.Header>
-                    <Table.Body>
-                        {currentTodos.map((rowData, key) => {
-                            let index = 0;
-                            return (
-                                <Table.Row key={key} onClick={() => this.clickRow(rowData[rowData.length - 1])}>
-                                    {rowData.map((eachColumn, key) => {
-                                        if (rowData.length - 1 !== index) {
-                                            index = index + 1;
-                                            return (<Table.Cell key={key}>
-                                                    {eachColumn.render}
-                                                </Table.Cell>
-                                            );
-                                        }
-                                    })}
-                                </Table.Row>
-                            );
-                        })}
-
-                    </Table.Body>
-                    {this.props.footerContent ?
-                        <Table.Footer>
-                            <Table.Row>
-                                <Table.HeaderCell/>
-                                <Table.HeaderCell/>
-                                <Table.HeaderCell/>
-                                <Table.HeaderCell/>
-                                <Table.HeaderCell/>
-                                <Table.HeaderCell
-                                    className="centralize-tables">{this.props.footerContent}
-                                </Table.HeaderCell>
-                            </Table.Row>
-                        </Table.Footer>
-                        : ''}
-                </Table>
-
-                <Pagination totalPages={Math.ceil(dataItems.length / this.props.itemsPerPage)}
-                            onPageChange={(e, data) => this.pageChange(e, data)}
-                            ellipsisItem={{ content: <Icon name='ellipsis horizontal' />, icon: true }}
-                            firstItem={{ content: <Icon name='angle double left' />, icon: true }}
-                            lastItem={{ content: <Icon name='angle double right' />, icon: true }}
-                            prevItem={{ content: <Icon name='angle left' />, icon: true }}
-                            nextItem={{ content: <Icon name='angle right' />, icon: true }}
-                            activePage={this.state.currentPage}
-                            className="common-Pagination"
-                />
-
-            </div>
-        );
+            );
+        }else{
+            return(
+                <div className="table-Container">
+                    <div className='table-Search-Container'>
+                        <div className='table-Search-Bar'>
+                                <Input type="text" placeholder="Type to Search..."/>
+                        </div>
+                    </div>
+                    <div className="common-Table" >
+                        <div className='table-Error-Message'>
+                        <span>{this.props.errorMessage}</span>
+                        </div>
+                    </div>
+                </div>
+            )
+        }
     }
 }
 
