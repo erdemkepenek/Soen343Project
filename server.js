@@ -3,6 +3,14 @@ const path = require("path");
 const app = express();
 const bodyParser = require('body-parser');
 Mapper = require("./class/Mapper.js");
+const TDG = require("./class/TDG.js");
+ let myTDG = new TDG();
+myTDG.login('Anthony@concordia.ca','hello',function(data){
+  console.log(data);
+});
+myTDG.registerUser('Eglenbro','Cecaj','00040 Concordia University, Montreal, Quebec','eglen@concordia.ca',2147433649,'1','eglencecaj');
+
+myTDG.mysqlConnection.end();
 myMapper = new Mapper();
 
 
