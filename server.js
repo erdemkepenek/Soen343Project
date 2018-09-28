@@ -1,10 +1,50 @@
 const express = require("express");
 const path = require("path");
 const app = express();
+const bodyParser = require("body-parser");
+const encrypt = require("js-sha512"); 
+const mysql = require("mysql");
+
+var mysqldb = mysql.createConnection({
+  host: "192.185.72.57",
+  user: "arti17co_soen343",
+  password: "hy.$EA)MS4_.",
+  database: "arti17co_soen343"
+});
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "front-end/build")));
 
+app.use(bodyParser.json());
+
+app.post("/auth/register", (req,res) => {
+  const email = req.body.email;
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
+  const address = req.body.address
+  const phone = req.body.phone;
+  const isAdmin = req.body.isAdmin;
+  const password = encrypt.sha512(req.body.password);
+  mysqldb.connect(function() {
+    mysqldb.query("SELECT * FROM Client WHERE email ='"+email+"' AND password = '"+password+"';")
+  });
+});
+
+app.post("/auth/login", (req,res) => {
+  const email = req.body.email;
+  const password = encrypt.sha512(req.body.password);
+  
+  mysqldb.connect(function(err) {
+    mysqldb.query("SELECT * FROM Client WHERE email ='"+email+"' AND password = '"+password+"';", function(err, result) {
+      if (result.length == 0){
+        res.send("login failed")
+      }
+      else {
+        res.send(result)
+      }
+    });
+  })
+});
 app.get("/api/customers", (req, res) => {
   const customers = [
     {
