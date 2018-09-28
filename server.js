@@ -26,7 +26,8 @@ app.post("/auth/register", (req,res) => {
   const isAdmin = req.body.isAdmin;
   const password = encrypt.sha512(req.body.password);
   mysqldb.connect(function() {
-    mysqldb.query("SELECT * FROM Client WHERE email ='"+email+"' AND password = '"+password+"';")
+    mysqldb.query("INSERT INTO Client (FirstName, LastName, Address, email, phone, type, password) VALUES ('"+firstName+"', '"+lastName+"', '"+address+"', '"+email+"', '"+phone+"', '"+isAdmin+"', '"+password+"');");
+    res.send("Registration Successful");
   });
 });
 
