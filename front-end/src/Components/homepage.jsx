@@ -72,11 +72,13 @@ class HomepageLayout extends Component {
             return(<div className='main-container'>
                 <HeaderComponent />
                 <div className='MainContainer-ant-carousel'>
-                    <div className='MainContainer-ant-carousel-div'>Online Library</div>
-                    <Button content='Discover'
-                            size={'huge'}
-                            onClick={this.login}
-                    />
+                    <div className='MainContainer-ant-carousel-div'>
+                        <div>Online Library</div>
+                        <Button content='Discover'
+                                size={'huge'}
+                                onClick={this.login}
+                        />
+                    </div>
                     <Carousel autoplay effect="fade">
                         <Image src={Magazine} />
                         <Image src={Music} />

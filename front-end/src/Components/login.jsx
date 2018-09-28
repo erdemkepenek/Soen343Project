@@ -39,7 +39,7 @@ class Login extends Component {
             if(!password){
                 this.setState({errorPassword: true})
             }
-
+            this.loginError();
         }else{
             let data={
                 email: email,
@@ -49,7 +49,6 @@ class Login extends Component {
             controller.hello(data);
             localStorage.setItem('jwtToken',JSON.stringify(data.email));
             this.props.dispatch({type: 'addUserProfile', data: JSON.parse(localStorage.getItem('jwtToken'))});
-           /* localStorage.removeItem("jwtToken");*/
             this.loginConfirmation();
             this.props.history.push(`/dashboard`);
         }
@@ -59,6 +58,13 @@ class Login extends Component {
             message: 'Hello!',
             description: 'Welcome to your Dashboard!',
             duration: 6,
+        });
+    };
+    loginError = () => {
+        notification.error({
+            message: 'Error',
+            description: 'You information is Missing!',
+            duration:6,
         });
     };
     signup=()=> this.props.history.push(`/signup`);
