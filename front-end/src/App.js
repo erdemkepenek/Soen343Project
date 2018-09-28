@@ -8,6 +8,13 @@ import HomePage from './Components/homepage.jsx'
 import Login from './Components/login'
 import Signup from './Components/signup'
 import Dashboard from './Components/dashboard'
+import Rentals from './Components/rentals'
+import Cart from './Components/cart'
+import Catalog from './Components/catalog';
+import Settings from './Components/settings'
+import Adminpanel from './Components/adminPanel'
+import Users from './Components/users'
+import AddUser from './Components/addUser'
 class App extends Component {
   render() {
     return (
@@ -17,6 +24,13 @@ class App extends Component {
         <Route exact path="/login" component={Login} />
         <Route exact path="/signup" component={Signup} />
         <Route exact path="/dashboard" component={Dashboard} />
+        <Route exact path="/cart" component={Cart} />
+        <Route exact path="/rentals" component={Rentals} />
+        <Route exact path="/ecatalog" component={Catalog} />
+        <Route exact path="/settings" component={Settings} />
+        <Route exact path="/users" component={Users} />
+        <Route exact path="/adduser" component={AddUser} />
+        <Route exact path="/adminpanel" component={Adminpanel} />
           </Switch>
           </BrowserRouter>
     );

@@ -70,3 +70,20 @@
     font-weight: 400;
     font-size: 0.9em;
 }
+.table-Error-Message {
+    border: 1px solid #95a5a6;
+    background: rgba(189, 195, 199, 0.15);
+    height: 60vh;
+    font-size: 1.4em;
+    margin: 3% 0 3% 3%;
+    text-align: center;
+    display: flex;
+    width: 94%;
+    border-radius: 2px;
+}
+.table-Error-Message > span {
+    margin: auto;
+    font-size: 0.7em;
+    font-weight: bold;
+    color: #34495e;
+}

@@ -11,7 +11,9 @@ const reducers = combineReducers({
     AdminReducer,
 });
 const store = createStore(reducers);
-
+if(localStorage.jwtToken) {
+    store.dispatch({type: 'addUserProfile', data: JSON.parse(localStorage.getItem('jwtToken'))})
+}
 ReactDOM.render(
     <Provider store={store}>
         <App />

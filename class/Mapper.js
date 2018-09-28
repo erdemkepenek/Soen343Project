@@ -19,19 +19,16 @@ class Mapper {
       password
     );
   }
-
   login(email, pwd) {
     return this.myTDG.login(email, pwd);
   }
-
   viewUsers() {
     if (this.IDMap.usersAlreadyFetched()) {
-      console.log("already fetch");
-      return this.IDMap.fetchUsers();
+		return this.IDMap.fetchUsers();
     } else {
-      let users = this.myTDG.fetchUsers();
-      this.IDMap.addUsers(users);
-      return users;
+		let users = this.myTDG.fetchUsers();
+		this.IDMap.addUsers(users);
+		return users;
     }
   }
 }
