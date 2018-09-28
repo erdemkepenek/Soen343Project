@@ -1,14 +1,18 @@
 const express = require("express");
 const path = require("path");
 const app = express();
+const bodyParser = require('body-parser');
 Mapper = require("./class/Mapper.js");
 myMapper = new Mapper();
 
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "front-end/build")));
-// by default the index.js file is fetched
+// by default the index.js file is fetche
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(require('./controllers'));
+
 
 
 app.get("/api/customers", (req, res) => {

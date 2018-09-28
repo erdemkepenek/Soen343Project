@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-router.get("/getusers",function(req,res){
+router.post("/getusers",function(req,res){
 	res.setHeader('Content-Type', 'application/json');
-	data = myMapper.login("hello","bye");
+	data = myMapper.viewUsers();
 	res.send(JSON.stringify(data));
 })
 
