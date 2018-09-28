@@ -10,6 +10,7 @@ import Book from "../images/book.jpg";
 import {withRouter} from "react-router-dom";
 import connect from "react-redux/es/connect/connect";
 import { notification } from 'antd';
+import {Redirect} from "react-router";
 
 class Signup extends Component {
     constructor(props) {
@@ -76,7 +77,7 @@ class Signup extends Component {
             if(!password){
                 this.setState({errorPassword: true})
             }
-
+            this.signupError();
         }else{
             let data={
                 firstName: firstName,
@@ -84,11 +85,10 @@ class Signup extends Component {
                 phone: phone,
                 address: address,
                 email: email,
-                password: password
+                password: password,
+                type: false
             }
             console.log(data)
-            const token = data.token;
-            localStorage.setItem('jwtToken',token);
 
             this.signupConfirmation();
             this.props.history.push(`/login`);
@@ -101,106 +101,110 @@ class Signup extends Component {
             duration:6,
         });
     };
-/*<Alert
-message="Coming Soon"
-description="This functionality will be released soon."
-type="info"
-showIcon
-/>*/
+    signupError = () => {
+        notification.error({
+            message: 'Error',
+            description: 'You information is Missing!',
+            duration:6,
+        });
+    };
     render() {
-
-        return (<div className='main-container'>
-            <HeaderComponent/>
-            <div className='MainContainer-ant-carousel'>
-                <div className='signup-form'>
-                    <Grid  textAlign='center' style={{height: '100%'}} >
-                        <Grid.Column style={{maxWidth: 450, opacity: 0.9}}>
-                            <Form size='large'>
-                                <Segment stacked>
-                                    <Header as='h2' className='login-Header' textAlign='center'>Create an account
-                                    </Header>
-                                    <Form.Group width='equal'>
-                                    <Form.Input
-                                        icon='user'
-                                        iconPosition='left'
-                                        placeholder='John'
-                                        label='First Name:'
-                                        value={this.state.firstName}
-                                        error={this.state.errorFirstName}
-                                        onChange={this.changeFirstName}
-                                        width={8}/>
-                                    <Form.Input
-                                        icon='user'
-                                        iconPosition='left'
-                                        placeholder='Dylon'
-                                        label='Last Name:'
-                                        value={this.state.lastName}
-                                        error={this.state.errorLastName}
-                                        onChange={this.changeLastName}
-                                        width={8} />
-                                    </Form.Group>
-                                    <Form.Input
-                                        fluid icon='phone'
-                                        iconPosition='left'
-                                        placeholder='Ex:514 888 111 32'
-                                        type='number'
-                                        value={this.state.phone}
-                                        error={this.state.errorPhone}
-                                        onChange={this.changePhone}
-                                        label='Phone:'/>
-                                    <Form.Input
-                                        fluid icon='address book'
-                                        iconPosition='left'
-                                        placeholder='Ex: 1445 Rue Guy Montreal QC, Canada'
-                                        value={this.state.address}
-                                        error={this.state.errorAddress}
-                                        onChange={this.changeAddress}
-                                        label='Address:'/>
-                                    <Form.Input
-                                        fluid icon='mail'
-                                        iconPosition='left'
-                                        placeholder='john@concordia.ca'
-                                        value={this.state.email}
-                                        error={this.state.errorEmail}
-                                        onChange={this.changeEmail}
-                                        label='Email:'/>
-                                    <Form.Input
-                                        fluid
-                                        icon='lock'
-                                        iconPosition='left'
-                                        label='Password'
-                                        placeholder='Password'
-                                        value={this.state.password}
-                                        error={this.state.errorPassword}
-                                        onChange={this.changePassword}
-                                        type='password'
-                                    />
-                                    <Button className='login-button' fluid size='large' onClick={this.signUp}>
-                                        Sign Up
-                                    </Button>
-                                </Segment>
-                            </Form>
-                            <Message>
-                                You already have an account? <a onClick={this.login}>Login</a>
-                            </Message>
-                        </Grid.Column>
-                    </Grid>
+        if(this.props.userProfile) {
+            return (<Redirect to={'/dashboard'}/>);
+        }else {
+            return (<div className='main-container'>
+                <HeaderComponent/>
+                <div className='MainContainer-ant-carousel'>
+                    <div className='signup-form'>
+                        <Grid textAlign='center' style={{height: '100%'}}>
+                            <Grid.Column style={{maxWidth: 450, opacity: 0.9}}>
+                                <Form size='large'>
+                                    <Segment stacked>
+                                        <Header as='h2' className='login-Header' textAlign='center'>Create an account
+                                        </Header>
+                                        <Form.Group width='equal'>
+                                            <Form.Input
+                                                icon='user'
+                                                iconPosition='left'
+                                                placeholder='John'
+                                                label='First Name:'
+                                                value={this.state.firstName}
+                                                error={this.state.errorFirstName}
+                                                onChange={this.changeFirstName}
+                                                width={8}/>
+                                            <Form.Input
+                                                icon='user'
+                                                iconPosition='left'
+                                                placeholder='Dylon'
+                                                label='Last Name:'
+                                                value={this.state.lastName}
+                                                error={this.state.errorLastName}
+                                                onChange={this.changeLastName}
+                                                width={8}/>
+                                        </Form.Group>
+                                        <Form.Input
+                                            fluid icon='phone'
+                                            iconPosition='left'
+                                            placeholder='Ex:514 888 111 32'
+                                            type='number'
+                                            value={this.state.phone}
+                                            error={this.state.errorPhone}
+                                            onChange={this.changePhone}
+                                            label='Phone:'/>
+                                        <Form.Input
+                                            fluid icon='address book'
+                                            iconPosition='left'
+                                            placeholder='Ex: 1445 Rue Guy Montreal QC, Canada'
+                                            value={this.state.address}
+                                            error={this.state.errorAddress}
+                                            onChange={this.changeAddress}
+                                            label='Address:'/>
+                                        <Form.Input
+                                            fluid icon='mail'
+                                            iconPosition='left'
+                                            placeholder='john@concordia.ca'
+                                            value={this.state.email}
+                                            error={this.state.errorEmail}
+                                            onChange={this.changeEmail}
+                                            label='Email:'/>
+                                        <Form.Input
+                                            fluid
+                                            icon='lock'
+                                            iconPosition='left'
+                                            label='Password'
+                                            placeholder='Password'
+                                            value={this.state.password}
+                                            error={this.state.errorPassword}
+                                            onChange={this.changePassword}
+                                            type='password'
+                                        />
+                                        <Button className='login-button' fluid size='large' onClick={this.signUp}>
+                                            Sign Up
+                                        </Button>
+                                    </Segment>
+                                </Form>
+                                <Message>
+                                    You already have an account? <a onClick={this.login}>Login</a>
+                                </Message>
+                            </Grid.Column>
+                        </Grid>
+                    </div>
+                    <Carousel autoplay effect="fade">
+                        <Image src={Magazine}/>
+                        <Image src={Music}/>
+                        <Image src={Movie}/>
+                        <Image src={Book}/>
+                    </Carousel>
                 </div>
-                <Carousel autoplay effect="fade">
-                    <Image src={Magazine}/>
-                    <Image src={Music}/>
-                    <Image src={Movie}/>
-                    <Image src={Book}/>
-                </Carousel>
-            </div>
-            <FooterComponent/>
-        </div>)
+                <FooterComponent/>
+            </div>)
+        }
     }
 }
 
 function mapStateToProps(state){
     return {
-        users: state.AdminReducer.userProfile
+        userProfile: state.AdminReducer.userProfile
     };
 
 }

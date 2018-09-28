@@ -10,6 +10,7 @@ import Book from "../images/book.jpg";
 import {withRouter} from "react-router-dom";
 import connect from "react-redux/es/connect/connect";
 import Controller from '../class/controller'
+import {Redirect} from "react-router";
 let controller = new Controller;
 class Login extends Component {
     constructor(props) {
@@ -46,6 +47,9 @@ class Login extends Component {
             }
             console.log(controller)
             controller.hello(data);
+            localStorage.setItem('jwtToken',JSON.stringify(data.email));
+            this.props.dispatch({type: 'addUserProfile', data: JSON.parse(localStorage.getItem('jwtToken'))});
+           /* localStorage.removeItem("jwtToken");*/
             this.loginConfirmation();
             this.props.history.push(`/dashboard`);
         }
@@ -59,61 +63,66 @@ class Login extends Component {
     };
     signup=()=> this.props.history.push(`/signup`);
     render() {
-        return (<div className='main-container'>
-        <HeaderComponent/>
-        <div className='MainContainer-ant-carousel'>
-            <div className='login-form'>
-                <Grid textAlign='center' style={{ height: '100%' }} verticalAlign='middle'>
-                    <Grid.Column style={{ maxWidth: 450 , opacity: 0.9}}>
-                        <Form size='large'>
-                            <Segment stacked>
-                                <Header as='h2' className='login-Header' textAlign='center'>Log-in to your account
-                                </Header>
-                                <Form.Input
-                                    fluid
-                                    icon='user'
-                                    iconPosition='left'
-                                    placeholder='E-mail address'
-                                    value={this.state.email}
-                                    error={this.state.errorEmail}
-                                    onChange={this.changeEmail}/>
-                                <Form.Input
-                                    fluid
-                                    icon='lock'
-                                    iconPosition='left'
-                                    placeholder='Password'
-                                    type='password'
-                                    value={this.state.password}
-                                    error={this.state.errorPassword}
-                                    onChange={this.changePassword}
-                                />
+        if(this.props.userProfile) {
+            return (<Redirect to={'/dashboard'}/>);
+        }else {
+            return (<div className='main-container'>
+                <HeaderComponent/>
+                <div className='MainContainer-ant-carousel'>
+                    <div className='login-form'>
+                        <Grid textAlign='center' style={{height: '100%'}} verticalAlign='middle'>
+                            <Grid.Column style={{maxWidth: 450, opacity: 0.9}}>
+                                <Form size='large'>
+                                    <Segment stacked>
+                                        <Header as='h2' className='login-Header' textAlign='center'>Log-in to your
+                                            account
+                                        </Header>
+                                        <Form.Input
+                                            fluid
+                                            icon='user'
+                                            iconPosition='left'
+                                            placeholder='E-mail address'
+                                            value={this.state.email}
+                                            error={this.state.errorEmail}
+                                            onChange={this.changeEmail}/>
+                                        <Form.Input
+                                            fluid
+                                            icon='lock'
+                                            iconPosition='left'
+                                            placeholder='Password'
+                                            type='password'
+                                            value={this.state.password}
+                                            error={this.state.errorPassword}
+                                            onChange={this.changePassword}
+                                        />
 
-                                <Button className='login-button' fluid size='large' onClick={this.login}>
-                                    Login
-                                </Button>
-                            </Segment>
-                        </Form>
-                        <Message>
-                            New to us? <a onClick={this.signup}>Sign Up</a>
-                        </Message>
-                    </Grid.Column>
-                </Grid>
-            </div>
-            <Carousel autoplay effect="fade">
-                <Image src={Magazine} />
-                <Image src={Music} />
-                <Image src={Movie}/>
-                <Image src={Book} />
-            </Carousel>
-        </div>
-        <FooterComponent/>
-    </div>)
+                                        <Button className='login-button' fluid size='large' onClick={this.login}>
+                                            Login
+                                        </Button>
+                                    </Segment>
+                                </Form>
+                                <Message>
+                                    New to us? <a onClick={this.signup}>Sign Up</a>
+                                </Message>
+                            </Grid.Column>
+                        </Grid>
+                    </div>
+                    <Carousel autoplay effect="fade">
+                        <Image src={Magazine}/>
+                        <Image src={Music}/>
+                        <Image src={Movie}/>
+                        <Image src={Book}/>
+                    </Carousel>
+                </div>
+                <FooterComponent/>
+            </div>)
+        }
     }
 }
 
 function mapStateToProps(state){
     return {
-        users: state.AdminReducer.userProfile
+        userProfile: state.AdminReducer.userProfile
     };
 
 }

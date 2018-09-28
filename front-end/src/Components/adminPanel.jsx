@@ -8,16 +8,14 @@ import {withRouter} from 'react-router-dom'
 import {Button, Form, Grid, Icon, Image, Message, Segment} from 'semantic-ui-react'
 import {Redirect} from "react-router";
 
-class Dashboard extends Component {
+class AdminPanel extends Component {
     constructor(props) {
         super(props);
         this.state = {
         }
     }
-    cart=()=>this.props.history.push(`/cart`);
-    settings=()=>this.props.history.push(`/settings`);
-    catalog=()=>this.props.history.push(`/ecatalog`);
-    rentals=()=>this.props.history.push(`/rentals`);
+    users=()=>this.props.history.push(`/users`);
+    addUser=()=>this.props.history.push(`/adduser`);
     render() {
         if(!this.props.userProfile) {
             return (<Redirect to={'/'}/>);
@@ -29,7 +27,7 @@ class Dashboard extends Component {
                         <div className="MainContainer-upper-container">
                             <div className="MainContainer-upper-container-text">
                                 <div className="MainContainer-upper-container-first-text">
-                                    Dashboard
+                                    Admin Panel
                                 </div>
                                 <div className="MainContainer-upper-container-second-text">
                                     You can select one of the options!
@@ -38,30 +36,16 @@ class Dashboard extends Component {
                         </div>
                         <Grid  textAlign='center' style={{height: '100%'}} verticalAlign='middle'>
                             <Grid.Row columns={2}>
-                            <Grid.Column>
-                                <div className='iconsDashboard' onClick={this.catalog}>
-                                    <Icon name='globe' />
-                                    <p>  E-Catalog</p>
-                                </div>
-                            </Grid.Column>
-                            <Grid.Column>
-                                <div className='iconsDashboard' onClick={this.cart}>
-                                <Icon name='cart'  />
-                                <p>Cart</p>
-                                </div>
-                            </Grid.Column>
-                            </Grid.Row>
-                            <Grid.Row columns={2}>
                                 <Grid.Column>
-                                    <div className='iconsDashboard' onClick={this.settings}>
-                                        <Icon name='cog' />
-                                        <p>Settings</p>
+                                    <div className='iconsDashboard' onClick={this.users}>
+                                        <Icon name='user' />
+                                        <p>Users</p>
                                     </div>
                                 </Grid.Column>
                                 <Grid.Column>
-                                    <div className='iconsDashboard' onClick={this.rentals}>
-                                        <Icon name='inbox' />
-                                        <p> Rentals</p>
+                                    <div className='iconsDashboard' onClick={this.addUser}>
+                                        <Icon name='add user'  />
+                                        <p>Add User</p>
                                     </div>
                                 </Grid.Column>
                             </Grid.Row>
@@ -80,4 +64,4 @@ function mapStateToProps(state){
     };
 
 }
-export default withRouter(connect(mapStateToProps)(Dashboard));
+export default withRouter(connect(mapStateToProps)(AdminPanel));
