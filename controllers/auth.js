@@ -1,15 +1,27 @@
 const express = require('express');
 const router = express.Router();
 
-router.get("/login",function(req,res){
+router.post("/login",function(req,res){
+	let login = req.body;
 	res.setHeader('Content-Type', 'application/json');
-	data = myMapper.login("hello","bye");
+	let data = myMapper.login(login.email,login.password);
 	res.send(JSON.stringify(data));
 })
-router.get("/signup",function(req,res){
+router.post("/signup",function(req,res){
+	let register = req.body;
 	res.setHeader('Content-Type', 'application/json');
-	data = myMapper.registerUser();
-	res.send(JSON.stringify({sample:"registration"}));
+	let success = myMapper.registerUser(
+		register.email, 
+		register.firstName, 
+		register.lastName, 
+		register.address, 
+		register.phone, 
+		register.isAdmin, 
+		register.password);
+	let data = {
+		success:success
+	}
+	res.send(JSON.stringify(data));
 })
 
 module.exports = router;
