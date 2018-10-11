@@ -9,3 +9,4 @@
 node_modules/
 front-end/node_modules/
 front-end/build/
+front-end/package-lock.json
