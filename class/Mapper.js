@@ -22,6 +22,30 @@ class Mapper {
   login(email, pwd) {
     return this.myTDG.login(email, pwd);
   }
+
+  insertItem(type, obj_parameter)
+  {
+    return this.myTDG.insertItem(type, obj_parameter);
+  }
+
+  modifyItem(type, obj_parameter)
+  {
+    return this.myTDG.modifyItem(type,obj_parameter);
+  }
+
+  deleteItem(type, obj_parameter)
+  {
+    return this.myTDG.deleteItem(type, obj_parameter);
+  }
+
+  viewItem(type)
+  {
+    return this.myTDG.viewItem(type);
+  }
+
+
+
+
   viewUsers() {
     if (this.IDMap.usersAlreadyFetched()) {
 		return this.IDMap.fetchUsers();
