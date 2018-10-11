@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const app = express();
+<<<<<<< HEAD
 const bodyParser = require("body-parser");
 const encrypt = require("js-sha512"); 
 const mysql = require("mysql");
@@ -11,9 +12,29 @@ var mysqldb = mysql.createConnection({
   password: "hy.$EA)MS4_.",
   database: "arti17co_soen343"
 });
+=======
+const bodyParser = require('body-parser');
+Mapper = require("./class/Mapper.js");
+const TDG = require("./class/TDG.js");
+ let myTDG = new TDG();
+myTDG.login('Anthony@concordia.ca','hello',function(data){
+  console.log(data);
+});
+myTDG.registerUser('Eglenbro','Cecaj','00040 Concordia University, Montreal, Quebec','eglen@concordia.ca',2147433649,'1','eglencecaj');
+
+myTDG.mysqlConnection.end();
+myMapper = new Mapper();
+
+>>>>>>> 6f753132b5c95b63a6b5b0e3ae6cc38e5c5f552b
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "front-end/build")));
+// by default the index.js file is fetche
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(require('./controllers'));
+
+
 
 app.use(bodyParser.json());
 
