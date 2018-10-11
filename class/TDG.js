@@ -36,6 +36,22 @@ class TDG {
 		})
 	}
 
+// modify an item given it id
+	modifyItem(type, obj_parameter){
+ 	switch(type){
+ 		case "Book":
+ 			var sql= "UPDATE Book SET Title= obj_parameter.Title, Author= obj_parameter.Author, Format= obj_parameter.Format, Pages=obj_parameter.Pages, Publisher= obj_parameter.Publisher, ISBN-10= obj_parameter.ISBN-10, ISBN-13=obj_parameter.ISBN-13, Status= obj_parameter.Status, Quantity=obj_parameter.Quantity, Language=obj_parameter.Language WHERE id=obj_parameter.id ";
+		case "Magazine":
+			var sql= "UPDATE Magazine SET Title=obj_parameter.Title, Publisher=obj_parameter.Publisher, ISBN-10=obj_parameter.ISBN-10, ISBN-13=obj_parameter.ISBN-13, Language=obj_parameter.Language WHERE id=obj_parameter.id";
+		case "Movie":
+			var sql= "UPDATE Movie SET Title=obj_parameter.Title, Director= obj_parameter.Director, Producers= obj_parameter.Producers, Actors=obj_parameter.Actors, Language=obj_parameter.Language, Subtitles=obj_parameter.Subtitles, Dubbed=obj_parameter.Dubbed, ReleaseDate=obj_parameter.ReleaseDate, RunTime=obj_parameter.RunTime, Status=obj_parameter.Status";
+		case "Music":
+			var sql= "UPDATE Music SET Title=obj_parameter.Title, Artist=obj_parameter.Artist, Label=obj_parameter.Label, Type=obj_parameter.Type, Quantity=obj_parameter.Quantity, ReleaseDate=obj_parameter.ReleaseDate, ASIN=obj_parameter.ASIN, Status=obj_parameter.Status WHERE id=obj_parameter.id";
+ 	}
+	}
+
+
+
 	//RegisterUser function, it takes the new user values from mapper class and registers it in the database
 	registerUser(FirstName, LastName, Address, email, phone, type, password){
 
@@ -50,6 +66,27 @@ class TDG {
 				console.log("1 record inserted");
 				return true;
 			}
+		})
+	}
+
+	// fetch all items from a specific type
+	viewItems(type, callback){
+		switch(type){
+			case "Book":
+				var sql= "SELECT * FROM Book";
+			case "Magazine":
+				var sql= "SELECT * FROM Magazine";
+			case "Movie":
+				var sql= "SELECT * FROM Movie";
+			case "Music":
+				var sql= "SELECT * FROM Music";
+		}
+		this.mysqlConnection.query(sql, (err, rows, fields) => {
+			if (!err)
+				 callback(JSON.stringify(rows));
+			else
+				callback("{}")
+				console.log(err);
 		})
 	}
 
