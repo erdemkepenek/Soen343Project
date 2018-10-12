@@ -4,7 +4,6 @@ var app = express();
 const bodyparser = require('body-parser');
 
 class TDG {
-
 	//constructor is used to create a connection to the database
 	constructor(){
 		this.mysqlConnection = mysql.createConnection({
@@ -22,7 +21,6 @@ class TDG {
 				console.log('DB connection failed \n Error : ' + JSON.stringify(err, undefined, 2));
 		});
 	}
-
 	//Log in function, it takes the values from Mapper class and checks the database if it is valid entry
 	login (email, password,callback){
 
@@ -35,8 +33,7 @@ class TDG {
 				console.log(err);
 		})
 	}
-
-// modify an item given it id
+	// modify an item given it id
 	modifyItem(type, obj_parameter){
  	switch(type){
  		case "Book":
@@ -47,11 +44,8 @@ class TDG {
 			var sql= "UPDATE Movie SET Title=obj_parameter.Title, Director= obj_parameter.Director, Producers= obj_parameter.Producers, Actors=obj_parameter.Actors, Language=obj_parameter.Language, Subtitles=obj_parameter.Subtitles, Dubbed=obj_parameter.Dubbed, ReleaseDate=obj_parameter.ReleaseDate, RunTime=obj_parameter.RunTime, Status=obj_parameter.Status";
 		case "Music":
 			var sql= "UPDATE Music SET Title=obj_parameter.Title, Artist=obj_parameter.Artist, Label=obj_parameter.Label, Type=obj_parameter.Type, Quantity=obj_parameter.Quantity, ReleaseDate=obj_parameter.ReleaseDate, ASIN=obj_parameter.ASIN, Status=obj_parameter.Status WHERE id=obj_parameter.id";
- 	}
+		}
 	}
-
-
-
 	//RegisterUser function, it takes the new user values from mapper class and registers it in the database
 	registerUser(FirstName, LastName, Address, email, phone, type, password){
 
@@ -68,7 +62,6 @@ class TDG {
 			}
 		})
 	}
-
 	// fetch all items from a specific type
 	viewItems(type, callback){
 		switch(type){
@@ -89,7 +82,6 @@ class TDG {
 				console.log(err);
 		})
 	}
-
 	//fetchUsers function, it takes all the users from the database and transfers them to the mapper.
 	fetchUsers(callback){
 
@@ -103,7 +95,6 @@ class TDG {
 				console.log(err);
 		})
 	}
-
 	deleteItem(type, obj_paramneter){
 
 		switch(type)
@@ -119,7 +110,6 @@ class TDG {
 		}
 
 	}
-
 	inserItem(type, obj_parameter)
 	{
 		switch(type)
@@ -143,9 +133,6 @@ class TDG {
 					+"obj_parameter.Type, obj_parameter.Quantity, obj_parameter.ReleaseDate, obj_parameter.ASIN, obj_parameter.Status)";
 		}
 	}
-
-
-
 }
 module.exports = TDG;
 
