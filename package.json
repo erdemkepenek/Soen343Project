@@ -19,6 +19,10 @@
     "body-parser": "^1.18.3",
     "concurrently": "^3.5.1",
     "express": "^4.16.2",
+<<<<<<< HEAD
+    "js-sha512": "^0.8.0",
+=======
+>>>>>>> 6f753132b5c95b63a6b5b0e3ae6cc38e5c5f552b
     "mysql": "^2.16.0"
   }
 }
