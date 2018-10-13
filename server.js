@@ -27,7 +27,7 @@ var Magazine = {
 	Language: "MyLanguage"
 }
 myTDG.insertItem("Magazine",Magazine);
-myTDG.mysqlConnection.end();
+/*myTDG.mysqlConnection.end();*/
 myMapper = new Mapper();
 
 

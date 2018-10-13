@@ -27,7 +27,6 @@ class HomepageLayout extends Component {
     }
 
     componentDidMount() {
-        controller.getUsers();
        /* axios.get('/api/customers').then(
             function (response, err) {
                 console.log(response)
