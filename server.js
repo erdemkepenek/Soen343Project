@@ -6,6 +6,7 @@ const encrypt = require("js-sha512");
 const mysql = require("mysql");
 const Mapper = require("./class/Mapper.js");
 const TDG = require("./class/TDG.js");
+let myTDG = new TDG();
 
 var mysqldb = mysql.createConnection({
   host: "192.185.72.57",
@@ -14,12 +15,10 @@ var mysqldb = mysql.createConnection({
   database: "arti17co_soen343"
 });
 
-
- let myTDG = new TDG();
-myTDG.login('Anthony@concordia.ca','hello',function(data){
-  console.log(data);
+myTDG.login('Anthony@concordia.ca', 'hello', function(data) {
+    console.log(data);
 });
-myTDG.registerUser('Eglenbro','Cecaj','00040 Concordia University, Montreal, Quebec','eglen@concordia.ca',2147433649,'1','eglencecaj');
+//myTDG.registerUser('Eglenbro','Cecaj','00040 Concordia University, Montreal, Quebec','eglen@concordia.ca',2147433649,'1','eglencecaj');
 
 myTDG.mysqlConnection.end();
 myMapper = new Mapper();
@@ -37,6 +36,7 @@ app.use(require('./controllers'));
 
 app.use(bodyParser.json());
 
+/*
 app.post("/auth/register", (req,res) => {
   const email = req.body.email;
   const firstName = req.body.firstName;
@@ -96,7 +96,7 @@ app.get("/api/customers", (req, res) => {
 
   res.json(customers);
 });
-
+*/
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/build/index.html"));
 });
