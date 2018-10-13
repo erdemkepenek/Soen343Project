@@ -4,8 +4,10 @@ const router = express.Router();
 router.post("/login",function(req,res){
 	let login = req.body;
 	res.setHeader('Content-Type', 'application/json');
-	let data = myMapper.login(login.email,login.password);
-	res.send(JSON.stringify(data));
+	myMapper.login(login.email,login.password, function(data){
+		res.send(JSON.stringify(data));
+	});
+	
 })
 router.post("/signup",function(req,res){
 	let register = req.body;

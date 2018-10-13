@@ -14,6 +14,8 @@ import {withRouter} from 'react-router-dom'
 import _ from 'lodash'
 import {Button, Image} from 'semantic-ui-react'
 import DataTable from '../Components/Common/table/table'
+import Controller from '../class/controller'
+let controller = new Controller;
 
 class HomepageLayout extends Component {
     constructor(props) {
@@ -25,6 +27,7 @@ class HomepageLayout extends Component {
     }
 
     componentDidMount() {
+        controller.getUsers();
        /* axios.get('/api/customers').then(
             function (response, err) {
                 console.log(response)

@@ -6,6 +6,7 @@ import registerServiceWorker from './registerServiceWorker';
 import AdminReducer from './reducers/adminReducer'
 import {createStore, combineReducers} from 'redux';
 import {Provider} from 'react-redux'
+import {BrowserRouter} from "react-router-dom";
 
 const reducers = combineReducers({
     AdminReducer,
@@ -16,7 +17,9 @@ if(localStorage.jwtToken) {
 }
 ReactDOM.render(
     <Provider store={store}>
+    <BrowserRouter>
         <App />
+    </BrowserRouter>
     </Provider>
     , document.getElementById('root'));
 registerServiceWorker();

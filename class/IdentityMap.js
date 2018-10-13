@@ -13,12 +13,14 @@ class IdentityMap {
 
 
 // checks if a specific user is already fetched
+	/*
 	userAlreadyFetched(user){
 		for (let i=0; i<users.length; i++) {
 			if (users[i]==user) {return true;}
 		}
 		return false;
 	}
+	*/
 // checks if a specific item is already fetched
 	itemAlreadyFetched(item){
 		for (let i=0; i<items.length; i++) {

@@ -5,7 +5,7 @@ class Mapper {
     console.log("from Mapper");
     this.myTDG = new TDG();
     this.IDMap = new IdentityMap();
-    // this.users = new Array();
+    //this.users = new Array();
   }
 
   registerUser(email, firstName, lastName, address, phone, isAdmin, password) {
@@ -19,8 +19,11 @@ class Mapper {
       password
     );
   }
-  login(email, pwd) {
-    return this.myTDG.login(email, pwd);
+  login(email, pwd, callback) {
+	this.myTDG.login(email, pwd,function(data){
+		console.log(data);
+		callback(data);
+	});
   }
 
   insertItem(type, obj_parameter)
@@ -42,17 +45,18 @@ class Mapper {
   {
     return this.myTDG.viewItem(type);
   }
-
-
-
-
   viewUsers() {
+	let IDMap_local = this.IDMap;
+	let quickUsers = null;
     if (this.IDMap.usersAlreadyFetched()) {
 		return this.IDMap.fetchUsers();
     } else {
-		let users = this.myTDG.fetchUsers();
-		this.IDMap.addUsers(users);
-		return users;
+		let users = this.myTDG.fetchUsers(function (users){
+			IDMap_local.addUsers(users);
+			quickUsers = users;
+			return quickUsers;
+		});
+		
     }
   }
 }
