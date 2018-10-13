@@ -1,9 +1,20 @@
 const express = require("express");
 const path = require("path");
 const app = express();
-const bodyParser = require('body-parser');
-Mapper = require("./class/Mapper.js");
+const bodyParser = require("body-parser");
+const encrypt = require("js-sha512"); 
+const mysql = require("mysql");
+const Mapper = require("./class/Mapper.js");
 const TDG = require("./class/TDG.js");
+
+var mysqldb = mysql.createConnection({
+  host: "192.185.72.57",
+  user: "arti17co_soen343",
+  password: "hy.$EA)MS4_.",
+  database: "arti17co_soen343"
+});
+
+
  let myTDG = new TDG();
 myTDG.login('Anthony@concordia.ca','hello',function(data){
   console.log(data);
@@ -12,6 +23,7 @@ myTDG.registerUser('Eglenbro','Cecaj','00040 Concordia University, Montreal, Que
 
 myTDG.mysqlConnection.end();
 myMapper = new Mapper();
+
 
 
 // Serve static files from the React app
@@ -23,6 +35,37 @@ app.use(require('./controllers'));
 
 
 
+app.use(bodyParser.json());
+
+app.post("/auth/register", (req,res) => {
+  const email = req.body.email;
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
+  const address = req.body.address
+  const phone = req.body.phone;
+  const isAdmin = req.body.isAdmin;
+  const password = encrypt.sha512(req.body.password);
+  mysqldb.connect(function() {
+    mysqldb.query("INSERT INTO Client (FirstName, LastName, Address, email, phone, type, password) VALUES ('"+firstName+"', '"+lastName+"', '"+address+"', '"+email+"', '"+phone+"', '"+isAdmin+"', '"+password+"');");
+    res.send("Registration Successful");
+  });
+});
+
+app.post("/auth/login", (req,res) => {
+  const email = req.body.email;
+  const password = encrypt.sha512(req.body.password);
+  
+  mysqldb.connect(function(err) {
+    mysqldb.query("SELECT * FROM Client WHERE email ='"+email+"' AND password = '"+password+"';", function(err, result) {
+      if (result.length == 0){
+        res.send("login failed")
+      }
+      else {
+        res.send(result)
+      }
+    });
+  })
+});
 app.get("/api/customers", (req, res) => {
   const customers = [
     {
