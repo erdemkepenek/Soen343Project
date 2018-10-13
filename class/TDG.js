@@ -28,7 +28,7 @@ class TDG {
 		console.log(sql);
 		this.mysqlConnection.query(sql, (err, rows, fields) => {
 			if (!err)
-				 callback(JSON.stringify(rows));
+				 callback(rows);
 			else
 				console.log(err);
 		})
@@ -89,7 +89,7 @@ class TDG {
 
 		this.mysqlConnection.query(sql, (err, rows, fields) => {
 			if (!err)
-				 callback(JSON.stringify(rows));
+				 callback(rows);
 			else
 				callback("{}")
 				console.log(err);
@@ -113,19 +113,21 @@ class TDG {
 		switch(type){
 			case "Book":
 				sql = "INSERT INTO Book(Title, Author, Format, Pages, Publisher, ISBN-10, ISBN-13, Status, Quantity, Language) "+
-							"VALUES("+obj_parameter.Title+", "+obj_parameter.Author+", "+obj_parameter.Format+", "+obj_parameter.Pages+", "+obj_parameter.Publisher+", "+obj_parameter.ISBN_10+", "+obj_parameter.ISBN_13+", "+obj_parameter.Status+", "+obj_parameter.Quantity+", "+obj_parameter.Language+")";
+							"VALUES("+obj_parameter.Title+", "+obj_parameter.Author+", "+obj_parameter.Format+", "+obj_parameter.Pages+", "+obj_parameter.Publisher+", "+obj_parameter.ISBN_10+", "+obj_parameterb.ISBN_13+", "+obj_parameter.Status+", "+obj_parameter.Quantity+", "+obj_parameter.Language+")";
 
-			case "Magazine":
-				sql = "INSERT INTO Magazine(Title, Publisher, ISBN-10, ISBN-13, Language)"+
+			case "Magazine": sql = "INSERT INTO Magazine(Title, Publisher, ISBN-10, ISBN-13, Language)"+
 							"VALUES("+obj_parameter.Title+", "+obj_parameter.Publisher+", "+obj_parameter.ISBN_10+", "+obj_parameter.ISBN_13+","+obj_parameter.Language+")";
+							break;
 			
 			case "Movie":
 				sql = "INSERT INTO Movie(Title, Director, Producers, Actors, Language, Subtitles, Dubbed,ReleaseDate, RunTime, Status) "+
-							"VALUES("+obj_parameter.Title+", "+obj_parameter.Director+", "+obj_parameter.Producers+", "+obj_parameters.Actors+", "+obj_parameter.Language+", "+obj_parameter.Subtitles+", "+obj_parameter.Dubbed+", "+obj_parameter.ReleaseDate+", "+obj_parameter.RunTime+", "+obj_parameter.Status+")";
+							"VALUES("+obj_parameter.Title+", "+obj_parameter.Director+", "+obj_parameter.Producers+", "+obj_parameter.Actors+", "+obj_parameter.Language+", "+obj_parameter.Subtitles+", "+obj_parameter.Dubbed+", "+obj_parameter.ReleaseDate+", "+obj_parameter.RunTime+", "+obj_parameter.Status+")";
+							break;
 			
 			case "Music":
 				sql = "INSERT INTO Music(Title , Artist, Label, Type, Quantity, ReleaseDate, ASIN, Status)"+
-							"VALUES("+obj_parameter.id+", "+obj_parameter.Title+", "+obj_parameter.Artist+", "+obj_parameter.Label+", "+obj_parameter.Type+", "+obj_parameter.Quantity+", "+obj_parameter.ReleaseDate+", "+obj_parameter.ASIN+", "+obj_parameter.Status+")";
+							"VALUES("+obj_parameter.Title+", "+obj_parameter.Artist+", "+obj_parameter.Label+", "+obj_parameter.Type+", "+obj_parameter.Quantity+", "+obj_parameter.ReleaseDate+", "+obj_parameter.ASIN+", "+obj_parameter.Status+")";
+							break;
 						
 		}
 		console.log(sql);

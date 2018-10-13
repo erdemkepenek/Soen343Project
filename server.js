@@ -18,8 +18,15 @@ var mysqldb = mysql.createConnection({
 myTDG.login('Anthony@concordia.ca', 'hello', function(data) {
     console.log(data);
 });
-//myTDG.registerUser('Eglenbro','Cecaj','00040 Concordia University, Montreal, Quebec','eglen@concordia.ca',2147433649,'1','eglencecaj');
-
+//myTDG.registerUser('Eglenbro','Cecaj','00040 Concordia University, Montreal, Quebec','test',2147433649,'1','simple');
+var Magazine = {
+	Title:"MyTitle",
+	Publisher: "MyPublihser",
+	ISBN_10: "myISBN_10)", 
+	ISBN_13: "MyISBN_13",
+	Language: "MyLanguage"
+}
+myTDG.insertItem("Magazine",Magazine);
 myTDG.mysqlConnection.end();
 myMapper = new Mapper();
 
