@@ -41,16 +41,16 @@ class Login extends Component {
             }
             this.loginError();
         }else{
-            let data={
-                email: email,
-                password: password
-            }
+            let temp = this.props;
+            let temp2 = this;
             console.log(controller)
-            controller.login(email,password);
-            localStorage.setItem('jwtToken',JSON.stringify(data.email));
-            this.props.dispatch({type: 'addUserProfile', data: JSON.parse(localStorage.getItem('jwtToken'))});
-            this.loginConfirmation();
-            this.props.history.push(`/dashboard`);
+            controller.login(email,password,function(data){
+                console.log(data)
+                localStorage.setItem('jwtToken',JSON.stringify(data[0].email));
+                temp.dispatch({type: 'addUserProfile', data: data[0].email});
+                temp2.loginConfirmation();
+                temp.history.push(`/dashboard`);
+            });
         }
     }
     loginConfirmation = () => {

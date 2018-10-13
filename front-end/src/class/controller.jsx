@@ -11,25 +11,25 @@ class Controller extends Component {
         console.log("HELLO")
     }
 
-    getUsers=()=> {
+    getUsers=(callback)=> {
         axios.post('/operation/getusers').then(
             function (response, err) {
                 console.log(response)
                 if(response.data){
-
+                    callback(response.data);
                 }
             }.bind(this)
         );
     }
 
-    login=(email, password)=> {
+    login=(email, password,callback)=> {
         axios.post('/auth/login',{
             email:email,
             password:password}).then(
             function (response, err) {
                 console.log(response)
                 if(response.data){
-
+                    callback(response.data);
                 }
             }.bind(this)
         );

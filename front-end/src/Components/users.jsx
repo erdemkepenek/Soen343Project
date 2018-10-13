@@ -8,7 +8,9 @@ import {withRouter} from 'react-router-dom'
 import {Button, Form, Grid, Icon, Image, Message, Segment} from 'semantic-ui-react'
 import {Redirect} from "react-router";
 import DataTable from '../Components/Common/table/table'
-
+import Controller from '../class/controller'
+let controller = new Controller;
+let tableArray= [];
 class Users extends Component {
     constructor(props) {
         super(props);
@@ -16,13 +18,41 @@ class Users extends Component {
         }
     }
     componentDidMount() {
-        axios.get('/client').then(
-            function (response, err) {
-                console.log(response)
-            }.bind(this)
-        );
+        let temp = this;
+        controller.getUsers(function(data){
+            console.log(data)
+            tableArray=data;
+            temp.forceUpdate();
+        });
+    }
+    openProfile=(data)=>{
+        console.log(data);
     }
     render() {
+        let columnItems =[
+                {value : 'User ID', render : 'User ID', type : 'number'},
+                {value : 'First Name', render : 'First Name', type : 'text'},
+                {value : 'Last Name', render : 'Last Name', type : 'text'},
+                {value : 'Email', render : 'Email', type : 'text'},
+                {value : 'Phone', render : 'Phone', type : 'number'},
+                {value : 'Address', render : 'Address', type : 'text'},
+                {value : 'Type', render : 'Type', type : 'text'},
+            ];
+            let tableItems = [];
+        tableArray.map((userData)=>{
+                let arrData=[
+                    {value : userData.id, render : userData.id, type : 'number'},
+                    {value : userData.FirstName, render : userData.FirstName, type : 'text'},
+                    {value : userData.LastName, render : userData.LastName, type : 'text'},
+                    {value : userData.email, render : userData.email, type : 'text'},
+                    {value : userData.phone, render : userData.phone, type : 'number'},
+                    {value : userData.Address, render : userData.Address, type : 'text'},
+                    {value : userData.type, render : userData.type, type : 'number'},
+                    userData
+                ]
+                tableItems.push(arrData);
+
+            })
         if(!this.props.userProfile) {
             return (<Redirect to={'/'}/>);
         }else {
@@ -41,7 +71,10 @@ class Users extends Component {
                             </div>
                         </div>
                         <DataTable
-                            errorMessage="There is no User"/>
+                            columnItems={columnItems}
+                            data={tableItems}
+                            itemsPerPage={10}
+                            clickRow={this.openProfile}/>
                     </div>
 
                     <FooterComponent/>
