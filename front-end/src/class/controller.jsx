@@ -1,5 +1,5 @@
 import {Component,React} from "react";
-const axios = require('axios');
+import axios from 'axios'
 
 class Controller extends Component {
     constructor(props) {
@@ -12,23 +12,27 @@ class Controller extends Component {
     }
 
     getUsers=()=> {
-        axios.post('/operation/getusers', {
-        }).then(function (response) {
-            console.log(response);
-        }).catch(function (error) {
-            console.log(error);
-        })
+        axios.post('/operation/getusers').then(
+            function (response, err) {
+                console.log(response)
+                if(response.data){
+
+                }
+            }.bind(this)
+        );
     }
 
     login=(email, password)=> {
-        axios.post('/auth/login', {
-            email: email,
-            password: password
-        }).then(function (response) {
-            console.log(response);
-        }).catch(function (error) {
-            console.log(error);
-        })
+        axios.post('/auth/login',{
+            email:email,
+            password:password}).then(
+            function (response, err) {
+                console.log(response)
+                if(response.data){
+
+                }
+            }.bind(this)
+        );
     }
 }
 

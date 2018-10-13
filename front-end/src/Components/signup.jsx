@@ -11,6 +11,7 @@ import {withRouter} from "react-router-dom";
 import connect from "react-redux/es/connect/connect";
 import { notification } from 'antd';
 import {Redirect} from "react-router";
+import axios from 'axios'
 
 class Signup extends Component {
     constructor(props) {
@@ -88,10 +89,17 @@ class Signup extends Component {
                 password: password,
                 type: false
             }
+            axios.post('/auth/signup',data).then(
+                function (response, err) {
+                    console.log(response)
+                    if(response.data){
+                        this.signupConfirmation();
+                        this.props.history.push(`/login`);
+                    }
+                }.bind(this)
+            );
             console.log(data)
 
-            this.signupConfirmation();
-            this.props.history.push(`/login`);
         }
     }
     signupConfirmation = () => {

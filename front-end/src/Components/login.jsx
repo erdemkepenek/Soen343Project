@@ -46,7 +46,7 @@ class Login extends Component {
                 password: password
             }
             console.log(controller)
-            controller.hello(data);
+            controller.login(email,password);
             localStorage.setItem('jwtToken',JSON.stringify(data.email));
             this.props.dispatch({type: 'addUserProfile', data: JSON.parse(localStorage.getItem('jwtToken'))});
             this.loginConfirmation();

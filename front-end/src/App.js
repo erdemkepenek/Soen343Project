@@ -15,10 +15,14 @@ import Settings from './Components/settings'
 import Adminpanel from './Components/adminPanel'
 import Users from './Components/users'
 import AddUser from './Components/addUser'
+import connect from "react-redux/es/connect/connect";
 class App extends Component {
+    componentDidMount(){
+        /*this.props.dispatch({type: 'addUserProfile', data: 'hello' });*/
+    }
   render() {
+        console.log(this.props.userProfile)
     return (
-        <BrowserRouter>
         <Switch>
         <Route exact path="/" component={HomePage} />
         <Route exact path="/login" component={Login} />
@@ -32,9 +36,13 @@ class App extends Component {
         <Route exact path="/adduser" component={AddUser} />
         <Route exact path="/adminpanel" component={Adminpanel} />
           </Switch>
-          </BrowserRouter>
     );
   }
 }
+function mapStateToProps(state){
+    return {
+        userProfile: state.AdminReducer.userProfile
+    };
 
-export default App;
+}
+export default withRouter(connect(mapStateToProps)(App));
