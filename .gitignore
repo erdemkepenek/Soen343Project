@@ -7,6 +7,11 @@
 .idea/vcs.xml
 .idea/dictionaries
 node_modules/
+package-lock.json
 front-end/node_modules/
 front-end/build/
 front-end/package-lock.json
+.DS_Store
+front-end/.DS_Store
+front-end/src/.DS_Store
+
