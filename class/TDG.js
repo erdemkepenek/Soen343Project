@@ -6,31 +6,180 @@ const bodyparser = require('body-parser');
 class TDG {
 	//constructor is used to create a connection to the database
 	constructor(){
-		this.mysqlConnection = mysql.createConnection({
+		this.mysqlConnection = mysql.createPool({
 			host: '192.185.72.57',
 			user: 'arti17co_soen343',
 			password: 'hy.$EA)MS4_.',
 			database: 'arti17co_soen343',
-			multipleStatements: true
+			multipleStatements: true,
 		});
-		this.returnData;
-		this.mysqlConnection.connect((err) => {
-			if (!err)
-				console.log('DB connection succeded.');
-			else
-				console.log('DB connection failed \n Error : ' + JSON.stringify(err, undefined, 2));
-		});
+		//let conn =  this.mysqlConnection;
+		/*
+		this.mysqlConnection.on('error', function(err){
+			if(err.code==='PROTOCOL_CONNECTION_LOST'){
+				conn.end();
+				conn.connect((err) => {
+					if (!err){
+						console.log('Reconnecting to DB: Success');
+					}
+					else {
+						console.log('Reconnection to DB: Unsucessfull \n' + JSON.stringify(err, undefined, 2));
+					}
+						
+				});
+			}
+			else{
+				throw err;
+			}
+		})
+		*/
+		this.runQuery = function (queryBuild){
+			let conn = this.mysqlConnection;
+			queryBuild(conn,function(type){
+				console.log("Completed query "+type+" \n");
+			});
+		};
 	}
 	//Log in function, it takes the values from Mapper class and checks the database if it is valid entry
 	login (email, password,callback){
-
-		var sql= "SELECT FirstName,LastName, Address, email, phone, type  FROM Client WHERE email ='"+email+"' AND password = sha1('"+password+"')";
-		console.log(sql);
-		this.mysqlConnection.query(sql, (err, rows, fields) => {
-			if (!err)
-				 callback(rows);
-			else
-				console.log(err);
+		let sql= "SELECT FirstName,LastName, Address, email, phone, type  FROM Client WHERE email ='"+email+"' AND password = sha1('"+password+"')";
+		this.runQuery(function(conn,completedQuery){
+			conn.query(sql, (err, rows, fields) => {
+				if (!err){
+					if(rows.length==1){
+						let msg = {};
+						msg.success="true";
+						msg.message="no message";
+						msg.login=rows[0];
+						callback(msg);
+					}
+					else{
+						let msg = {};
+						msg.success="false";
+						msg.message="incorrect username or password";
+						callback(msg);
+					}
+				}	 
+				else{
+					console.log(err);
+					let msg = {};
+					msg.success="false";
+					msg.message="internal error";
+					console.log(err);
+					callback(msg);
+				}
+				completedQuery("login");
+			})
+		})
+	}
+	//RegisterUser function, it takes the new user values from mapper class and registers it in the database
+	registerUser(FirstName, LastName, Address, email, phone, type, password, callback){
+		var sql = "INSERT INTO Client (FirstName, LastName, Address, email, phone, type, password) VALUES ('"+FirstName+"' , '"+LastName+"' ,'"+Address+"' ,'"+email+"' ,'"+phone+"' ,'"+type+"' ,sha1('"+password+"') )";
+		this.runQuery(function(conn,completedQuery){
+			conn.query(sql, (err, rows, fields) => {
+				if (!err){
+					if(rows.affectedRows==1){
+						let msg = {};
+						msg.success="true";
+						msg.message="no message";
+						msg.login = {
+							FirstName: FirstName,
+							LastName: LastName,
+							Address: Address,
+							email: email,
+							phone: phone,
+							type: type
+						};
+						callback(msg);
+					}
+					else{
+						let msg = {};
+						msg.success="false";
+						msg.message=rows.message;
+						callback(msg);
+					}
+				}	 
+				else{
+					// console.log(err);
+					let msg = {};
+					msg.success="false";
+					msg.message=err.sqlMessage;
+					callback(msg);
+				}
+				completedQuery("register");
+			})
+		})
+	}
+	deleteUser(email,callback){
+		let sql = "DELETE from Client where email = '"+email+"'";
+		this.runQuery(function(conn,completedQuery){
+			conn.query(sql, (err, rows, fields) => {
+				console.log(rows);
+				if (!err){
+					if(rows.affectedRows==1){
+						let msg = {};
+						msg.success="true";
+						msg.message="deleted user with email "+email;
+						callback(msg);
+					}
+					else{
+						let msg = {};
+						msg.success="false";
+						if(rows.message==""){
+							msg.message="user with email "+email+" does not exists";
+						}
+						else{
+							msg.message=rows.message;
+						}
+						callback(msg);
+					}
+				}	 
+				else{
+					// console.log(err);
+					let msg = {};
+					msg.success="false";
+					msg.message=err.sqlMessage;
+					callback(msg);
+				}
+				completedQuery("delete user");
+			})
+		})
+		
+	}
+	//fetchUsers function, it takes all the users from the database and transfers them to the mapper.
+	fetchUsers(callback){
+		let sql='SELECT FirstName, LastName, Address, email, phone, type FROM Client';
+		this.runQuery(function(conn,completedQuery){
+			conn.query(sql, (err, rows, fields) => {
+				if (!err){
+					if(rows.length>0){
+						let msg = {};
+						msg.success="true";
+						msg.message="no message";
+						msg.users = rows;
+						callback(msg);
+					}
+					else{
+						let msg = {};
+						msg.success="false";
+						if(rows.messages || rows.message==""){
+							msg.message="empty client table";
+						}
+						else{
+							msg.message=rows.message;
+						}
+						callback(msg);
+					}
+				}	 
+				else{
+					// console.log(err);
+					let msg = {};
+					msg.success="false";
+					msg.message=err.sqlMessage;
+					callback(msg);
+				}
+				completedQuery("fetch users");
+			})
 		})
 	}
 	// modify an item given it id
@@ -45,22 +194,6 @@ class TDG {
 		case "Music":
 			var sql= "UPDATE Music SET Title=obj_parameter.Title, Artist=obj_parameter.Artist, Label=obj_parameter.Label, Type=obj_parameter.Type, Quantity=obj_parameter.Quantity, ReleaseDate=obj_parameter.ReleaseDate, ASIN=obj_parameter.ASIN, Status=obj_parameter.Status WHERE id=obj_parameter.id";
 		}
-	}
-	//RegisterUser function, it takes the new user values from mapper class and registers it in the database
-	registerUser(FirstName, LastName, Address, email, phone, type, password){
-
-		var sql = "INSERT INTO Client (FirstName, LastName, Address, email, phone, type, password) VALUES ('"+FirstName+"' , '"+LastName+"' ,'"+Address+"' ,'"+email+"' ,'"+phone+"' ,'"+type+"' ,sha1('"+password+"') )";
-
-		this.mysqlConnection.query(sql, (err,result)=>{
-			if(err) {
-				throw err;
-				return false;
-			}
-			else{
-				console.log("1 record inserted");
-				return true;
-			}
-		})
 	}
 	// fetch all items from a specific type
 	viewItems(type, callback){
@@ -77,19 +210,6 @@ class TDG {
 		this.mysqlConnection.query(sql, (err, rows, fields) => {
 			if (!err)
 				 callback(JSON.stringify(rows));
-			else
-				callback("{}")
-				console.log(err);
-		})
-	}
-	//fetchUsers function, it takes all the users from the database and transfers them to the mapper.
-	fetchUsers(callback){
-
-		var sql='SELECT * FROM Client';
-
-		this.mysqlConnection.query(sql, (err, rows, fields) => {
-			if (!err)
-				 callback(rows);
 			else
 				callback("{}")
 				console.log(err);

@@ -8,16 +8,20 @@ const Mapper = require("./class/Mapper.js");
 const TDG = require("./class/TDG.js");
 let myTDG = new TDG();
 
-var mysqldb = mysql.createConnection({
-  host: "192.185.72.57",
-  user: "arti17co_soen343",
-  password: "hy.$EA)MS4_.",
-  database: "arti17co_soen343"
-});
-
-myTDG.login('Anthony@concordia.ca', 'hello', function(data) {
+console.log("AAA");
+myTDG.login('test', 'simple', function(data) {
+	console.log("jjj");
     console.log(data);
 });
+myTDG.registerUser("Lisa", "Paso", "Wonderland", "6email@email.com", "12349", 1, "simple", function(data){
+	console.log(data);
+	myTDG.deleteUser("6email@email.com",function(data){
+		console.log(data);
+	})
+})
+myTDG.fetchUsers(function(data){
+	console.log(data);
+})
 //myTDG.registerUser('Eglenbro','Cecaj','00040 Concordia University, Montreal, Quebec','test',2147433649,'1','simple');
 var Magazine = {
 	Title:"MyTitle",
@@ -28,6 +32,7 @@ var Magazine = {
 }
 myTDG.insertItem("Magazine",Magazine);
 /*myTDG.mysqlConnection.end();*/
+//myTDG.mysqlConnection.end();
 myMapper = new Mapper();
 
 
