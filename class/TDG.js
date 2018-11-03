@@ -13,26 +13,6 @@ class TDG {
 			database: 'arti17co_soen343',
 			multipleStatements: true,
 		});
-		//let conn =  this.mysqlConnection;
-		/*
-		this.mysqlConnection.on('error', function(err){
-			if(err.code==='PROTOCOL_CONNECTION_LOST'){
-				conn.end();
-				conn.connect((err) => {
-					if (!err){
-						console.log('Reconnecting to DB: Success');
-					}
-					else {
-						console.log('Reconnection to DB: Unsucessfull \n' + JSON.stringify(err, undefined, 2));
-					}
-						
-				});
-			}
-			else{
-				throw err;
-			}
-		})
-		*/
 		this.runQuery = function (queryBuild){
 			let conn = this.mysqlConnection;
 			queryBuild(conn,function(type){
@@ -182,13 +162,38 @@ class TDG {
 			})
 		})
 	}
+	insertItem(type, obj_parameter){
+		let sql;
+		switch(type){
+			case "Book":
+				sql = "INSERT INTO Book(Title, Author, Format, Pages, Publisher, `ISBN-10`, `ISBN-13`, Status, Quantity, Language) "+
+							"VALUES('"+obj_parameter.Title+"', '"+obj_parameter.Author+"', '"+obj_parameter.Format+"', '"+obj_parameter.Pages+"', '"+obj_parameter.Publisher+"', "+obj_parameter.ISBN_10+", "+obj_parameterb.ISBN_13+", '"+obj_parameter.Status+"', '"+obj_parameter.Quantity+"', '"+obj_parameter.Language+"')";
+							break;
+
+			case "Magazine": sql = "INSERT INTO Magazine (Title, Publisher, `ISBN-10`, `ISBN-13`, Language) "+
+							"VALUES('"+obj_parameter.Title+"', '"+obj_parameter.Publisher+"', "+obj_parameter.ISBN_10+", "+obj_parameter.ISBN_13+",'"+obj_parameter.Language+"')";
+							break;
+			
+			case "Movie":
+				sql = "INSERT INTO Movie(Title, Director, Producers, Actors, Language, Subtitles, Dubbed,ReleaseDate, RunTime, Status) "+
+							"VALUES('"+obj_parameter.Title+"', '"+obj_parameter.Director+"', '"+obj_parameter.Producers+"', '"+obj_parameter.Actors+"', '"+obj_parameter.Language+"', '"+obj_parameter.Subtitles+"', '"+obj_parameter.Dubbed+"', '"+obj_parameter.ReleaseDate+"', '"+obj_parameter.RunTime+"', '"+obj_parameter.Status+"')";
+							break;
+			
+			case "Music":
+				sql = "INSERT INTO Music(Title , Artist, Label, Type, Quantity, ReleaseDate, ASIN, Status)"+
+							"VALUES('"+obj_parameter.Title+"', '"+obj_parameter.Artist+"', '"+obj_parameter.Label+"', '"+obj_parameter.Type+"', '"+obj_parameter.Quantity+"', '"+obj_parameter.ReleaseDate+"', '"+obj_parameter.ASIN+"', '"+obj_parameter.Status+"')";
+							break;
+		}
+		
+		console.log(sql);
+	}
 	// modify an item given it id
 	modifyItem(type, obj_parameter){
  	switch(type){
  		case "Book":
- 			var sql= "UPDATE Book SET Title= obj_parameter.Title, Author= obj_parameter.Author, Format= obj_parameter.Format, Pages=obj_parameter.Pages, Publisher= obj_parameter.Publisher, ISBN-10= obj_parameter.ISBN-10, ISBN-13=obj_parameter.ISBN-13, Status= obj_parameter.Status, Quantity=obj_parameter.Quantity, Language=obj_parameter.Language WHERE id=obj_parameter.id ";
+ 			var sql= "UPDATE Book SET Title= obj_parameter.Title, Author= obj_parameter.Author, Format= obj_parameter.Format, Pages=obj_parameter.Pages, Publisher= obj_parameter.Publisher, ISBN-10= obj_parameter.`ISBN-10`, `ISBN-13`=obj_parameter.ISBN-13, Status= obj_parameter.Status, Quantity=obj_parameter.Quantity, Language=obj_parameter.Language WHERE id=obj_parameter.id ";
 		case "Magazine":
-			var sql= "UPDATE Magazine SET Title=obj_parameter.Title, Publisher=obj_parameter.Publisher, ISBN-10=obj_parameter.ISBN-10, ISBN-13=obj_parameter.ISBN-13, Language=obj_parameter.Language WHERE id=obj_parameter.id";
+			var sql= "UPDATE Magazine SET Title=obj_parameter.Title, Publisher=obj_parameter.Publisher, ISBN-10=obj_parameter.`ISBN-10`, `ISBN-13`=obj_parameter.ISBN-13, Language=obj_parameter.Language WHERE id=obj_parameter.id";
 		case "Movie":
 			var sql= "UPDATE Movie SET Title=obj_parameter.Title, Director= obj_parameter.Director, Producers= obj_parameter.Producers, Actors=obj_parameter.Actors, Language=obj_parameter.Language, Subtitles=obj_parameter.Subtitles, Dubbed=obj_parameter.Dubbed, ReleaseDate=obj_parameter.ReleaseDate, RunTime=obj_parameter.RunTime, Status=obj_parameter.Status";
 		case "Music":
@@ -227,30 +232,6 @@ class TDG {
 			case "Music":
 				var sql = "DELETE FROM Music WHERE id = obj_parameter.id ";
 		}
-	}
-	insertItem(type, obj_parameter){
-		let sql;
-		switch(type){
-			case "Book":
-				sql = "INSERT INTO Book(Title, Author, Format, Pages, Publisher, ISBN-10, ISBN-13, Status, Quantity, Language) "+
-							"VALUES("+obj_parameter.Title+", "+obj_parameter.Author+", "+obj_parameter.Format+", "+obj_parameter.Pages+", "+obj_parameter.Publisher+", "+obj_parameter.ISBN_10+", "+obj_parameterb.ISBN_13+", "+obj_parameter.Status+", "+obj_parameter.Quantity+", "+obj_parameter.Language+")";
-
-			case "Magazine": sql = "INSERT INTO Magazine(Title, Publisher, ISBN-10, ISBN-13, Language)"+
-							"VALUES("+obj_parameter.Title+", "+obj_parameter.Publisher+", "+obj_parameter.ISBN_10+", "+obj_parameter.ISBN_13+","+obj_parameter.Language+")";
-							break;
-			
-			case "Movie":
-				sql = "INSERT INTO Movie(Title, Director, Producers, Actors, Language, Subtitles, Dubbed,ReleaseDate, RunTime, Status) "+
-							"VALUES("+obj_parameter.Title+", "+obj_parameter.Director+", "+obj_parameter.Producers+", "+obj_parameter.Actors+", "+obj_parameter.Language+", "+obj_parameter.Subtitles+", "+obj_parameter.Dubbed+", "+obj_parameter.ReleaseDate+", "+obj_parameter.RunTime+", "+obj_parameter.Status+")";
-							break;
-			
-			case "Music":
-				sql = "INSERT INTO Music(Title , Artist, Label, Type, Quantity, ReleaseDate, ASIN, Status)"+
-							"VALUES("+obj_parameter.Title+", "+obj_parameter.Artist+", "+obj_parameter.Label+", "+obj_parameter.Type+", "+obj_parameter.Quantity+", "+obj_parameter.ReleaseDate+", "+obj_parameter.ASIN+", "+obj_parameter.Status+")";
-							break;
-						
-		}
-		console.log(sql);
 	}
 }
 module.exports = TDG;
