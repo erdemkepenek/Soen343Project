@@ -5,37 +5,12 @@ const bodyParser = require("body-parser");
 const encrypt = require("js-sha512"); 
 const mysql = require("mysql");
 const Mapper = require("./class/Mapper.js");
-const TDG = require("./class/TDG.js");
-let myTDG = new TDG();
+const TDG = require("./class/BookTDG.js");
+let myBookTDG = new TDG();
 
-console.log("AAA");
-myTDG.login('test', 'simple', function(data) {
-	console.log("jjj");
-    console.log(data);
-});
-myTDG.registerUser("Lisa", "Paso", "Wonderland", "6email@email.com", "12349", 1, "simple", function(data){
-	console.log(data);
-	myTDG.deleteUser("6email@email.com",function(data){
-		console.log(data);
-	})
+myBookTDG.modifyItem(24,function(msg){
+	console.log(msg);
 })
-myTDG.fetchUsers(function(data){
-	console.log(data);
-})
-//myTDG.registerUser('Eglenbro','Cecaj','00040 Concordia University, Montreal, Quebec','test',2147433649,'1','simple');
-var Magazine = {
-	Title:"MyTitle",
-	Publisher: "MyPublihser",
-	ISBN_10: "myISBN_10)", 
-	ISBN_13: "MyISBN_13",
-	Language: "MyLanguage"
-}
-myTDG.insertItem("Magazine",Magazine);
-/*myTDG.mysqlConnection.end();*/
-//myTDG.mysqlConnection.end();
-myMapper = new Mapper();
-
-
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "front-end/build")));
