@@ -4,13 +4,28 @@ const app = express();
 const bodyParser = require("body-parser");
 const encrypt = require("js-sha512"); 
 const mysql = require("mysql");
-const Mapper = require("./class/Mapper.js");
-const TDG = require("./class/BookTDG.js");
-let myBookTDG = new TDG();
+const BookMapper = require("./class/Mapper/BookMapper.js");
 
-myBookTDG.modifyItem(24,function(msg){
-	console.log(msg);
-})
+let item = {
+  "idDesc": 28,
+  "title": "successEG",
+  "author": "Shakespear",
+  "format": "hardcopy",
+  "pages": 342,
+  "publisher": "Concordia",
+  "ISBN10": null,
+  "ISBN13": null,
+  "language": "english"
+}
+
+myBookMapper=new BookMapper();
+//myBookMapper.viewItems(function(msg){
+  //console.log(msg);
+//});
+
+myBookMapper.deleteItem(1, function (msg) {
+  console.log(msg);
+});
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "front-end/build")));

@@ -27,11 +27,7 @@ class BookTDG {
 		+ deleteItem();
 	*/
 	viewItems(callback){
-		let sql= '   SELECT bookdesc.iddesc, title, author, format, pages, publisher, `isbn-10`, `isbn-13`, language, Count(id) AS Quantity   '  + 
-				 '   FROM   bookdesc   '  + 
-				 '          LEFT JOIN bookph   '  + 
-				 '                 ON bookph.iddesc = bookdesc.iddesc   '  + 
-				 '  GROUP  BY ( bookdesc.iddesc )   ' ; 
+		let sql = 'SELECT BookDesc.idDesc, Title,Author,Format, Pages, Publisher, `ISBN-10`,`ISBN-13`, Language, COUNT(id) as Quantity FROM BookDesc LEFT JOIN BookPh ON BookPh.idDesc = BookDesc.idDesc GROUP BY (BookDesc.idDesc)' ; 
 		this.runQuery(function(conn,completedQuery){
 			conn.query(sql, (err, rows, fields) => {
 				if (!err){
@@ -55,7 +51,7 @@ class BookTDG {
 	addItem(item, callback){
 		let sql=	 '   INSERT INTO `BookDesc` (`Title`, `Author`, `Format`, `Pages`, `Publisher`, `ISBN-10`, `ISBN-13`, `Language`)  '  + 
 					 '   VALUES  '  + 
-					 '       ("'+item.title+'", "'+item.author+'", "'+item.format+'", '+item.pages+', "'+item.publisher+'", '+item.ISBN10+', '+item.ISBN13+', '+item.language+');  '  + 
+					 '       ("'+item.title+'", "'+item.author+'", "'+item.format+'", '+item.pages+', "'+item.publisher+'", '+item.ISBN10+', '+item.ISBN13+', "'+item.language+'");  '  + 
 					 '   SET @last_id_book = LAST_INSERT_ID();  '  + 
 					 '   INSERT INTO `Items` (id)  '  + 
 					 '   VALUES  '  + 
@@ -108,8 +104,9 @@ class BookTDG {
 	}
 	modifyItem(item,callback){
 		let sql='   UPDATE `BookDesc`  '  + 
-				'   SET Title="'+item.title+'", Author="'+item.author+'", Format="'+item.format+'", Pages='+item.pages+', Publisher="'+item.publisher+'", `ISBN-10`='+item.ISBN10+', `ISBN-13`='+item.ISBN15+', Language='+item.language+'  '  + 
-				'  WHERE idDesc=2;  ';
+				'   SET Title="'+item.title+'", Author="'+item.author+'", Format="'+item.format+'", Pages='+item.pages+', Publisher="'+item.publisher+'", `ISBN-10`='+item.ISBN10+', `ISBN-13`='+item.ISBN13+', Language="'+item.language+'"  '  + 
+				'  WHERE idDesc='+item.idDesc+';  ';
+				console.log(sql);
 		this.runQuery(function(conn,completedQuery){
 			conn.query(sql, (err, rows, fields) => {
 				if (!err){

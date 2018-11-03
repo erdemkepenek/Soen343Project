@@ -1,5 +1,5 @@
-const TDG = require("./TDG.js");
-const IdentityMap = require("./IdentityMap.js");
+const TDG = require("../TDG/TDG.js");
+const IdentityMap = require("../IdentityMap.js");
 class Mapper {
   constructor() {
     console.log("from Mapper");
