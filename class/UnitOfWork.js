@@ -82,16 +82,20 @@ class UnitOfWork{
 		let temp = {};
 		temp.id=id;
 		let index_reg = this.getUserIndex(id, this.registration);
-		temp.registration = this.registration[index_reg][1];
-		this.registration.splice(index_reg,1);
+		if(index_reg>-1){
+			temp.registration = this.registration[index_reg][1];
+			this.registration.splice(index_reg,1);
+		}
 		let index_upt = this.getUserIndex(id, this.updates);
-		temp.updates = this.updates[index_upt][1];
+		if(index_upt>-1){
+			temp.updates = this.updates[index_upt][1];
+			this.updates.splice(index_upt,1);
+		}
 		let index_clean = this.getUserIndex(id, this.erase);
-		temp.erase = this.erase[index_clean][1];
-		this.registration.splice(index_reg,1);
-		this.updates.splice(index_upt,1);
-		this.erase.splice(index_clean,1);
-		
+		if(index_clean>-1){
+			temp.erase = this.erase[index_clean][1];
+			this.erase.splice(index_clean,1);
+		}
 		console.log(this.registration);
 		console.log(this.updates);
 		console.log(this.erase);
