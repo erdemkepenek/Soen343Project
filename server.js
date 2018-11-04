@@ -8,7 +8,20 @@ const BookMapper = require("./class/Mapper/BookMapper.js");
 
 let item = {
   "idDesc": 28,
-  "title": "successEG",
+  "title": "samsung",
+  "author": "Shakespear",
+  "format": "hardcopy",
+  "pages": 342,
+  "publisher": "Concordia",
+  "ISBN10": null,
+  "ISBN13": null,
+  "language": "english"
+}
+
+let item2 = {
+  "id": 46,
+  "idDesc": 26,
+  "title": "samsung",
   "author": "Shakespear",
   "format": "hardcopy",
   "pages": 342,
@@ -23,9 +36,20 @@ myBookMapper=new BookMapper();
   //console.log(msg);
 //});
 
-myBookMapper.deleteItem(1, function (msg) {
-  console.log(msg);
-});
+// myBookMapper.deleteItem(, function (msg) {
+//   console.log(msg);
+// });
+
+//myBookMapper.addItem(2,item);
+
+myBookMapper.modifyItem(2,item2);
+myBookMapper.deleteItem(2, item2.id);
+//myBookMapper.addItem(2, item);
+
+//myBookMapper.commit(2);
+let myCommits = myBookMapper.commit(2);
+console.log(myCommits);
+
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "front-end/build")));
