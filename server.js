@@ -40,15 +40,27 @@ myBookMapper=new BookMapper();
 //   console.log(msg);
 // });
 
-//myBookMapper.addItem(2,item);
 
-myBookMapper.modifyItem(2,item2);
-myBookMapper.deleteItem(2, item2.id);
-//myBookMapper.addItem(2, item);
 
-//myBookMapper.commit(2);
-let myCommits = myBookMapper.commit(2);
-console.log(myCommits);
+myBookMapper.viewItems(2,function(msg){
+  console.log("111111111");
+  console.log(msg);
+  myBookMapper.viewItems(2, function (msg) {
+    console.log("22222222");
+    console.log(msg);
+    console.log(myBookMapper.emptyIDM(2));
+  });
+});
+
+
+
+// myBookMapper.modifyItem(2,item2);
+// myBookMapper.deleteItem(2, item2.id);
+// //myBookMapper.addItem(2, item);
+
+// //myBookMapper.commit(2);
+// let myCommits = myBookMapper.commit(2);
+// console.log(myCommits);
 
 
 // Serve static files from the React app

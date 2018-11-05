@@ -1,5 +1,5 @@
 const BookTDG = require("../TDG/BookTDG.js");
-//const IdentityMap = require ("../IdentityMap.js");
+const IdentityMap = require ("../IdentityMap.js");
 const UnitOfWork = require("../UnitOfWork.js");
 
 class BookMapper{
@@ -7,17 +7,30 @@ class BookMapper{
   console.log("from BookMapper");
     this.BookTDG=new BookTDG();
     this.BookUnitOfWork=new UnitOfWork();
-    //this.BookIdentitymap= new IdentityMap();
+    this.BookIdentitymap= new IdentityMap();
     
   }
   
-  viewItems(callback){
-      this.BookTDG.viewItems(function(msg){
-        callback(msg);
-      });
+  viewItems(id,callback){
+      let temp = this.BookIdentitymap;
+      var result = temp.getItems(id);
+      //console.log(result);
+      if (result.Items.length == 0 ){
+        console.log("Getting from database");
+        this.BookTDG.viewItems(function(msg){
+          temp.addItem(id,msg);
+          //console.log((temp.getItems(id)));
+          callback(msg);
+        });
+      }
+      else{ 
+        console.log("received from Identity Map");
+        callback(result);
+      }
     }
     
   
+
   addItem(id,item,callback){
     this.BookUnitOfWork.addNew(id,item);
     // this.BookTDG.addItem(item,function(msg){
@@ -35,6 +48,11 @@ class BookMapper{
     // this.BookTDG.deleteItem(id, function (msg) {
     //   callback(msg);
     // });
+  }
+
+  emptyIDM(id){
+    let temp = this.BookIdentitymap;
+    return temp.empty(id);
   }
 
   commit(id,callback){
