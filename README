@@ -12,10 +12,46 @@ TEAM #8
 - Anthony Iatropoulos 40028246 anthonyiatropoulos@hotmail.com
 
 
-HOW TO RUN THE Soen343Project:
+Project Title
+Online library & Catalog to Rent items of music, book, magazine and movie.
 
+Getting Started
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+
+Prerequisites
+What things you need to install the software and how to install them
+
+Give examples
+
+C:Users\ExampleUser\WebstormProjects\Soen343Project>npm install
+C:Users\ExampleUser\WebstormProjects\Soen343Project>npm run server
+C:Users\ExampleUser\WebstormProjects\Soen343Project\front-end> npm install
+C:Users\ExampleUser\WebstormProjects\Soen343Project\front-end> npm start
+
+Installing
 - Install npm packages to Soen343Project directory  by running  "npm install" command in Soen343Project directory.
-- After installing the npm packages, at Soen343Project directory please run command "npm run server" to run the server
-- Then inside Soen343Project reach out to front-end directory and install the npm packages for front end by running again
+- After installing the npm packages, at Soen343Project directory, run "npm run server" command to run the server
+- After running the server at Soen343Project directory, reach out to front-end directory and install the npm packages for front end by running again
 "npm install" command.
-- Finally, at front-end directory run the "npm start" command to initiliaze the application.
+- Finally, at front-end directory run "npm start" command to initiliaze the application.
+- The application will run on localhost:3000
+
+
+Built With
+React, Express - The web framework used
+React Semantics, Antd, Axios, Lodash, Moment - Dependency Management
+
+Authors
+- Marc-Henry Noon
+- Erdem Kepenek
+- Manpreet Singh
+- Eglen Cecaj
+- Mike Salib
+- Khang Zheng Ng
+- Yongtang Lu
+- Line Ghanem
+- David Bechara
+- Anthony Iatropoulos
+
+License
+This project is licensed under the MIT License - see the LICENSE.md file for details
