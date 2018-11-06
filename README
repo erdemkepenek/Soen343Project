@@ -23,12 +23,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 Latest Version of Node.js and git installed on your local machine.
 
-### Example
-
-C:Users\ExampleUser\WebstormProjects\Soen343Project>npm install
-C:Users\ExampleUser\WebstormProjects\Soen343Project>npm run server
-C:Users\ExampleUser\WebstormProjects\Soen343Project\front-end> npm install
-C:Users\ExampleUser\WebstormProjects\Soen343Project\front-end> npm start
+```
 
 ### Installing
 
@@ -38,6 +33,13 @@ C:Users\ExampleUser\WebstormProjects\Soen343Project\front-end> npm start
 "npm install" command.
 - Finally, at front-end directory run "npm start" command to initiliaze the application.
 - The application will run on localhost:3000
+
+### Example
+
+C:Users\ExampleUser\WebstormProjects\Soen343Project>npm install
+C:Users\ExampleUser\WebstormProjects\Soen343Project>npm run server
+C:Users\ExampleUser\WebstormProjects\Soen343Project\front-end> npm install
+C:Users\ExampleUser\WebstormProjects\Soen343Project\front-end> npm start
 
 ```
 
