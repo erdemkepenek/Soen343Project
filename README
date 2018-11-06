@@ -17,4 +17,4 @@ HOW TO RUN THE Soen343Project:
 - Install npm packages to Soen343Project directory  by running  "npm install" command in Soen343Project directory.
 - After installing the npm packages, at Soen343Project directory please run command "npm run server" to run the server
 - Then inside Soen343Project reach out to front-end directory and install the npm packages for front end by running again "npm install" command.
-- Finally, run the "npm start" command to initiliaze the application.
+- Finally, at front-end directory run the "npm start" command to initiliaze the application.
