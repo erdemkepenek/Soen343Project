@@ -50,7 +50,7 @@ C:Users\ExampleUser\WebstormProjects\Soen343Project\front-end> npm start
 * [Ant Design](https://ant.design/) - Dependency Management
 * [Lodash](https://lodash.com/) - Dependency Management
 * [Moment.js](https://momentjs.com/) - Dependency Management
-* [Axios](https://github.com/axios/axios) - Used to generate RSS Feeds
+* [Axios](https://github.com/axios/axios) - Used to generate get post requests on the client layer
 
 
 ## Authors & Contributors
