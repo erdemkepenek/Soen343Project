@@ -8,7 +8,7 @@ import {withRouter} from 'react-router-dom'
 import {Button, Form, Grid, Icon, Image, Message, Segment} from 'semantic-ui-react'
 import {Redirect} from "react-router";
 import DataTable from '../Components/Common/table/table';
-import UserProfile from "./addUser";
+import UserProfile from "./userProfile";
 
 let tableArray = [];
 
