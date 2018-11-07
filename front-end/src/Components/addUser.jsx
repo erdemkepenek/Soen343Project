@@ -18,13 +18,13 @@ class AddUser extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            firstName: '',
-            lastName:'',
-            phone:'',
-            address:'',
-            email:'',
+            firstName: this.props.profile? this.props.profile.FirstName : "",
+            lastName: this.props.profile? this.props.profile.LastName : "",
+            phone:this.props.profile? this.props.profile.phone : "",
+            address:this.props.profile? this.props.profile.Address : "",
+            email:this.props.profile? this.props.profile.email : "",
             password: '',
-            type: '',
+            type: this.props.profile? (this.props.profile.type=== 1 ? "Client" : "Administrator") : "",
             errorFirstName:false,
             errorLastName:false,
             errorPhone:false,
@@ -108,10 +108,66 @@ class AddUser extends Component {
             this.props.history.push(`/users`);
         }
     }
+    editUser=()=>{
+        let {firstName,lastName,phone,address, email, password, type } = this.state;
+        if(!firstName || !lastName || !phone || !address || !email || !password || !type){
+            if(!firstName){
+                this.setState({errorFirstName: true})
+            }
+            if(!lastName){
+                this.setState({errorLastName: true})
+            }
+            if(!phone){
+                this.setState({errorPhone: true})
+            }
+            if(!address){
+                this.setState({errorAddress: true})
+            }
+            if(!email){
+                this.setState({errorEmail: true})
+            }
+            if(!password){
+                this.setState({errorPassword: true})
+            }
+            if(!type){
+                this.setState({errorType: true})
+            }
+            this.signupError();
+        }else{
+            let data={
+                firstName: firstName,
+                lastName: lastName,
+                phone: phone,
+                address: address,
+                email: email,
+                password: password,
+                type: ','
+            }
+            if(this.state.type = 'Client'){
+                data.type=false;
+            }else{
+                data.type=true;
+            }
+            console.log(data)
+
+            this.editConfirmation();
+            this.props.closeProfile();
+            this.props.history.push(`/users`);
+        }
+    }
+
     signupConfirmation = () => {
         notification.success({
             message: 'Sucess',
             description: 'You have Created an Account!',
+            duration:6,
+        });
+    };
+
+    editConfirmation = () => {
+        notification.success({
+            message: 'Sucess',
+            description: 'You have Editted a User!',
             duration:6,
         });
     };
@@ -135,15 +191,17 @@ class AddUser extends Component {
                         <div className="MainContainer-upper-container">
                             <div className="MainContainer-upper-container-text">
                                 <div className="MainContainer-upper-container-first-text">
-                                    Add User
+                                   {this.props.profile? "Edit User" : "Add User"}
                                 </div>
                                 <div className="MainContainer-upper-container-second-text">
-                                    You can register new user to the system!
+                                {this.props.profile? "You can edit a user" : "You can register new user to the system!"}
+                                    
                                 </div>
                             </div>
                         </div>
                         <Form size='large' className='SettingsForm'>
-                            <Header as='h2' className='login-Header' style={{marginTop:'3%'}}textAlign='center'>Create an Account
+                            <Header as='h2' className='login-Header' style={{marginTop:'3%'}}textAlign='center'> {
+                                this.props.profile? "Edit an Account" : "Create an Account"}
                             </Header>
                             <Form.Group width='equal'>
                                 <Form.Input
@@ -211,8 +269,8 @@ class AddUser extends Component {
                                 onChange={this.changePassword}
                                 type='password'
                             />
-                            <Button className='login-button' fluid size='large' onClick={this.signUp}>
-                                Sign Up
+                            <Button className='login-button' fluid size='large' onClick={this.props.profile? this.editUser :this.signUp}>
+                            {this.props.profile? "Save" : "Sign Up"}
                             </Button>
                         </Form>
                     </div>
