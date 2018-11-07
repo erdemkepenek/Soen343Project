@@ -71,23 +71,16 @@ class IdentityMap
         let index_clean = this.getUserIndex(id, this.Items);
 		if(index_clean>-1){
             this.Items.splice(index_clean,1);
+            console.log("success deleted bravoooo");
             return "Success, deleted !";
 		}
 		else {
+            console.log("User not found damnnnnnnn");
 			return "User not found.";
 		}
     }
     
     
-    // find(item)
-    // {
-    //     return ItemList.contains(item)
-    // }
-
-    // empty()
-    // {
-    //     ItemList.clear();
-    // }
 
 }
 module.exports = IdentityMap;

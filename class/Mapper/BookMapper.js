@@ -50,10 +50,10 @@ class BookMapper{
     // });
   }
 
-  emptyIDM(id){
-    let temp = this.BookIdentitymap;
-    return temp.empty(id);
-  }
+  // emptyIDM(id){
+  //   let temp = this.BookIdentitymap;
+  //   return temp.empty(id);
+  // }
 
   commit(id,callback){
     let items = this.BookUnitOfWork.commit(id);
@@ -78,6 +78,11 @@ class BookMapper{
         console.log(msg);
       });
     }
+
+    //empty IdentityMap
+    let IDM = this.BookIdentitymap;
+    IDM.empty(id);
+
   }
 
 
