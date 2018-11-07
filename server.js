@@ -43,18 +43,17 @@ myBookMapper=new BookMapper();
 
 
 myBookMapper.viewItems(2,function(msg){
-  console.log("111111111");
-  console.log(msg);
-  myBookMapper.viewItems(2, function (msg) {
-    console.log("22222222");
-    console.log(msg);
-    console.log(myBookMapper.emptyIDM(2));
-  });
+  console.log("lol");
+  myBookMapper.commit(2);
+  // myBookMapper.viewItems(2, function (msg) {
+  //   console.log("22222222");
+  //   console.log(msg);
+  // });
 });
 
 
 
-// myBookMapper.modifyItem(2,item2);
+//myBookMapper.commit(2);
 // myBookMapper.deleteItem(2, item2.id);
 // //myBookMapper.addItem(2, item);
 
