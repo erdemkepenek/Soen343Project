@@ -7,29 +7,57 @@ import FooterComponent from './Common/footer/footer'
 import {withRouter} from 'react-router-dom'
 import {Button, Form, Grid, Icon, Image, Message, Segment} from 'semantic-ui-react'
 import {Redirect} from "react-router";
-import DataTable from '../Components/Common/table/table'
-import Controller from '../class/controller'
-let controller = new Controller;
-let tableArray= [];
+import DataTable from '../Components/Common/table/table';
+import UserProfile from "./addUser";
+
+let tableArray = [];
+
 class Users extends Component {
     constructor(props) {
         super(props);
-        this.state = {
+        this.state = {profile:'',
         }
     }
     componentDidMount() {
-        let temp = this;
-        controller.getUsers(function(data){
-            console.log(data)
-            tableArray=data;
-            temp.forceUpdate();
-        });
+    /*    axios.get('/client').then(
+            function (response, err) {
+                console.log(response)
+            }.bind(this)
+        ); */
+        tableArray= [];
+        let marc={
+            FirstName: "marc",
+            LastName:"noon",
+            email: "marc@gmail,com",
+            phone: 672672,
+            Address: "267 guy",
+            type: 1,
+            id: 627822,
+        
+        }
+        tableArray.push(marc);
+        this.forceUpdate();
     }
+
+    closeProfile=()=>{
+        this.setState({profile: ""})
+}
+
     openProfile=(data)=>{
         console.log(data);
+        this.setState({profile: data})
     }
     render() {
-        let columnItems =[
+        if(!this.props.userProfile) {
+            return (<Redirect to={'/'}/>);
+        
+        } else if (this.state.profile){
+            return(<UserProfile 
+                closeProfile={this.closeProfile}
+                    profile= { this.state.profile}/>)
+        }
+        else {
+            let columnItems =[
                 {value : 'User ID', render : 'User ID', type : 'number'},
                 {value : 'First Name', render : 'First Name', type : 'text'},
                 {value : 'Last Name', render : 'Last Name', type : 'text'},
@@ -51,11 +79,7 @@ class Users extends Component {
                     userData
                 ]
                 tableItems.push(arrData);
-
             })
-        if(!this.props.userProfile) {
-            return (<Redirect to={'/'}/>);
-        }else {
             return (
                 <div className='main-container'>
                     <HeaderComponent/>
