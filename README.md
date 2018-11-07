@@ -27,12 +27,15 @@ Latest Version of Node.js and git installed on your local machine.
 
 ### Installing
 
+```
+
 - Install npm packages to Soen343Project directory  by running  "npm install" command in Soen343Project directory.
 - After installing the npm packages, at Soen343Project directory, run "npm run server" command to run the server
-- After running the server at Soen343Project directory, reach out to front-end directory and install the npm packages for front end by running again
-"npm install" command.
+- After running the server at Soen343Project directory, reach out to front-end directory and install the npm packages for front end by running again "npm install" command.
 - Finally, at front-end directory run "npm start" command to initiliaze the application.
 - The application will run on localhost:3000
+
+```
 
 ### Example
 
@@ -41,7 +44,7 @@ C:Users\ExampleUser\WebstormProjects\Soen343Project>npm run server
 C:Users\ExampleUser\WebstormProjects\Soen343Project\front-end> npm install
 C:Users\ExampleUser\WebstormProjects\Soen343Project\front-end> npm start
 
-```
+
 
 ## Built With
 * [React](https://reactjs.org/) - The web framework used
