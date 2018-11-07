@@ -14,7 +14,7 @@ import Catalog from './Components/catalog';
 import Settings from './Components/settings'
 import Adminpanel from './Components/adminPanel'
 import Users from './Components/users'
-import AddUser from './Components/addUser'
+import UserProfile from './Components/userProfile'
 import connect from "react-redux/es/connect/connect";
 class App extends Component {
     componentDidMount(){
@@ -33,7 +33,7 @@ class App extends Component {
         <Route exact path="/ecatalog" component={Catalog} />
         <Route exact path="/settings" component={Settings} />
         <Route exact path="/users" component={Users} />
-        <Route exact path="/adduser" component={AddUser} />
+        <Route exact path="/adduser" component={UserProfile} />
         <Route exact path="/adminpanel" component={Adminpanel} />
           </Switch>
     );
