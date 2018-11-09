@@ -31,7 +31,7 @@ class RedirectItem extends Component {
     }
     else if (this.props.profile.Type === "Music"){return(<MusicProfile musicProfile= {this.props.profile} closeProfile= {this.closeProfile}/>)} 
 
-    //else if (this.props.profile.Type === "Magazine") {return(<MagazineProfile magazineProfile= {this.props.profile} closeProfile= {this.closeProfile}/>)}
+    else if (this.props.profile.Type === "Magazine") {return(<MagazineProfile magazineProfile= {this.props.profile} closeProfile= {this.closeProfile}/>)}
 
     else  {return(<MovieProfile movieProfile= {this.props.profile} closeProfile= {this.closeProfile}/>)}
         }   
