@@ -32,6 +32,7 @@ class Catalog extends Component {
             Type: "Book",
             }
             tableArray.push(book);
+            this.forceUpdate();
 
             let music={
                 Title: "marc' music",
@@ -73,7 +74,7 @@ class Catalog extends Component {
                 Type: "Movie",
                 }
                 tableArray.push(movie);
-            
+                this.forceUpdate();
         }
     
         closeProfile=()=>{
