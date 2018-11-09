@@ -15,7 +15,7 @@ class BookProfile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            bookTitle: this.props.bookProfile? this.props.bookProfile.BookTitle : "",
+            Title: this.props.bookProfile? this.props.bookProfile.Title : "",
             author: this.props.bookProfile? this.props.bookProfile.Author : "",
             format: this.props.bookProfile? this.props.bookProfile.Format : "",
             pages: this.props.bookProfile? this.props.bookProfile.Pages : "",
@@ -24,7 +24,7 @@ class BookProfile extends Component {
             ISBN10: this.props.bookProfile? this.props.bookProfile.ISBN10 : "",
             ISBN13: this.props.bookProfile? this.props.bookProfile.ISBN13 : "",
             quantity: this.props.bookProfile? this.props.bookProfile.Quantity : "",
-            errorBookTitle: false,
+            errorTitle: false,
             errorAuthor: false,
             errorFormat: false,
             errorPages: false,
@@ -36,9 +36,9 @@ class BookProfile extends Component {
         }
     }
     
-    changeBookTitle=(e)=>{
-        this.setState({bookTitle:e.target.value})
-        this.setState({errorBookTitle: false})
+    changeTitle=(e)=>{
+        this.setState({Title:e.target.value})
+        this.setState({errorTitle: false})
     }
     changeAuthor=(e)=>{
         this.setState({author:e.target.value})
@@ -74,10 +74,10 @@ class BookProfile extends Component {
     }
 
    editBook=()=>{
-        let {bookTitle,author,format,pages, publisher, language, ISBN10, ISBN13, quantity } = this.state;
-        if(!bookTitle || !author || !format || !pages || !publisher || !language || !ISBN10 || !ISBN13 || !quantity){
-            if(!bookTitle){
-                this.setState({errorBookTitle: true})
+        let {Title,author,format,pages, publisher, language, ISBN10, ISBN13, quantity } = this.state;
+        if(!Title || !author || !format || !pages || !publisher || !language || !ISBN10 || !ISBN13 || !quantity){
+            if(!Title){
+                this.setState({errorTitle: true})
             }
             if(!author){
                 this.setState({errorAuthor: true})
@@ -106,7 +106,7 @@ class BookProfile extends Component {
             this.bookError();
         }else{
             let data={
-                Title: bookTitle,
+                Title: Title,
                 Author: author,
                 Format: format,
                 Pages: pages,
@@ -135,10 +135,10 @@ class BookProfile extends Component {
     };
 
     addBook=()=>{
-        let {bookTitle,author,format,pages, publisher, language, ISBN10, ISBN13, quantity } = this.state;
-        if(!bookTitle || !author || !format || !pages || !publisher || !language || !ISBN10 || !ISBN13 || !quantity){
-            if(!bookTitle){
-                this.setState({errorBookTitle: true})
+        let {Title,author,format,pages, publisher, language, ISBN10, ISBN13, quantity } = this.state;
+        if(!Title || !author || !format || !pages || !publisher || !language || !ISBN10 || !ISBN13 || !quantity){
+            if(!Title){
+                this.setState({errorTitle: true})
             }
             if(!author){
                 this.setState({errorAuthor: true})
@@ -167,7 +167,7 @@ class BookProfile extends Component {
             this.bookError();
         }else{
             let data={
-                Title: bookTitle,
+                Title: Title,
                 Author: author,
                 Format: format,
                 Pages: pages,
@@ -235,9 +235,9 @@ class BookProfile extends Component {
                                     iconPosition='left'
                                     placeholder='Bel Ami'
                                     label='Title:'
-                                    value={this.state.bookTitle}
-                                    error={this.state.errorBookTitle}
-                                    onChange={this.changeBookTitle}
+                                    value={this.state.Title}
+                                    error={this.state.errorTitle}
+                                    onChange={this.changeTitle}
                                     width={8}/>
                                 <Form.Input
                                     icon='user'
