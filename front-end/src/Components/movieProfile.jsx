@@ -249,7 +249,7 @@ class MovieProfile extends Component {
                                 fluid icon='user'
                                 iconPosition='left'
                                 placeholder='Ex: Digital'
-                                value={this.state.Producers}
+                                value={this.state.producers}
                                 error={this.state.errorProducers}
                                 onChange={this.changeProducers}
                                 label='Producers:'/>
