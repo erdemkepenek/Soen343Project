@@ -10,7 +10,7 @@ import {Redirect} from "react-router";
 import BookProfile from "./bookProfile";
 import BookProfile from "./musicProfile";
 import BookProfile from "./movieProfile";
-import BookProfile from "./mogazineProfile";
+import BookProfile from "./magazineProfile";
 
 class RedirectItem extends Component {
     constructor(props) {
