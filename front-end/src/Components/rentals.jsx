@@ -8,7 +8,8 @@ import {withRouter} from 'react-router-dom'
 import {Button, Form, Grid, Icon, Image, Message, Segment} from 'semantic-ui-react'
 import {Redirect} from "react-router";
 import DataTable from '../Components/Common/table/table'
-
+import RedirectItem from "./redirectItem"
+let tableArray= [];
 class Rentals extends Component {
     constructor(props) {
         super(props);
@@ -16,10 +17,55 @@ class Rentals extends Component {
         }
     }
 
+    componentDidMount() {
+        tableArray= [];
+        let book={
+            BookTitle: "marc",
+            Author: "marc noon",
+            Format: "marc format",
+            Pages: 567,
+            Publisher: "marc again",
+            Language: "marc's language",
+            ISBN10: 1234567890,
+            ISBN13: "7927927892",
+            Quantity: 67,
+            Type: "Book",
+        }
+        tableArray.push(book);
+        this.forceUpdate();
+    }
+
+    closeProfile=()=>{
+        this.setState({profile: ""})
+    }
+
+    openProfile=(data)=>{
+        console.log(data);
+        this.setState({profile: data})
+    }
+
     render() {
         if(!this.props.userProfile) {
             return (<Redirect to={'/'}/>);
-        }else {
+        }else if(this.state.profile) {
+            return (<RedirectItem closeProfile={this.closeProfile}
+                                  profile= { this.state.profile}/>)
+
+        }else{
+            let columnItems =[
+                {value : 'Title', render : 'Title', type : 'text'},
+                {value : 'Type', render : 'Type', type : 'text'},
+
+            ];
+            let tableItems = [];
+            tableArray.map((itemData)=>{
+                let arrData=[
+                    {value : itemData.BookTitle, render : itemData.BookTitle, type : 'text'},
+                    {value : itemData.Type, render : itemData.Type, type : 'text'},
+                    itemData
+                ]
+                tableItems.push(arrData);
+            })
             return (
                 <div className='main-container'>
                     <HeaderComponent/>
@@ -35,7 +81,10 @@ class Rentals extends Component {
                             </div>
                         </div>
                         <DataTable
-                            errorMessage="There is no Rentals"/>
+                            columnItems={columnItems}
+                            data={tableItems}
+                            itemsPerPage={10}
+                            clickRow={this.openProfile}/>
                     </div>
 
                     <FooterComponent/>

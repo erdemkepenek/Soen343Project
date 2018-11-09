@@ -17,7 +17,11 @@ class HeaderComponent extends Component { //
     cart=()=>this.props.history.push(`/cart`);
     settings=()=>this.props.history.push(`/settings`);
     adminPanel=()=>this.props.history.push(`/adminpanel`);
-    catalog=()=>this.props.history.push(`/ecatalog`);
+    catalog=()=>{
+        if(this.props.closeProfileItem){
+            this.props.closeProfileItem();
+        }
+        this.props.history.push(`/ecatalog`);}
     rentals=()=>this.props.history.push(`/rentals`);
     logout=()=> {
         localStorage.removeItem("jwtToken");
@@ -51,7 +55,7 @@ class HeaderComponent extends Component { //
                                             <Dropdown.Item icon='cart' text='Cart' onClick={this.cart}/>
                                             <Dropdown.Item icon='inbox' text='Rentals' onClick={this.rentals} />
                                             <Dropdown.Item icon='cog' text='Settings' onClick={this.settings}/>
-                                            <Dropdown.Item icon='user' text='Admin Panel' onClick={this.adminPanel}/>
+                                            <Dropdown.Item icon='user secret' text='Admin Panel' onClick={this.adminPanel}/>
                                             <Dropdown.Item icon='log out' text='Logout' onClick={this.logout} />
                                         </Dropdown.Menu>
                                     </Dropdown>

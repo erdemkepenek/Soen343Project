@@ -8,7 +8,7 @@ import {withRouter} from 'react-router-dom'
 import {Button, Form, Grid, Header, Icon, Image, Message, Segment} from 'semantic-ui-react'
 import {Redirect} from "react-router";
 import DataTable from '../Components/Common/table/table'
-import {notification} from "antd";
+import {notification,Popconfirm} from "antd";
 
 const optionsType = [
     {key: 'Client', value: 'Client', text: 'Client'},
@@ -178,8 +178,15 @@ class AddUser extends Component {
             duration:6,
         });
     };
-
-
+    deleteUser=()=>{
+        this.props.closeProfile();
+    }
+    backToUsers=()=>{
+        this.props.history.push(`/users`);
+        if(this.props.profile){
+            this.props.closeProfile();
+        }
+    }
     render() {
         if(!this.props.userProfile) {
             return (<Redirect to={'/'}/>);
@@ -197,6 +204,14 @@ class AddUser extends Component {
                                 {this.props.profile? "You can edit a user" : "You can register new user to the system!"}
                                     
                                 </div>
+                            </div>
+                            <div className='MainContainer-upper-container-button'>
+                                <Button icon='user' content='Back to Users' onClick={this.backToUsers}/>
+                                {this.props.profile?
+                                <Popconfirm title="Are you sure to delete this User?" onConfirm={this.deleteUser} placement="bottomRight" okText="Yes" cancelText="No">
+                                    <Button icon='user' content='Delete User'/>
+                                </Popconfirm>
+                                    : ''}
                             </div>
                         </div>
                         <Form size='large' className='SettingsForm'>

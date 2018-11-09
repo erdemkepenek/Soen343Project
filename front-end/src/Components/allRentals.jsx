@@ -10,7 +10,7 @@ import {Redirect} from "react-router";
 import DataTable from '../Components/Common/table/table'
 import RedirectItem from "./redirectItem"
 let tableArray= [];
-class Catalog extends Component {
+class AllRentals extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -18,8 +18,8 @@ class Catalog extends Component {
     }
 
     componentDidMount() {
-            tableArray= [];
-            let book={
+        tableArray= [];
+        let book={
             BookTitle: "marc",
             Author: "marc noon",
             Format: "marc format",
@@ -30,42 +30,38 @@ class Catalog extends Component {
             ISBN13: "7927927892",
             Quantity: 67,
             Type: "Book",
-            }
-            tableArray.push(book);
-        this.props.history.push(`/ecatalog/`);
-            this.forceUpdate();
         }
-    
-        closeProfile=()=>{
-            this.setState({profile: ""})
+        tableArray.push(book);
+        this.forceUpdate();
     }
-    
-        openProfile=(data)=>{
-            console.log(data);
-            this.props.history.push(`/ecatalog/`+data.BookTitle);
-            this.setState({profile: data})
-        }
+
+    closeProfile=()=>{
+        this.setState({profile: ""})
+    }
+
+    openProfile=(data)=>{
+        console.log(data);
+        this.setState({profile: data})
+    }
 
     render() {
         if(!this.props.userProfile) {
             return (<Redirect to={'/'}/>);
-        }else if(this.state.profile) { 
+        }else if(this.state.profile) {
             return (<RedirectItem closeProfile={this.closeProfile}
-                profile= { this.state.profile}/>)
+                                  profile= { this.state.profile}/>)
 
         }else{
             let columnItems =[
                 {value : 'Title', render : 'Title', type : 'text'},
                 {value : 'Type', render : 'Type', type : 'text'},
-                {value : 'Quantity', render : 'Quantity', type : 'number'},
-                
+
             ];
             let tableItems = [];
-        tableArray.map((itemData)=>{
+            tableArray.map((itemData)=>{
                 let arrData=[
                     {value : itemData.BookTitle, render : itemData.BookTitle, type : 'text'},
                     {value : itemData.Type, render : itemData.Type, type : 'text'},
-                    {value : itemData.Quantity, render : itemData.Quantity, type : 'number'},
                     itemData
                 ]
                 tableItems.push(arrData);
@@ -77,7 +73,7 @@ class Catalog extends Component {
                         <div className="MainContainer-upper-container">
                             <div className="MainContainer-upper-container-text">
                                 <div className="MainContainer-upper-container-first-text">
-                                    Catalog
+                                    Rentals
                                 </div>
                                 <div className="MainContainer-upper-container-second-text">
                                     You can select one of the item to see their details!
@@ -103,4 +99,4 @@ function mapStateToProps(state){
     };
 
 }
-export default withRouter(connect(mapStateToProps)(Catalog));
+export default withRouter(connect(mapStateToProps)(AllRentals));
