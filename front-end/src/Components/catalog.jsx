@@ -124,6 +124,8 @@ class Catalog extends Component {
                                     You can select one of the item to see their details!
                                 </div>
                             </div>
+
+                            
                         </div>
                         <DataTable
                             columnItems={columnItems}
