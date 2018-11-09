@@ -8,6 +8,10 @@ import {withRouter} from 'react-router-dom'
 import {Button, Form, Grid, Icon, Image, Message, Segment} from 'semantic-ui-react'
 import {Redirect} from "react-router";
 import BookProfile from "./bookProfile";
+import BookProfile from "./musicProfile";
+import BookProfile from "./movieProfile";
+import BookProfile from "./magazineProfile";
+
 class RedirectItem extends Component {
     constructor(props) {
         super(props);
@@ -23,9 +27,9 @@ class RedirectItem extends Component {
     if (this.props.profile.Type === "Book"){
         return(<BookProfile bookProfile= {this.props.profile} closeProfile= {this.closeProfile}/>)
     }
-    else if (this.props.profile.Type === "Music"){return(<div>this is music</div>)} 
-    else if (this.props.profile.Type === "Magazine") {return(<div>this is magazine</div>)}
-    else  {return(<div>this is movie</div>)}
+    else if (this.props.profile.Type === "Music"){return(<MusicProfile musicProfile= {this.props.profile} closeProfile= {this.closeProfile}/>)} 
+    else if (this.props.profile.Type === "Magazine") {return(<MagazineProfile magazineProfile= {this.props.profile} closeProfile= {this.closeProfile}/>)}
+    else  {return(<MovieProfile movieProfile= {this.props.profile} closeProfile= {this.closeProfile}/>)}
         }   
 }
 function mapStateToProps(state){
