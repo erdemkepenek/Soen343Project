@@ -36,7 +36,7 @@ class Catalog extends Component {
             let music={
                 Title: "marc' music",
                 Artist: "marc noon",
-                Type: "marc type",
+                MusicType: "marc type",
                 Label: "label marc",
                 ReleaseDate: "marc again",
                 ASIN: "TY157373",
@@ -45,6 +45,35 @@ class Catalog extends Component {
                 }
                 tableArray.push(music);
             this.forceUpdate();
+
+            let magazine={
+                Title: "marc' magazine",
+                Publisher: "marc again",
+                Language: "marc's language",
+                Label: "label marc",
+                ISBN10: 1234567890,
+                ISBN13: "7927927892",
+                Quantity: 67,
+                Type: "Magazine",
+                }
+                tableArray.push(magazine);
+            this.forceUpdate();
+            
+            let movie={
+                Title: "marc' movie",
+                Director: "marc noon",
+                Producers: "marc type",
+                Actors: "label marc",
+                Language: "marc's language",
+                Subtitles: "marc's language",
+                Dubbed: "marc's language",
+                ReleaseDate: "marc again",
+                RunTime: "TY157373",
+                Quantity: 67,
+                Type: "Music",
+                }
+                tableArray.push(movie);
+            
         }
     
         closeProfile=()=>{
