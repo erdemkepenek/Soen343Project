@@ -10,7 +10,7 @@ import {Redirect} from "react-router";
 import DataTable from '../Components/Common/table/table'
 import RedirectItem from "./redirectItem"
 let tableArray= [];
-class Rentals extends Component {
+class AllRentals extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -99,4 +99,4 @@ function mapStateToProps(state){
     };
 
 }
-export default withRouter(connect(mapStateToProps)(Rentals));
+export default withRouter(connect(mapStateToProps)(AllRentals));

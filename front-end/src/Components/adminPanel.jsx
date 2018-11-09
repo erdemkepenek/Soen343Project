@@ -38,14 +38,28 @@ class AdminPanel extends Component {
                             <Grid.Row columns={2}>
                                 <Grid.Column>
                                     <div className='iconsDashboard' onClick={this.users}>
-                                        <Icon name='user' />
+                                        <Icon name='users' />
                                         <p>Users</p>
                                     </div>
                                 </Grid.Column>
                                 <Grid.Column>
                                     <div className='iconsDashboard' onClick={this.addUser}>
-                                        <Icon name='add user'  />
-                                        <p>Add User</p>
+                                        <Icon name='inbox'  />
+                                        <p>All Rentals</p>
+                                    </div>
+                                </Grid.Column>
+                            </Grid.Row>
+                            <Grid.Row columns={2}>
+                                <Grid.Column>
+                                    <div className='iconsDashboard' onClick={this.settings}>
+                                        <Icon name='folder open' />
+                                        <p>Transaction History</p>
+                                    </div>
+                                </Grid.Column>
+                                <Grid.Column>
+                                    <div className='iconsDashboard' onClick={this.rentals}>
+                                        <Icon name='history' />
+                                        <p>Login Logs</p>
                                     </div>
                                 </Grid.Column>
                             </Grid.Row>
