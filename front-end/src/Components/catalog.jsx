@@ -70,7 +70,7 @@ class Catalog extends Component {
                 ReleaseDate: "marc again",
                 RunTime: "TY157373",
                 Quantity: 67,
-                Type: "Music",
+                Type: "Movie",
                 }
                 tableArray.push(movie);
             
