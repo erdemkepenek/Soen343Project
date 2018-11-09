@@ -20,7 +20,7 @@ class Catalog extends Component {
     componentDidMount() {
             tableArray= [];
             let book={
-            BookTitle: "marc",
+            Title: "Marc's book",
             Author: "marc noon",
             Format: "marc format",
             Pages: 567,
@@ -32,7 +32,48 @@ class Catalog extends Component {
             Type: "Book",
             }
             tableArray.push(book);
+
+            let music={
+                Title: "marc' music",
+                Artist: "marc noon",
+                MusicType: "marc type",
+                Label: "label marc",
+                ReleaseDate: "marc again",
+                ASIN: "TY157373",
+                Quantity: 67,
+                Type: "Music",
+                }
+                tableArray.push(music);
             this.forceUpdate();
+
+            let magazine={
+                Title: "marc' magazine",
+                Publisher: "marc again",
+                Language: "marc's language",
+                Label: "label marc",
+                ISBN10: 1234567890,
+                ISBN13: "7927927892",
+                Quantity: 67,
+                Type: "Magazine",
+                }
+                tableArray.push(magazine);
+            this.forceUpdate();
+            
+            let movie={
+                Title: "marc' movie",
+                Director: "marc noon",
+                Producers: "marc type",
+                Actors: "label marc",
+                Language: "marc's language",
+                Subtitles: "marc's language",
+                Dubbed: "marc's language",
+                ReleaseDate: "marc again",
+                RunTime: "TY157373",
+                Quantity: 67,
+                Type: "Music",
+                }
+                tableArray.push(movie);
+            
         }
     
         closeProfile=()=>{
@@ -62,7 +103,7 @@ class Catalog extends Component {
             let tableItems = [];
         tableArray.map((itemData)=>{
                 let arrData=[
-                    {value : itemData.BookTitle, render : itemData.BookTitle, type : 'text'},
+                    {value : itemData.Title, render : itemData.Title, type : 'text'},
                     {value : itemData.Type, render : itemData.Type, type : 'text'},
                     {value : itemData.Quantity, render : itemData.Quantity, type : 'number'},
                     itemData

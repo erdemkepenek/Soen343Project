@@ -11,8 +11,7 @@ import BookProfile from "./bookProfile";
 
 import MusicProfile from "./musicProfile";
 import MovieProfile from "./movieProfile";
-//import MagazineProfile from "./magazineProfile";
-
+import MagazineProfile from "./magazineProfile";
 
 
 class RedirectItem extends Component {

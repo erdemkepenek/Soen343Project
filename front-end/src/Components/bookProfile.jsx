@@ -15,7 +15,9 @@ class BookProfile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            Title: this.props.bookProfile? this.props.bookProfile.BookTitle : "",
+
+            Title: this.props.bookProfile? this.props.bookProfile.Title : "",
+
             author: this.props.bookProfile? this.props.bookProfile.Author : "",
             format: this.props.bookProfile? this.props.bookProfile.Format : "",
             pages: this.props.bookProfile? this.props.bookProfile.Pages : "",
