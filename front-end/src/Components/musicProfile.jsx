@@ -18,13 +18,17 @@ class MusicProfile extends Component {
             Title: this.props.musicProfile? this.props.musicProfile.Title : "",
             artist: this.props.musicProfile? this.props.musicProfile.Artist : "",
             label: this.props.musicProfile? this.props.musicProfile.Label : "",
+
             musicType: this.props.musicProfile? this.props.musicProfile.MusicType : "",
+
             releaseDate: this.props.musicProfile? this.props.musicProfile.ReleaseDate : "",
             ASIN: this.props.musicProfile? this.props.musicProfile.ASIN : "",
             errorTitle: false,
             errorArtist: false,
             errorLabel: false,
+
             errorMusicType: false,
+
             errorReleaseDate: false,
             errorASIN: false,
         }
@@ -42,9 +46,11 @@ class MusicProfile extends Component {
         this.setState({label:e.target.value})
         this.setState({errorLabel: false})
     }
+
     changeMusicType=(e)=>{
         this.setState({musicType:e.target.value})
         this.setState({errorMusicType: false})
+
     }
     changeReleaseDate=(e)=>{
         this.setState({releaseDate:e.target.value})
@@ -56,8 +62,10 @@ class MusicProfile extends Component {
     }
 
    editMusic=()=>{
+
         let {Title, artist, label, musicType, releaseDate, ASIN} = this.state;
         if(!Title || !artist || !label || !musicType || !releaseDate || !ASIN){
+
             if(!Title){
                 this.setState({errorTitle: true})
             }
@@ -67,8 +75,10 @@ class MusicProfile extends Component {
             if(!label){
                 this.setState({errorLabel: true})
             }
+
             if(!musicType){
                 this.setState({errorMusicType: true})
+
             }
             if(!releaseDate){
                 this.setState({errorReleaseDate: true})
@@ -82,7 +92,9 @@ class MusicProfile extends Component {
                 Title: Title,
                 Artist: artist,
                 Label: label,
+
                 MusicType: musicType,
+
                 ReleaseDate: releaseDate,
                 ASIN: ASIN,
             }
@@ -104,8 +116,10 @@ class MusicProfile extends Component {
     };
 
     addMusic=()=>{
+
         let {Title, artist, label, musicType, releaseDate, ASIN} = this.state;
         if(!Title || !artist || !label || !musicType || !releaseDate || !ASIN){
+
             if(!Title){
                 this.setState({errorTitle: true})
             }
@@ -115,8 +129,10 @@ class MusicProfile extends Component {
             if(!label){
                 this.setState({errorLabel: true})
             }
+
             if(!musicType){
                 this.setState({errorMusicType: true})
+
             }
             if(!releaseDate){
                 this.setState({errorReleaseDate: true})
@@ -130,7 +146,9 @@ class MusicProfile extends Component {
                 Title: Title,
                 Artist: artist,
                 Label: label,
+
                 MusicType: musicType,
+
                 ReleaseDate: releaseDate,
                 ASIN: ASIN,
             }
@@ -215,9 +233,11 @@ class MusicProfile extends Component {
                                 fluid icon='th'
                                 iconPosition='left'
                                 placeholder='Chanson'
+
                                 value={this.state.musicType}
                                 error={this.state.errorMusicType}
                                 onChange={this.changeMusicType}
+
                                 label='Type:'/>
                                 
                            

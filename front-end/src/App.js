@@ -31,6 +31,7 @@ class App extends Component {
         <Route exact path="/cart" component={Cart} />
         <Route exact path="/rentals" component={Rentals} />
         <Route exact path="/ecatalog" component={Catalog} />
+        <Route exact path="/ecatalog/:title" component={Catalog} />
         <Route exact path="/settings" component={Settings} />
         <Route exact path="/users" component={Users} />
         <Route exact path="/adduser" component={UserProfile} />

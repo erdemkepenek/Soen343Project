@@ -47,6 +47,9 @@ class Users extends Component {
         console.log(data);
         this.setState({profile: data})
     }
+    addUSer=()=>{
+        this.props.history.push(`/adduser`);
+    }
     render() {
         if(!this.props.userProfile) {
             return (<Redirect to={'/'}/>);
@@ -92,6 +95,9 @@ class Users extends Component {
                                 <div className="MainContainer-upper-container-second-text">
                                     You can select one of the users to see their details!
                                 </div>
+                            </div>
+                            <div className='MainContainer-upper-container-button'>
+                                <Button icon='user' content='Add User' onClick={this.addUSer}/>
                             </div>
                         </div>
                         <DataTable

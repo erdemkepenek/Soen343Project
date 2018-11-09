@@ -82,6 +82,7 @@ class Catalog extends Component {
     
         openProfile=(data)=>{
             console.log(data);
+            this.props.history.push(`/ecatalog/`+data.BookTitle);
             this.setState({profile: data})
         }
 

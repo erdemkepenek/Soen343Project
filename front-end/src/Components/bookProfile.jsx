@@ -15,7 +15,9 @@ class BookProfile extends Component {
     constructor(props) {
         super(props);
         this.state = {
+
             Title: this.props.bookProfile? this.props.bookProfile.Title : "",
+
             author: this.props.bookProfile? this.props.bookProfile.Author : "",
             format: this.props.bookProfile? this.props.bookProfile.Format : "",
             pages: this.props.bookProfile? this.props.bookProfile.Pages : "",
@@ -120,6 +122,7 @@ class BookProfile extends Component {
 
             this.editConfirmation();
             this.props.history.push(`/ecatalog`);
+            this.closeProfile();
         }
     }
 
@@ -199,6 +202,9 @@ class BookProfile extends Component {
             duration:6,
         });
     };
+    closeProfile=()=>{
+        this.props.closeProfile();
+    }
 
 
     render() {
@@ -208,7 +214,7 @@ class BookProfile extends Component {
         }else {
             return (
                 <div className='main-container'>
-                    <HeaderComponent/>
+                    <HeaderComponent closeProfileItem={this.closeProfile} />
                     <div className='MainContainer'>
                         <div className="MainContainer-upper-container">
                             <div className="MainContainer-upper-container-text">

@@ -59,7 +59,7 @@ img.ui.image{
     border: solid 2px #e2e3e4;
     background-color: #ffffff;
     box-shadow: 0 2px 9px 0 rgba(0, 0, 0, 0.03);
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
 }
 .MainContainer-upper-container{
@@ -72,6 +72,37 @@ img.ui.image{
 }
 .MainContainer-upper-container-text{
     align-self: center;
+}
+.MainContainer-upper-container-button{
+    align-self: center;
+}
+.MainContainer-upper-container-button > Button {
+    background-color: #e2670f !important;
+    color: #ffffff !important;
+    border: solid 1px #e2670f;
+}
+.MainContainer-upper-container-button > Button:hover {
+    background-color: #ffffff !important;
+    color: #e2670f !important;
+    border: solid 1px #e2670f;
+}
+.ant-btn-sm{
+    border: solid 1px #e2670f !important;
+    background-color: #ffffff !important;
+    color: #e2670f !important;
+}
+.ant-btn-primary{
+    background-color: #e2670f !important;
+    color: #ffffff !important;
+    border: solid 1px rgba(226, 103, 15, 0.60) !important;
+}
+.ant-popover-message-title{
+    color: #e2670f !important;
+}
+.ant-btn-primary:hover{
+    background-color: rgba(226, 103, 15, 0.91) !important;
+    color: #ffffff !important;
+    border: solid 1px  rgba(226, 103, 15, 0.91) !important;
 }
 .MainContainer-upper-container-first-text {
     font-family: 'Fahkwang', sans-serif;
