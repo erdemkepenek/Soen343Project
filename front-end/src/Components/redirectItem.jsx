@@ -8,6 +8,10 @@ import {withRouter} from 'react-router-dom'
 import {Button, Form, Grid, Icon, Image, Message, Segment} from 'semantic-ui-react'
 import {Redirect} from "react-router";
 import BookProfile from "./bookProfile";
+import BookProfile from "./musicProfile";
+import BookProfile from "./movieProfile";
+import BookProfile from "./mogazineProfile";
+
 class RedirectItem extends Component {
     constructor(props) {
         super(props);
