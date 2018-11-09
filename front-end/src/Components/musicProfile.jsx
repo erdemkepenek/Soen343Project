@@ -7,9 +7,7 @@ import FooterComponent from './Common/footer/footer'
 import {withRouter} from 'react-router-dom'
 import {Button, Form, Grid, Header, Icon, Image, Message, Segment} from 'semantic-ui-react'
 import {Redirect} from "react-router";
-
-import {notification} from "antd";
-
+import {notification,Popconfirm} from "antd";
 
 class MusicProfile extends Component {
     constructor(props) {
@@ -177,6 +175,21 @@ class MusicProfile extends Component {
     };
 
 
+    closeProfile=()=>{
+        this.props.closeProfile();
+    }
+    backToCatalog= ()=>
+    {this.props.history.push(`/ecatalog`);
+    if(this.props.musicProfile){
+        this.props.closeProfile();
+    } 
+    }
+    deleteMusic = ()=>
+    {
+        this.props.closeProfile();
+    }
+   
+
     render() {
         console.log(this.props.musicProfile);
         if(!this.props.userProfile) {
@@ -184,7 +197,7 @@ class MusicProfile extends Component {
         }else {
             return (
                 <div className='main-container'>
-                    <HeaderComponent/>
+                    <HeaderComponent closeProfileItem={this.closeProfile} />
                     <div className='MainContainer'>
                         <div className="MainContainer-upper-container">
                             <div className="MainContainer-upper-container-text">
@@ -195,6 +208,21 @@ class MusicProfile extends Component {
                                 {this.props.musicProfile? "You can edit music" : "You can add new music to the system!"}
                                     
                                 </div>
+
+                            
+
+
+
+
+                            </div>
+
+                            <div className='MainContainer-upper-container-button'>
+                                <Button icon='user' content='Back to Catalog' onClick={this.backToCatalog}/>
+                                {this.props.musicProfile?
+                                <Popconfirm title="Are you sure to delete this Music Media?" onConfirm={this.deleteMusic} placement="bottomRight" okText="Yes" cancelText="No">
+                                    <Button icon='user' content='Delete Music'/>
+                                </Popconfirm>
+                                    : ''}
                             </div>
                         </div>
                         <Form size='large' className='SettingsForm'>

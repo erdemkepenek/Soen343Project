@@ -7,8 +7,7 @@ import FooterComponent from './Common/footer/footer'
 import {withRouter} from 'react-router-dom'
 import {Button, Form, Grid, Header, Icon, Image, Message, Segment} from 'semantic-ui-react'
 import {Redirect} from "react-router";
-
-import {notification} from "antd";
+import {notification,Popconfirm} from "antd";
 
 
 class MovieProfile extends Component {
@@ -183,6 +182,20 @@ class MovieProfile extends Component {
         }
     }
 
+    closeProfile=()=>{
+        this.props.closeProfile();
+    }
+    backCatalog= ()=>
+    {this.props.history.push(`/ecatalog`);
+    if(this.props.movieProfile){
+        this.props.closeProfile();
+    } 
+    }
+    deleteMovie = ()=>
+    {
+        this.props.closeProfile();
+    }
+   
 
 
     addConfirmation = () => {
@@ -199,7 +212,7 @@ class MovieProfile extends Component {
             duration:6,
         });
     };
-//
+
 
     render() {
         console.log(this.props.movieProfile);
@@ -208,7 +221,7 @@ class MovieProfile extends Component {
         }else {
             return (
                 <div className='main-container'>
-                    <HeaderComponent/>
+                    <HeaderComponent closeProfileItem={this.closeProfile} />
                     <div className='MainContainer'>
                         <div className="MainContainer-upper-container">
                             <div className="MainContainer-upper-container-text">
@@ -220,6 +233,20 @@ class MovieProfile extends Component {
                                     
                                 </div>
                             </div>
+
+                        <div className='MainContainer-upper-container-button'>
+                                <Button icon='user' content='Movie to Catalog' onClick={this.backCatalog}/>
+                                {this.props.movieProfile?
+                                <Popconfirm title="Are you sure to delete this Movie?" onConfirm={this.deleteMovie} placement="bottomRight" okText="Yes" cancelText="No">
+                                    <Button icon='user' content='Delete Movie'/>
+                                </Popconfirm>
+                                    : ''}
+                            </div>
+
+
+
+
+
                         </div>
                         <Form size='large' className='SettingsForm'>
                             <Header as='h2' className='login-Header' style={{marginTop:'3%'}}textAlign='center'> {
@@ -249,7 +276,7 @@ class MovieProfile extends Component {
                                 fluid icon='user'
                                 iconPosition='left'
                                 placeholder='Ex: Digital'
-                                value={this.state.Producers}
+                                value={this.state.producers}
                                 error={this.state.errorProducers}
                                 onChange={this.changeProducers}
                                 label='Producers:'/>
