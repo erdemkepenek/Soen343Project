@@ -20,7 +20,7 @@ class Catalog extends Component {
     componentDidMount() {
             tableArray= [];
             let book={
-            BookTitle: "marc",
+            Title: "Marc's book",
             Author: "marc noon",
             Format: "marc format",
             Pages: 567,
@@ -32,6 +32,18 @@ class Catalog extends Component {
             Type: "Book",
             }
             tableArray.push(book);
+
+            let music={
+                Title: "marc' music",
+                Artist: "marc noon",
+                Type: "marc type",
+                Label: "label marc",
+                ReleaseDate: "marc again",
+                ASIN: "TY157373",
+                Quantity: 67,
+                Type: "Music",
+                }
+                tableArray.push(music);
             this.forceUpdate();
         }
     
@@ -61,7 +73,7 @@ class Catalog extends Component {
             let tableItems = [];
         tableArray.map((itemData)=>{
                 let arrData=[
-                    {value : itemData.BookTitle, render : itemData.BookTitle, type : 'text'},
+                    {value : itemData.Title, render : itemData.Title, type : 'text'},
                     {value : itemData.Type, render : itemData.Type, type : 'text'},
                     {value : itemData.Quantity, render : itemData.Quantity, type : 'number'},
                     itemData
