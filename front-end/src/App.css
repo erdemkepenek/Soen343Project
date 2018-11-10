@@ -276,3 +276,10 @@ img.ui.image{
   color: rgba(226, 103, 15, 0.60);
   font-size: 0.8em;
 }
+.History-Main-Container{
+    width: 95%;
+    margin: auto;
+}
+.Main-Container-history-log{
+    min-height: 75vh;
+}
