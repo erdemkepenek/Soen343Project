@@ -101,5 +101,31 @@ class userTDG {
 		})
 	}
 
+	modifyUser(user, callback){
+		let sql = "UPDATE User "+
+		"SET Firstname = '"+user.FirstName+"', LastName = '"+user.LastName+"', Address = '"+user.Address+"', email = '"+user.email+"', phone = '"+user.phone+"', type = '"+user.type+"', password = '"+encrypt.sha512(user.password)+"'"+
+		"WHERE UserId = '"+user.UserId+"';"
+		
+		this.runQuery(function(conn,completedQuery){
+			conn.query(sql, (err, rows, fields) => {
+				if (!err){
+					let msg = {};
+					msg.success="true";
+					msg.message="no message";
+					msg.data=rows;
+					callback(msg);
+				}	 
+				else{
+					console.log(err);
+					let msg = {};
+					msg.success="false";
+					msg.message=err.sqlMessage;;
+					callback(msg);
+				}
+				completedQuery("Modify User");
+			})
+		})
+	}
+
 }
 module.exports = userTDG;
