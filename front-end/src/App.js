@@ -16,7 +16,8 @@ import Adminpanel from './Components/adminPanel'
 import Users from './Components/users'
 import UserProfile from './Components/userProfile'
 import connect from "react-redux/es/connect/connect";
-import TransactionLog from "./Components/transactionLogs";
+import TransactionHistory from "./Components/transactionHistory";
+import LogActivity from "./Components/logActivity";
 class App extends Component {
     componentDidMount(){
         /*this.props.dispatch({type: 'addUserProfile', data: 'hello' });*/
@@ -37,7 +38,8 @@ class App extends Component {
         <Route exact path="/users" component={Users} />
         <Route exact path="/adduser" component={UserProfile} />
         <Route exact path="/adminpanel" component={Adminpanel} />
-        <Route exact path="/alltransactions" component={TransactionLog} />
+        <Route exact path="/logactivity" component={LogActivity} />
+        <Route exact path="/transactionhistory" component={TransactionHistory} />
           </Switch>
     );
   }
