@@ -250,3 +250,36 @@ img.ui.image{
     width: 100% !important;
 
 }
+#history-timeline-with-card .ant-card-body {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+
+#history-timeline .ant-card-wider-padding .ant-card-body {
+  padding: 15px;
+}
+
+#history-timeline-with-card .ant-card-meta-title {
+  font-size: 1em;
+  text-overflow: unset;
+  overflow: unset;
+  white-space: normal;
+  color: #e2670f;
+  opacity: 0.9;
+  font-weight: 400;
+  width: 93%;
+}
+
+#history-timeline-with-card .ant-card-meta-description {
+  color: rgba(226, 103, 15, 0.60);
+  font-size: 0.8em;
+}
+.History-Main-Container{
+    width: 95%;
+    margin: auto;
+}
+.Main-Container-history-log{
+    min-height: 75vh;
+}
