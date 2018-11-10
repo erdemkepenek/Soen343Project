@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const encrypt = require("js-sha512"); 
 const mysql = require("mysql");
 const BookMapper = require("./class/Mapper/BookMapper.js");
+const userTDG = require("./class/TDG/UserTDG.js");
 
 let item = {
   "idDesc": 28,
@@ -30,6 +31,27 @@ let item2 = {
   "ISBN13": null,
   "language": "english"
 }
+let user = {
+  FirstName: 'TEST',
+  LastName: 'TEST',
+  Address: 'SOMEWHERE',
+  email: 'TEST@9.COM',
+  phone: 2147483647,
+  type: 0,
+  password: 'helloWorld',
+ }
+
+ let user2 = {
+  FirstName: 'TEST',
+  LastName: 'TEST',
+  Address: 'SOMEWHERE',
+  email: 'TT@T.COM',
+  phone: 2147483647,
+  type: 0,
+  password: 'helloWorld',
+  UserId: 879
+ }
+
 
 myBookMapper=new BookMapper();
 //myBookMapper.viewItems(function(msg){
@@ -41,17 +63,23 @@ myBookMapper=new BookMapper();
 // });
 
 
-
-myBookMapper.viewItems(2,function(msg){
-  console.log("lol");
-  myBookMapper.commit(2);
-  // myBookMapper.viewItems(2, function (msg) {
-  //   console.log("22222222");
-  //   console.log(msg);
-  // });
-});
-
-
+ myUserTDG = new userTDG();
+// myUserTDG.login("Anthony@concordia.ca","hello", function(msg){
+//   console.log(msg);
+// });
+// myUserTDG.viewAllUsers(function(msg){
+//   console.log(msg);
+// })
+// // myUserTDG.addUser(user,function(msg){
+// //   console.log(msg);
+// // })
+// myUserTDG.modifyUser(user2, function(msg)
+// {
+//   console.log(msg);
+// })
+// myUserTDG.deleteUser(872, function(msg){
+//   console.log(msg);
+// }); 
 
 //myBookMapper.commit(2);
 // myBookMapper.deleteItem(2, item2.id);
