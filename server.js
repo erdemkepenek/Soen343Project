@@ -62,7 +62,6 @@ myBookMapper=new BookMapper();
 //   console.log(msg);
 // });
 
-
  myUserTDG = new userTDG();
 // myUserTDG.login("Anthony@concordia.ca","hello", function(msg){
 //   console.log(msg);
@@ -80,6 +79,15 @@ myBookMapper=new BookMapper();
 // myUserTDG.deleteUser(872, function(msg){
 //   console.log(msg);
 // }); 
+
+myBookMapper.viewItems(function(msg){
+  console.log("lol");
+  //myBookMapper.commit(2);
+  // myBookMapper.viewItems(2, function (msg) {
+  //   console.log("22222222");
+  //   console.log(msg);
+  // });
+});
 
 //myBookMapper.commit(2);
 // myBookMapper.deleteItem(2, item2.id);

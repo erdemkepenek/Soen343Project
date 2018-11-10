@@ -32,6 +32,7 @@ class Catalog extends Component {
             Type: "Book",
             }
             tableArray.push(book);
+            this.forceUpdate();
 
             let music={
                 Title: "marc' music",
@@ -70,10 +71,10 @@ class Catalog extends Component {
                 ReleaseDate: "marc again",
                 RunTime: "TY157373",
                 Quantity: 67,
-                Type: "Music",
+                Type: "Movie",
                 }
                 tableArray.push(movie);
-            
+                this.forceUpdate();
         }
     
         closeProfile=()=>{
@@ -123,6 +124,8 @@ class Catalog extends Component {
                                     You can select one of the item to see their details!
                                 </div>
                             </div>
+
+                            
                         </div>
                         <DataTable
                             columnItems={columnItems}

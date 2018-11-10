@@ -7,8 +7,7 @@ import FooterComponent from './Common/footer/footer'
 import {withRouter} from 'react-router-dom'
 import {Button, Form, Grid, Header, Icon, Image, Message, Segment} from 'semantic-ui-react'
 import {Redirect} from "react-router";
-
-import {notification} from "antd";
+import {notification,Popconfirm} from "antd";
 
 
 class BookProfile extends Component {
@@ -206,6 +205,19 @@ class BookProfile extends Component {
         this.props.closeProfile();
     }
 
+    backToCatalog= ()=>
+    {
+        this.props.history.push(`/ecatalog`);
+        if(this.props.bookProfile){
+            this.props.closeProfile();
+            } 
+    }
+
+    deleteBook = ()=>
+    {
+        this.props.closeProfile();
+    }
+
 
     render() {
         console.log(this.props.bookProfile);
@@ -225,6 +237,14 @@ class BookProfile extends Component {
                                 {this.props.bookProfile? "You can edit a book" : "You can add a new book to the system!"}
                                     
                                 </div>
+                            </div>
+                            <div className='MainContainer-upper-container-button'>
+                                <Button icon='user' content='Back to Catalog' onClick={this.backToCatalog}/>
+                                {this.props.bookProfile?
+                                <Popconfirm title="Are you sure to delete this User?" onConfirm={this.deleteBook} placement="bottomRight" okText="Yes" cancelText="No">
+                                    <Button icon='user' content='Delete Book'/>
+                                </Popconfirm>
+                                    : ''}
                             </div>
                         </div>
                         <Form size='large' className='SettingsForm'>
