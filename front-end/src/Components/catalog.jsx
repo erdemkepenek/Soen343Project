@@ -5,15 +5,22 @@ import {connect} from 'react-redux'
 import HeaderComponent from './Common/header/header'
 import FooterComponent from './Common/footer/footer'
 import {withRouter} from 'react-router-dom'
-import {Button, Form, Grid, Icon, Image, Message, Segment} from 'semantic-ui-react'
+import {Menu, Dropdown, Button} from 'semantic-ui-react'
 import {Redirect} from "react-router";
 import DataTable from '../Components/Common/table/table'
 import RedirectItem from "./redirectItem"
-let tableArray= [];
+let tableArray= []
+const options = [
+    { key: 1, text: 'Book', value: "Book" },
+    { key: 2, text: 'Magazine', value: "Magazine" },
+    { key: 3, text: 'Music', value: "Music" },
+    { key: 4, text: 'Movie', value: "Movie" },
+]
 class Catalog extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            addItem: '',
         }
     }
 
@@ -80,6 +87,27 @@ class Catalog extends Component {
         closeProfile=()=>{
             this.setState({profile: ""})
     }
+    addItem=(data)=>{
+        this.setState({addItem:data.value})
+        switch(data.value){
+            case 'Music':
+                this.props.history.push(`/addMusic/`);
+                break;
+            case 'Movie':
+                this.props.history.push(`/addMovie/`);
+                break;
+            case 'Magazine':
+                this.props.history.push(`/addMagazine/`);
+                break;
+            case 'Book':
+                this.props.history.push(`/addBook/`);
+                break;
+            default:
+                this.props.history.push(`/addMusic/`);
+                break;
+
+        }
+    }
     
         openProfile=(data)=>{
             console.log(data);
@@ -123,6 +151,9 @@ class Catalog extends Component {
                                 <div className="MainContainer-upper-container-second-text">
                                     You can select one of the item to see their details!
                                 </div>
+                            </div>
+                            <div className='MainContainer-upper-container-button'>
+                                <Dropdown placeholder="Add Item" value={this.state.addItem} onChange={(e,value)=>this.addItem(value)} options={options}  selection />
                             </div>
 
                             

@@ -221,7 +221,7 @@ class MovieProfile extends Component {
         }else {
             return (
                 <div className='main-container'>
-                    <HeaderComponent closeProfileItem={this.closeProfile} />
+                    <HeaderComponent closeProfileItem={this.props.movieProfile ? this.closeProfile: ''} />
                     <div className='MainContainer'>
                         <div className="MainContainer-upper-container">
                             <div className="MainContainer-upper-container-text">

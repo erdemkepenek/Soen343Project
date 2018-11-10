@@ -17,7 +17,7 @@ import {
 } from "semantic-ui-react";
 import { Redirect } from "react-router";
 
-import { notification } from "antd";
+import {notification, Popconfirm} from "antd";
 
 class MagazineProfile extends Component {
   constructor(props) {
@@ -221,6 +221,16 @@ class MagazineProfile extends Component {
   closeProfile = () => {
     this.props.closeProfile();
   };
+    backToCatalog= ()=>
+    {this.props.history.push(`/ecatalog`);
+        if(this.props.magazineProfile){
+            this.props.closeProfile();
+        }
+    }
+    deleteMagazine = ()=>
+    {
+        this.props.closeProfile();
+    }
 
   render() {
     console.log(this.props.magazineProfile);
@@ -229,7 +239,7 @@ class MagazineProfile extends Component {
     } else {
       return (
         <div className="main-container">
-          <HeaderComponent closeProfileItem={this.closeProfile} />
+          <HeaderComponent closeProfileItem={this.props.magazineProfile ? this.closeProfile : ''} />
           <div className="MainContainer">
             <div className="MainContainer-upper-container">
               <div className="MainContainer-upper-container-text">
@@ -244,6 +254,14 @@ class MagazineProfile extends Component {
                     : "You can add a new magazine to the system!"}
                 </div>
               </div>
+                <div className='MainContainer-upper-container-button'>
+                    <Button icon='user' content='Back to Catalog' onClick={this.backToCatalog}/>
+                    {this.props.magazineProfile?
+                        <Popconfirm title="Are you sure to delete this Magazine?" onConfirm={this.deleteMagazine} placement="bottomRight" okText="Yes" cancelText="No">
+                            <Button icon='user' content='Delete Magazine'/>
+                        </Popconfirm>
+                        : ''}
+                </div>
             </div>
             <Form size="large" className="SettingsForm">
               <Header
