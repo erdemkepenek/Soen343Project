@@ -6,6 +6,8 @@ const encrypt = require("js-sha512");
 const mysql = require("mysql");
 const BookMapper = require("./class/Mapper/BookMapper.js");
 const userTDG = require("./class/TDG/UserTDG.js");
+const logActivityTDG = require("./class/TDG/logActivityTDG.js");
+const transactionHistoryTDG = require("./class/TDG/transactionHistoryTDG.js");
 
 let item = {
   "idDesc": 28,
@@ -61,7 +63,20 @@ myBookMapper=new BookMapper();
 // myBookMapper.deleteItem(, function (msg) {
 //   console.log(msg);
 // });
-
+lActivityTDG = new logActivityTDG();
+/*lActivityTDG.viewActivity(function(msg){
+    console.log(msg)
+})*/
+/*lActivityTDG.addActivity(5,function(msg){
+    console.log(msg)
+})*/
+transactionHisTDG = new transactionHistoryTDG();
+/*transactionHisTDG.viewActivity(function(msg){
+    console.log(msg)
+})*/
+/*transactionHisTDG.addActivity(3,'Return',function(msg){
+    console.log(msg)
+})*/
  myUserTDG = new userTDG();
 // myUserTDG.login("Anthony@concordia.ca","hello", function(msg){
 //   console.log(msg);
@@ -80,14 +95,14 @@ myBookMapper=new BookMapper();
 //   console.log(msg);
 // }); 
 
-myBookMapper.viewItems(function(msg){
+/*myBookMapper.viewItems(function(msg){
   console.log("lol");
   //myBookMapper.commit(2);
   // myBookMapper.viewItems(2, function (msg) {
   //   console.log("22222222");
   //   console.log(msg);
   // });
-});
+});*/
 
 //myBookMapper.commit(2);
 // myBookMapper.deleteItem(2, item2.id);
