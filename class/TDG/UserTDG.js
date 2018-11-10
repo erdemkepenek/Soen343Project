@@ -53,6 +53,29 @@ class userTDG {
 			})
 		})
 	}
+	
+	viewAllUsers(callback){
+		let sql = 'SELECT * FROM User' ; 
+		this.runQuery(function(conn,completedQuery){
+			conn.query(sql, (err, rows, fields) => {
+				if (!err){
+					let msg = {};
+					msg.success="true";
+					msg.message="no message";
+					msg.data=rows;
+					callback(msg);
+				}	 
+				else{
+					console.log(err);
+					let msg = {};
+					msg.success="false";
+					msg.message=err.sqlMessage;;
+					callback(msg);
+				}
+				completedQuery("View All Users");
+			})
+		})
+	}
 
 }
 module.exports = userTDG;
