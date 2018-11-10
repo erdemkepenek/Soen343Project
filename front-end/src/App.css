@@ -283,3 +283,11 @@ img.ui.image{
 .Main-Container-history-log{
     min-height: 75vh;
 }
+.MainContainer-upper-container-button > div, .MainContainer-upper-container-button > div > div, .MainContainer-upper-container-button > div > div > div{
+    color: #ffffff !important;
+    background-color: #e2670f !important ;
+}
+.MainContainer-upper-container-button > div > div:hover, .MainContainer-upper-container-button > div > div > div:hover{
+    color: #e2670f !important;
+    background-color: #ffffff !important ;
+}
