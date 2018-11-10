@@ -21,6 +21,7 @@ class userTDG {
 			});
 		};
 	}
+
 	login (email, password,callback){
 		let sql= "SELECT FirstName,LastName, Address, email, phone, type FROM User WHERE email ='"+email+"' AND password = +'"+encrypt.sha512(password)+"'";
 		this.runQuery(function(conn,completedQuery){
@@ -53,51 +54,5 @@ class userTDG {
 		})
 	}
 
-	viewAllUsers(callback){
-		let sql = 'SELECT * FROM User' ; 
-		this.runQuery(function(conn,completedQuery){
-			conn.query(sql, (err, rows, fields) => {
-				if (!err){
-					let msg = {};
-					msg.success="true";
-					msg.message="no message";
-					msg.data=rows;
-					callback(msg);
-				}	 
-				else{
-					console.log(err);
-					let msg = {};
-					msg.success="false";
-					msg.message=err.sqlMessage;;
-					callback(msg);
-				}
-				completedQuery("View All Users");
-			})
-		})
-	}
-
-	addUser(user, callback){
-		let sql = "INSERT INTO User (FirstName, LastName, Address, email, phone, type, password)"+
-		"VALUES('"+user.FirstName+"', '"+user.LastName+"', '"+user.Address+"', '"+user.email+"', '"+user.phone+"', '"+user.type+"', '"+encrypt.sha512(user.password)+"');"
-		this.runQuery(function(conn,completedQuery){
-			conn.query(sql, (err, rows, fields) => {
-				if (!err){
-					let msg = {};
-					msg.success="true";
-					msg.message="no message";
-					msg.data=rows;
-					callback(msg);
-				}	 
-				else{
-					console.log(err);
-					let msg = {};
-					msg.success="false";
-					msg.message=err.sqlMessage;;
-					callback(msg);
-				}
-				completedQuery("Add User");
-			})
-		})
-	}
 }
 module.exports = userTDG;
