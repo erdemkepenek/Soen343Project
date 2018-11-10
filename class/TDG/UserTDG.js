@@ -127,5 +127,28 @@ class userTDG {
 		})
 	}
 
+	deleteUser(id,callback){
+		let sql=  '  DELETE FROM User where UserId = '+id+';  ' ;
+		this.runQuery(function(conn,completedQuery){
+			conn.query(sql, (err, rows, fields) => {
+				if (!err){
+					let msg = {};
+					msg.success="true";
+					msg.message="no message";
+					msg.data=rows;
+					callback(msg);
+				}	 
+				else{
+					console.log(err);
+					let msg = {};
+					msg.success="false";
+					msg.message=err.sqlMessage;;
+					callback(msg);
+				}
+				completedQuery("Delete User");
+			})
+		})
+	}
+
 }
 module.exports = userTDG;
