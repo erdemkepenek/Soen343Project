@@ -16,7 +16,8 @@ import Adminpanel from './Components/adminPanel'
 import Users from './Components/users'
 import UserProfile from './Components/userProfile'
 import connect from "react-redux/es/connect/connect";
-import TransactionLog from "./Components/transactionLogs";
+import TransactionHistory from "./Components/transactionHistory";
+import LogActivity from "./Components/logActivity";
 import Movie from './Components/movieProfile'
 import Music from './Components/musicProfile'
 import Magazine from './Components/magazineProfile'
@@ -45,7 +46,8 @@ class App extends Component {
         <Route exact path="/addMusic" component={Music} />
         <Route exact path="/addMovie" component={Movie} />
         <Route exact path="/adminpanel" component={Adminpanel} />
-        <Route exact path="/alltransactions" component={TransactionLog} />
+        <Route exact path="/logactivity" component={LogActivity} />
+        <Route exact path="/transactionhistory" component={TransactionHistory} />
           </Switch>
     );
   }

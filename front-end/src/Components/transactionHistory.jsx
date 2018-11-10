@@ -12,7 +12,7 @@ import _ from 'lodash'
 import {Redirect} from "react-router";
 import {Pagination, Icon} from "semantic-ui-react";
 
-class Cart extends Component {
+class TransactionHistory extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -140,7 +140,7 @@ class Cart extends Component {
           <div className="MainContainer-upper-container">
             <div className="MainContainer-upper-container-text">
               <div className="MainContainer-upper-container-first-text">
-                Transactions
+                Transactions History
               </div>
               <div className="MainContainer-upper-container-second-text">
                 You can see all the transaction history!
@@ -175,4 +175,4 @@ function mapStateToProps(state) {
   return {userProfile: state.AdminReducer.userProfile};
 
 }
-export default withRouter(connect(mapStateToProps)(Cart));
+export default withRouter(connect(mapStateToProps)(TransactionHistory));

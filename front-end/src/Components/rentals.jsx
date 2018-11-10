@@ -30,6 +30,7 @@ class Rentals extends Component {
             ISBN13: "7927927892",
             Quantity: 67,
             Type: "Book",
+            Time: "2 days"
         }
         tableArray.push(book);
         this.forceUpdate();
@@ -55,13 +56,14 @@ class Rentals extends Component {
             let columnItems =[
                 {value : 'Title', render : 'Title', type : 'text'},
                 {value : 'Type', render : 'Type', type : 'text'},
-
+                {value: 'Time', render: 'Time', type: 'text' },
             ];
             let tableItems = [];
             tableArray.map((itemData)=>{
                 let arrData=[
                     {value : itemData.BookTitle, render : itemData.BookTitle, type : 'text'},
                     {value : itemData.Type, render : itemData.Type, type : 'text'},
+                    { value: itemData.Time, render: itemData.Time, type: 'text' },
                     itemData
                 ]
                 tableItems.push(arrData);
