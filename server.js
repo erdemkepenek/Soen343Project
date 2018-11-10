@@ -42,9 +42,9 @@ myBookMapper=new BookMapper();
 
 
 
-myBookMapper.viewItems(2,function(msg){
+myBookMapper.viewItems(function(msg){
   console.log("lol");
-  myBookMapper.commit(2);
+  //myBookMapper.commit(2);
   // myBookMapper.viewItems(2, function (msg) {
   //   console.log("22222222");
   //   console.log(msg);
