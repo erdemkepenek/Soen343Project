@@ -27,7 +27,7 @@ class MagazineTDG {
 		+ deleteItem();
 	*/
 	viewItems(callback){
-		let sql = 'SELECT MagazineDesc.idDesc, Title, Publisher, Language, `ISBN-10`,`ISBN-13`, COUNT(id) as Quantity FROM MagazineDesc LEFT JOIN MagazinePh ON MagazinePh.idDesc = MagazineDesc.idDesc GROUP BY (MagazineDesc.idDesc)' ; 
+		let sql = 'SELECT MagazineDesc.idDesc, Title, Publisher, Language, `ISBN-10`,`ISBN-13`, COUNT(id) as Quantity FROM MagazineDesc LEFT JOIN MagazinePh ON MagazinePh.idDesc = MagazineDesc.idDesc GROUP BY (MagazineDesc.idDesc)' ;
 		this.runQuery(function(conn,completedQuery){
 			conn.query(sql, (err, rows, fields) => {
 				if (!err){
@@ -36,7 +36,7 @@ class MagazineTDG {
 					msg.message="no message";
 					msg.data=rows;
 					callback(msg);
-				}	 
+				}
 				else{
 					console.log(err);
 					let msg = {};
@@ -49,17 +49,17 @@ class MagazineTDG {
 		})
 	}
 	addItem(item, callback){
-		let sql=	 '   INSERT INTO `MagazineDesc` (`Title`,`Publisher`, `Language`, `ISBN-10`, `ISBN-13`)  '  + 
-					 '   VALUES  '  + 
-					 '       ("'+item.title+'", "'+item.publisher+'", "'+item.language+'", '+item.ISBN10+', '+item.ISBN13+');  '  + 
-					 '   SET @last_id_magazine = LAST_INSERT_ID();  '  + 
-					 '   INSERT INTO `Items` (id)  '  + 
-					 '   VALUES  '  + 
-					 '       (null);  '  + 
-					 '   SET @last_id_item = LAST_INSERT_ID();  '  + 
-					 '   INSERT INTO `MagazinePh` (idDesc, available, id)  '  + 
-					 '   VALUES  '  + 
-					 '      (@last_id_magazine, 1, @last_id_item);  ' ; 
+		let sql=	 '   INSERT INTO `MagazineDesc` (`Title`,`Publisher`, `Language`, `ISBN-10`, `ISBN-13`)  '  +
+					 '   VALUES  '  +
+					 '       ("'+item.title+'", "'+item.publisher+'", "'+item.language+'", '+item.ISBN10+', '+item.ISBN13+');  '  +
+					 '   SET @last_id_magazine = LAST_INSERT_ID();  '  +
+					 '   INSERT INTO `Items` (id)  '  +
+					 '   VALUES  '  +
+					 '       (null);  '  +
+					 '   SET @last_id_item = LAST_INSERT_ID();  '  +
+					 '   INSERT INTO `MagazinePh` (idDesc, available, id)  '  +
+					 '   VALUES  '  +
+					 '      (@last_id_magazine, 1, @last_id_item);  ' ;
 		this.runQuery(function(conn,completedQuery){
 			conn.query(sql, (err, rows, fields) => {
 				if (!err){
@@ -68,7 +68,7 @@ class MagazineTDG {
 					msg.message="no message";
 					msg.data=rows;
 					callback(msg);
-				}	 
+				}
 				else{
 					console.log(err);
 					let msg = {};
@@ -90,7 +90,7 @@ class MagazineTDG {
 					msg.message="no message";
 					msg.data=rows;
 					callback(msg);
-				}	 
+				}
 				else{
 					console.log(err);
 					let msg = {};
@@ -103,8 +103,8 @@ class MagazineTDG {
 		})
 	}
 	modifyItem(item,callback){
-		let sql='   UPDATE `MagzineDesc`  '  + 
-				'   SET Title="'+item.title+'", Publisher="'+item.publisher+'", Language="'+item.language+'", `ISBN-10`='+item.ISBN10+', `ISBN-13`='+item.ISBN13+'  '  + 
+		let sql='   UPDATE `MagzineDesc`  '  +
+				'   SET Title="'+item.title+'", Publisher="'+item.publisher+'", Language="'+item.language+'", `ISBN-10`='+item.ISBN10+', `ISBN-13`='+item.ISBN13+'  '  +
 				'  WHERE idDesc='+item.idDesc+';  ';
 				console.log(sql);
 		this.runQuery(function(conn,completedQuery){
@@ -115,7 +115,7 @@ class MagazineTDG {
 					msg.message="no message";
 					msg.data=rows;
 					callback(msg);
-				}	 
+				}
 				else{
 					console.log(err);
 					let msg = {};
@@ -128,5 +128,4 @@ class MagazineTDG {
 		})
 	}
 }
-module.exports = MagazinesTDG;
-
+module.exports = MagazineTDG;

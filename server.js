@@ -2,9 +2,11 @@ const express = require("express");
 const path = require("path");
 const app = express();
 const bodyParser = require("body-parser");
-const encrypt = require("js-sha512"); 
+const encrypt = require("js-sha512");
 const mysql = require("mysql");
 const BookMapper = require("./class/Mapper/BookMapper.js");
+const MagazineMapper = require("./class/Mapper/MagazineMapper.js");
+const MagazineTDG = require("./class/TDG/MagazineTDG.js");
 const userTDG = require("./class/TDG/UserTDG.js");
 const logActivityTDG = require("./class/TDG/logActivityTDG.js");
 const transactionHistoryTDG = require("./class/TDG/transactionHistoryTDG.js");
@@ -33,6 +35,14 @@ let item2 = {
   "ISBN13": null,
   "language": "english"
 }
+let item3 = {
+  "idDesc": 26,
+  "title": "apple",
+  "publisher": "Concordia",
+  "ISBN10": 738299,
+  "ISBN13": 383838,
+  "language": "english"
+}
 let user = {
   FirstName: 'TEST',
   LastName: 'TEST',
@@ -41,9 +51,9 @@ let user = {
   phone: 2147483647,
   type: 0,
   password: 'helloWorld',
- }
+}
 
- let user2 = {
+let user2 = {
   FirstName: 'TEST',
   LastName: 'TEST',
   Address: 'SOMEWHERE',
@@ -52,32 +62,39 @@ let user = {
   type: 0,
   password: 'helloWorld',
   UserId: 879
- }
+}
 
 
-myBookMapper=new BookMapper();
+//myBookMapper = new BookMapper();
 //myBookMapper.viewItems(function(msg){
-  //console.log(msg);
+//console.log(msg);
 //});
+
+//myTDGMAG = new MagazineTDG();
+//myTDGMAG.addItem(item3);
+myMagazineMapper = new MagazineMapper();
+myMagazineMapper.addItem(3, item3)
+myMagazineMapper.commit(3);
+
 
 // myBookMapper.deleteItem(, function (msg) {
 //   console.log(msg);
 // });
-lActivityTDG = new logActivityTDG();
+//lActivityTDG = new logActivityTDG();
 /*lActivityTDG.viewActivity(function(msg){
     console.log(msg)
 })*/
 /*lActivityTDG.addActivity(5,function(msg){
     console.log(msg)
 })*/
-transactionHisTDG = new transactionHistoryTDG();
+//transactionHisTDG = new transactionHistoryTDG();
 /*transactionHisTDG.viewActivity(function(msg){
     console.log(msg)
 })*/
 /*transactionHisTDG.addActivity(3,'Return',function(msg){
     console.log(msg)
 })*/
- myUserTDG = new userTDG();
+//myUserTDG = new userTDG();
 // myUserTDG.login("Anthony@concordia.ca","hello", function(msg){
 //   console.log(msg);
 // });
@@ -93,7 +110,7 @@ transactionHisTDG = new transactionHistoryTDG();
 // })
 // myUserTDG.deleteUser(872, function(msg){
 //   console.log(msg);
-// }); 
+// });
 
 /*myBookMapper.viewItems(function(msg){
   console.log("lol");
@@ -117,7 +134,9 @@ transactionHisTDG = new transactionHistoryTDG();
 app.use(express.static(path.join(__dirname, "front-end/build")));
 // by default the index.js file is fetche
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 app.use(require('./controllers'));
 
 
@@ -142,7 +161,7 @@ app.post("/auth/register", (req,res) => {
 app.post("/auth/login", (req,res) => {
   const email = req.body.email;
   const password = encrypt.sha512(req.body.password);
-  
+
   mysqldb.connect(function(err) {
     mysqldb.query("SELECT * FROM Client WHERE email ='"+email+"' AND password = '"+password+"';", function(err, result) {
       if (result.length == 0){
