@@ -39,8 +39,8 @@ let item3 = {
   "idDesc": 26,
   "title": "apple",
   "publisher": "Concordia",
-  "ISBN10": 8787878,
-  "ISBN13": 87687698,
+  "ISBN10": 738299,
+  "ISBN13": 383838,
   "language": "english"
 }
 let user = {
@@ -70,10 +70,11 @@ let user2 = {
 //console.log(msg);
 //});
 
-myTDGMAG = new MagazineTDG();
-myTDGMAG.addItem(item3);
-//myMagazineMapper = new MagazineMapper();
-//myMagazineMapper.addItem(3, item3)
+//myTDGMAG = new MagazineTDG();
+//myTDGMAG.addItem(item3);
+myMagazineMapper = new MagazineMapper();
+myMagazineMapper.addItem(3, item3)
+myMagazineMapper.commit(3);
 
 
 // myBookMapper.deleteItem(, function (msg) {
