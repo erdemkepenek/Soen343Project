@@ -102,7 +102,7 @@ class LoanTDG {
     });
   }
 
-  viewItems(callback) {
+  viewAllLoans(callback) {
     let sql = "SELECT * FROM Loan"; // for now just display information only in Loan table
     this.runQuery(function(conn, completedQuery) {
       conn.query(sql, (err, rows, fields) => {
@@ -119,7 +119,29 @@ class LoanTDG {
           msg.message = err.sqlMessage;
           callback(msg);
         }
-        completedQuery("View Loan Records");
+        completedQuery("View All Loan Records");
+      });
+    });
+  }
+
+  viewLoansForOneUser(userId, callback) {
+    let sql = "SELECT * FROM Loan WHERE UserId = " + userId + ";"; // for now just display information only in Loan table
+    this.runQuery(function(conn, completedQuery) {
+      conn.query(sql, (err, rows, fields) => {
+        if (!err) {
+          let msg = {};
+          msg.success = "true";
+          msg.message = "no message";
+          msg.data = rows;
+          callback(msg);
+        } else {
+          console.log(err);
+          let msg = {};
+          msg.success = "false";
+          msg.message = err.sqlMessage;
+          callback(msg);
+        }
+        completedQuery("View Loan Records for a User");
       });
     });
   }
