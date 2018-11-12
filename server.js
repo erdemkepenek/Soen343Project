@@ -7,6 +7,7 @@ const mysql = require("mysql");
 const BookMapper = require("./class/Mapper/BookMapper.js");
 const MagazineMapper = require("./class/Mapper/MagazineMapper.js");
 const MagazineTDG = require("./class/TDG/MagazineTDG.js");
+const TransactionHistoryMapper = require("./class/Mapper/TransactionHistoryMapper.js");
 const userTDG = require("./class/TDG/UserTDG.js");
 const logActivityTDG = require("./class/TDG/logActivityTDG.js");
 const transactionHistoryTDG = require("./class/TDG/transactionHistoryTDG.js");
@@ -72,10 +73,13 @@ let user2 = {
 
 //myTDGMAG = new MagazineTDG();
 //myTDGMAG.addItem(item3);
-myMagazineMapper = new MagazineMapper();
-myMagazineMapper.addItem(3, item3)
-myMagazineMapper.commit(3);
+// myMagazineMapper = new MagazineMapper();
+// myMagazineMapper.addItem(3, item3)
+// myMagazineMapper.commit(3);
 
+
+myTransactions = new TransactionHistoryMapper();
+myTransactions.addActivity(3, 'loan');
 
 // myBookMapper.deleteItem(, function (msg) {
 //   console.log(msg);
