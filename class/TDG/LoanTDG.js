@@ -19,23 +19,34 @@ class LoanTDG {
         console.log("Completed query " + type + " \n");
       });
     };
+    // a helper method to get current Date
+    this.getCurrentDate = function() {
+      var date = new Date();
+      var tmp =
+        date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
+      return tmp;
+    };
   }
+
   /*
 		+ loanItem():
     + returnItem():
     + viewItems():
 	*/
   loanItem(userId, itemId, callback) {
+    let loanDate = this.getCurrentDate;
     let sql =
       "   UPDATE `Items`  " +
-      "   SET available=0 WHERE id =" +
+      "   SET available=0 WHERE itemId =" +
       itemId +
       ";  " +
-      "INSERT INTO `Loan` (`UserId`, `itemId`, `rentTime`) VALUES (" +
+      "INSERT INTO `Loan` (`UserId`, `itemId`, `loanDate`) VALUES (" +
       userId +
       "," +
       itemId +
-      ",'24:00');"; // the default length of a loan is 24 hours (temporary)
+      ",'" +
+      loanDate +
+      "');";
     console.log(sql);
     this.runQuery(function(conn, completedQuery) {
       conn.query(sql, (err, rows, fields) => {
@@ -58,7 +69,18 @@ class LoanTDG {
   }
 
   returnItem(userId, itemId, callback) {
-    "   UPDATE `Items`  " + "   SET available=1 WHERE id =" + itemId + ";  "; // userId is not used for now
+    let returnDate = this.getCurrentDate;
+    let sql =
+      "   UPDATE `Items` SET available=1 WHERE itemId = " +
+      itemId +
+      ";  " +
+      " UPDATE `Loan` SET returnDate = '" +
+      returnDate +
+      "' WHERE UserId = " +
+      userId +
+      " AND itemId = " +
+      itemId +
+      " AND returnDate is NULL;";
     console.log(sql);
     this.runQuery(function(conn, completedQuery) {
       conn.query(sql, (err, rows, fields) => {
