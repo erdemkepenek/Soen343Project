@@ -19,22 +19,34 @@ class LoanTDG {
         console.log("Completed query " + type + " \n");
       });
     };
+    // a helper method to get current Date
+    this.getCurrentDate = function() {
+      var date = new Date();
+      var tmp =
+        date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
+      return tmp;
+    };
   }
+
   /*
 		+ loanItem():
-		+ returnItem():
+    + returnItem():
+    + viewItems():
 	*/
   loanItem(userId, itemId, callback) {
+    let loanDate = this.getCurrentDate;
     let sql =
       "   UPDATE `Items`  " +
-      "   SET available=0 WHERE id =" +
+      "   SET available=0 WHERE itemId =" +
       itemId +
       ";  " +
-      "INSERT INTO `Loan` (`UserId`, `itemId`, `rentTime`) VALUES (" +
+      "INSERT INTO `Loan` (`UserId`, `itemId`, `loanDate`) VALUES (" +
       userId +
       "," +
       itemId +
-      ",'24:00');"; // the default length of a loan is 24 hours (temporary)
+      ",'" +
+      loanDate +
+      "');";
     console.log(sql);
     this.runQuery(function(conn, completedQuery) {
       conn.query(sql, (err, rows, fields) => {
@@ -57,7 +69,18 @@ class LoanTDG {
   }
 
   returnItem(userId, itemId, callback) {
-    "   UPDATE `Items`  " + "   SET available=1 WHERE id =" + itemId + ";  "; // userId is not used for now
+    let returnDate = this.getCurrentDate;
+    let sql =
+      "   UPDATE `Items` SET available=1 WHERE itemId = " +
+      itemId +
+      ";  " +
+      " UPDATE `Loan` SET returnDate = '" +
+      returnDate +
+      "' WHERE UserId = " +
+      userId +
+      " AND itemId = " +
+      itemId +
+      " AND returnDate is NULL;";
     console.log(sql);
     this.runQuery(function(conn, completedQuery) {
       conn.query(sql, (err, rows, fields) => {
@@ -75,6 +98,50 @@ class LoanTDG {
           callback(msg);
         }
         completedQuery("Return an item");
+      });
+    });
+  }
+
+  viewAllLoans(callback) {
+    let sql = "SELECT * FROM Loan"; // for now just display information only in Loan table
+    this.runQuery(function(conn, completedQuery) {
+      conn.query(sql, (err, rows, fields) => {
+        if (!err) {
+          let msg = {};
+          msg.success = "true";
+          msg.message = "no message";
+          msg.data = rows;
+          callback(msg);
+        } else {
+          console.log(err);
+          let msg = {};
+          msg.success = "false";
+          msg.message = err.sqlMessage;
+          callback(msg);
+        }
+        completedQuery("View All Loan Records");
+      });
+    });
+  }
+
+  viewLoansForOneUser(userId, callback) {
+    let sql = "SELECT * FROM Loan WHERE UserId = " + userId + ";"; // for now just display information only in Loan table
+    this.runQuery(function(conn, completedQuery) {
+      conn.query(sql, (err, rows, fields) => {
+        if (!err) {
+          let msg = {};
+          msg.success = "true";
+          msg.message = "no message";
+          msg.data = rows;
+          callback(msg);
+        } else {
+          console.log(err);
+          let msg = {};
+          msg.success = "false";
+          msg.message = err.sqlMessage;
+          callback(msg);
+        }
+        completedQuery("View Loan Records for a User");
       });
     });
   }
