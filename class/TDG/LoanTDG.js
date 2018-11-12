@@ -103,18 +103,18 @@ class LoanTDG {
   }
 
   viewAllLoans(callback) {
-    let sql = "SELECT * FROM Loan"; // for now just display information only in Loan table
+    let msg = {}; //array that will keep all the loan data
+    let sqlBook = 'SELECT * FROM BookDesc INNER JOIN (SELECT * FROM BookPh INNER JOIN Loan ON BookPh.id = Loan.itemId) AS T ON BookDesc.idDesc = T.idDesc';
+    
     this.runQuery(function(conn, completedQuery) {
-      conn.query(sql, (err, rows, fields) => {
+      conn.query(sqlBook, (err, rows, fields) => {
         if (!err) {
-          let msg = {};
           msg.success = "true";
           msg.message = "no message";
           msg.data = rows;
           callback(msg);
         } else {
           console.log(err);
-          let msg = {};
           msg.success = "false";
           msg.message = err.sqlMessage;
           callback(msg);
