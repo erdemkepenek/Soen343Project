@@ -29,17 +29,17 @@ class UserMapper {
 	  })
   }
   addUser(id, user, callback) {
-	console.log("[UserMapper] adduser()"); 
+	console.log("[UserMapper] addUser()"); 
     this.UserUnitOfWork.addNew(id, user);
     
   }
   modifyUser(id, user, callback) {
-	console.log("[UserMapper] modifyuser()");
+	console.log("[UserMapper] modifyUser()");
     this.UserUnitOfWork.addDirty(id, user);
     
   }
   deleteUser(id, userId, callback) {
-	console.log("[UserMapper] deleteuser()");
+	console.log("[UserMapper] deleteUser()");
     this.UserUnitOfWork.addClean(id, userId);
     
   }

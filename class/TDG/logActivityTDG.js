@@ -44,7 +44,7 @@ class LogActivityTDG {
                     msg.message=err.sqlMessage;;
                     callback(msg);
                 }
-                completedQuery("View Log Activity");
+                completedQuery("[LogActivityTDG] viewActivity()");
             })
         })
     }
@@ -68,7 +68,7 @@ class LogActivityTDG {
                     msg.message=err.sqlMessage;;
                     callback(msg);
                 }
-                completedQuery("add Log Activity");
+                completedQuery("[LogActivityTDG] addActivity()");
             })
         })
     }

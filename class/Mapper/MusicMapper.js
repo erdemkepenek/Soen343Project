@@ -14,13 +14,11 @@ class MusicMapper {
     let IDM = this.MusicIdentitymap;
     var result = IDM.getData();
     if (result.length == 0) {
-      console.log("Getting from database");
       this.MusicTDG.viewItems(function(msg) {
         IDM.putData(msg);
         callback(msg);
       });
     } else {
-      console.log("received from Identity Map");
       callback(result);
     }
   }
