@@ -12,7 +12,6 @@ class IdentityMap {
     putData(item) {
 		console.log("[IdentityMap] putData()");
         let temp = item;
-        console.log("Item being added");
         this.Items.push(temp);
 		
     }

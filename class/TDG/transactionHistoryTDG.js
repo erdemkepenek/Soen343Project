@@ -38,7 +38,7 @@ class TransactionHistoryTDG {
                     msg.message=err.sqlMessage;;
                     callback(msg);
                 }
-                completedQuery("View Transaction History");
+                completedQuery("[TransactionHistoryTDG] viewActivity()");
             })
         })
     }
@@ -62,7 +62,7 @@ class TransactionHistoryTDG {
                     msg.message=err.sqlMessage;;
                     callback(msg);
                 }
-                completedQuery("add Transaction History");
+                completedQuery("[TransactionHistoryTDG] addActivity()");
             })
         })
     }

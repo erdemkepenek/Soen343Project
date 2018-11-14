@@ -14,13 +14,11 @@ class MagazineMapper {
     let IDM = this.MagazineIdentityMap;
     var result = IDM.getData();
     if (result.length == 0) {
-      console.log("Getting from database");
       this.MagazineTDG.viewItems(function(msg) {
         IDM.putData(msg);
         callback(msg);
       });
     } else {
-      console.log("received from Identity Map");
       callback(result);
     }
   }
