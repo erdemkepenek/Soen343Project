@@ -17,7 +17,6 @@ class MusicMapper {
       console.log("Getting from database");
       this.MusicTDG.viewItems(function(msg) {
         IDM.putData(msg);
-        console.log(IDM.getData()[0]);
         callback(msg);
       });
     } else {

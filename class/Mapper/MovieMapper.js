@@ -17,7 +17,6 @@ class MovieMapper {
       console.log("Getting from database");
       this.MovieTDG.viewItems(function(msg) {
         IDM.putData(msg);
-        console.log(IDM.getData()[0]);
         callback(msg);
       });
     } else {

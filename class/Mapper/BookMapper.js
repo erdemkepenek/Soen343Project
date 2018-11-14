@@ -17,7 +17,6 @@ class BookMapper {
     if (result.length == 0) {
       this.BookTDG.viewItems(function(msg) {
         IDM.putData(msg);
-        console.log(IDM.getData()[0]);
         callback(msg);
       });
     } else {
