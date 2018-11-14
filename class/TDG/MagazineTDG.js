@@ -20,12 +20,6 @@ class MagazineTDG {
 			});
 		};
 	}
-	/*
-		+ viewItems():
-		+ addItem(): void
-		+ modifyItem():
-		+ deleteItem();
-	*/
 	viewItems(callback){
 		let sql = 'SELECT MagazineDesc.idDesc, Title, Publisher, Language, `ISBN-10`,`ISBN-13`, COUNT(id) as Quantity FROM MagazineDesc LEFT JOIN MagazinePh ON MagazinePh.idDesc = MagazineDesc.idDesc GROUP BY (MagazineDesc.idDesc)' ;
 		this.runQuery(function(conn,completedQuery){
@@ -44,14 +38,14 @@ class MagazineTDG {
 					msg.message=err.sqlMessage;;
 					callback(msg);
 				}
-				completedQuery("View Magazines");
+				completedQuery("[MagazineTDG] viewItems()");
 			})
 		})
 	}
 	addItem(item, callback){
 		let sql=	 '   INSERT INTO `MagazineDesc` (`Title`,`Publisher`, `Language`, `ISBN-10`, `ISBN-13`)  '  +
 					 '   VALUES  '  +
-					 '       ("'+item.title+'", "'+item.publisher+'", "'+item.language+'", '+item.ISBN10+', '+item.ISBN13+');  '  +
+					 '       ("'+item.title+'", "'+item.publisher+'", "'+item.language+'", "'+item.ISBN10+'", "'+item.ISBN13+'");  '  +
 					 '   SET @last_id_magazine = LAST_INSERT_ID();  '  +
 					 '   INSERT INTO `Items` (id)  '  +
 					 '   VALUES  '  +
@@ -76,7 +70,7 @@ class MagazineTDG {
 					msg.message=err.sqlMessage;;
 					callback(msg);
 				}
-				completedQuery("Add Magazines");
+				completedQuery("[MagazineTDG] addItem()");
 			})
 		})
 	}
@@ -98,15 +92,14 @@ class MagazineTDG {
 					msg.message=err.sqlMessage;;
 					callback(msg);
 				}
-				completedQuery("Delete Magazine");
+				completedQuery("[MagazineTDG] deleteItem()");
 			})
 		})
 	}
 	modifyItem(item,callback){
-		let sql='   UPDATE `MagzineDesc`  '  +
-				'   SET Title="'+item.title+'", Publisher="'+item.publisher+'", Language="'+item.language+'", `ISBN-10`='+item.ISBN10+', `ISBN-13`='+item.ISBN13+'  '  +
+		let sql='   UPDATE `MagazineDesc`  '  +
+				'   SET Title="'+item.title+'", Publisher="'+item.publisher+'", Language="'+item.language+'", `ISBN-10`="'+item.ISBN10+'", `ISBN-13`="'+item.ISBN13+'"  '  +
 				'  WHERE idDesc='+item.idDesc+';  ';
-				console.log(sql);
 		this.runQuery(function(conn,completedQuery){
 			conn.query(sql, (err, rows, fields) => {
 				if (!err){
@@ -123,7 +116,7 @@ class MagazineTDG {
 					msg.message=err.sqlMessage;;
 					callback(msg);
 				}
-				completedQuery("Modify Magazine");
+				completedQuery("[MagazineTDG] modifyItem()");
 			})
 		})
 	}

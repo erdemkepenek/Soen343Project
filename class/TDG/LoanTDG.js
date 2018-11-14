@@ -20,10 +20,11 @@ class LoanTDG {
       });
     };
     // a helper method to get current Date
-    this.getCurrentDate = function () {
+    this.getCurrentDateWithAddition = function (days) {
       var date = new Date();
+	  date.setDate(date.getDate()+days);
       var tmp =
-        date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
+        date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate();
       return tmp;
     };
   }
@@ -34,18 +35,21 @@ class LoanTDG {
     + viewItems():
 	*/
   loanItem(userId, itemId, callback) {
-    let loanDate = this.getCurrentDate;
+    let loanDate = this.getCurrentDateWithAddition(0);
+    let returnDate = this.getCurrentDateWithAddition(7);
     let sql =
       "   UPDATE `Items`  " +
-      "   SET available=0 WHERE itemId =" +
+      "   SET available=0 WHERE id =" +
       itemId +
       ";  " +
-      "INSERT INTO `Loan` (`UserId`, `itemId`, `loanDate`) VALUES (" +
+      "INSERT INTO `Loan` (`UserId`, `itemId`, `loanDate`, `returnDate`) VALUES (" +
       userId +
       "," +
       itemId +
       ",'" +
       loanDate +
+	  "','" +
+	  returnDate +
       "');";
     console.log(sql);
     this.runQuery(function (conn, completedQuery) {
@@ -63,7 +67,7 @@ class LoanTDG {
           msg.message = err.sqlMessage;
           callback(msg);
         }
-        completedQuery("Loan an item");
+        completedQuery("[LoanTDG] loanItem()");
       });
     });
   }
@@ -71,16 +75,10 @@ class LoanTDG {
   returnItem(userId, itemId, callback) {
     let returnDate = this.getCurrentDate;
     let sql =
-      "   UPDATE `Items` SET available=1 WHERE itemId = " +
+      "   UPDATE `Items` SET available=1 WHERE id = " +
       itemId +
       ";  " +
-      " UPDATE `Loan` SET returnDate = '" +
-      returnDate +
-      "' WHERE UserId = " +
-      userId +
-      " AND itemId = " +
-      itemId +
-      " AND returnDate is NULL;";
+      " DELETE from `Loan` where UserId="+userId+" and itemId="+itemId
     console.log(sql);
     this.runQuery(function (conn, completedQuery) {
       conn.query(sql, (err, rows, fields) => {
@@ -97,7 +95,7 @@ class LoanTDG {
           msg.message = err.sqlMessage;
           callback(msg);
         }
-        completedQuery("Return an item");
+        completedQuery("[LoanTDG] returnItem()");
       });
     });
   }
@@ -116,6 +114,7 @@ class LoanTDG {
         if (!err) {
           msg.success = "true";
           msg.message = "no message";
+		  msg.data = {};
           //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
           conn.query(sqlMagazine, (err, rows, fields) => {
             if (!err) {
@@ -131,7 +130,7 @@ class LoanTDG {
                     if (!err) {
                       msg.success = "true";
                       msg.message = "no message";
-                      msg.movies = rows;
+                      msg.data.movies = rows;
                       callback(msg);
                     } else {
                       console.log(err);
@@ -139,10 +138,10 @@ class LoanTDG {
                       msg.message = err.sqlMessage;
                       callback(msg);
                     }
-                    completedQuery("View All Loan Records");
+                    completedQuery("[LoanTDG] viewAllLoans() - 4-4");
                   });
                   //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                  msg.music = rows;
+                  msg.data.music = rows;
                   //callback(msg);
                 } else {
                   console.log(err);
@@ -150,10 +149,10 @@ class LoanTDG {
                   msg.message = err.sqlMessage;
                   callback(msg);
                 }
-                completedQuery("View All Loan Records");
+                completedQuery("[LoanTDG] viewAllLoans() - 3-4");
               });
               //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-              msg.magazines = rows;
+              msg.data.magazines = rows;
               //callback(msg);
             } else {
               console.log(err);
@@ -161,10 +160,10 @@ class LoanTDG {
               msg.message = err.sqlMessage;
               callback(msg);
             }
-            completedQuery("View All Loan Records");
+            completedQuery("[LoanTDG] viewAllLoans() - 2-4");
           });
           //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-          msg.books = rows;
+          msg.data.books = rows;
           //callback(msg);
         } else {
           console.log(err);
@@ -172,7 +171,7 @@ class LoanTDG {
           msg.message = err.sqlMessage;
           callback(msg);
         }
-        completedQuery("View All Loan Records");
+        completedQuery("[LoanTDG] viewAllLoans() - 1-4");
       });
     });
     //end all>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -193,6 +192,7 @@ class LoanTDG {
         if (!err) {
           msg.success = "true";
           msg.message = "no message";
+		  msg.data = {};
           //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
           conn.query(sqlMagazine, (err, rows, fields) => {
             if (!err) {
@@ -208,7 +208,7 @@ class LoanTDG {
                     if (!err) {
                       msg.success = "true";
                       msg.message = "no message";
-                      msg.movies = rows;
+                      msg.data.movies = rows;
                       callback(msg);
                     } else {
                       console.log(err);
@@ -216,10 +216,10 @@ class LoanTDG {
                       msg.message = err.sqlMessage;
                       callback(msg);
                     }
-                    completedQuery("View All Loan Records");
+                    completedQuery("[LoanTDG] viewAllLoans() - 4-4");
                   });
                   //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                  msg.music = rows;
+                  msg.data.music = rows;
                   //callback(msg);
                 } else {
                   console.log(err);
@@ -227,10 +227,10 @@ class LoanTDG {
                   msg.message = err.sqlMessage;
                   callback(msg);
                 }
-                completedQuery("View All Loan Records");
+                completedQuery("[LoanTDG] viewAllLoans() - 3-4");
               });
               //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-              msg.magazines = rows;
+              msg.data.magazines = rows;
               //callback(msg);
             } else {
               console.log(err);
@@ -238,10 +238,10 @@ class LoanTDG {
               msg.message = err.sqlMessage;
               callback(msg);
             }
-            completedQuery("View All Loan Records");
+            completedQuery("[LoanTDG] viewAllLoans() - 2-4");
           });
           //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-          msg.books = rows;
+          msg.data.books = rows;
           //callback(msg);
         } else {
           console.log(err);
@@ -249,7 +249,7 @@ class LoanTDG {
           msg.message = err.sqlMessage;
           callback(msg);
         }
-        completedQuery("View All Loan Records");
+        completedQuery("[LoanTDG] viewAllLoans() - 1-4");
       });
     });
     //end all>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

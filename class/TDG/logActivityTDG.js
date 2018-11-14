@@ -48,10 +48,10 @@ class LogActivityTDG {
             })
         })
     }
-    addActivity(id, callback){
-        let sql=	 '   INSERT INTO `LogActivity` (`userId`)  '  +
+    addActivity(id,action,callback){
+        let sql=	 '   INSERT INTO `LogActivity` (`userId`, `action`)  '  +
             '   VALUES  '  +
-            '       ("'+id+'")';
+            '       ("'+id+'","'+action+'")';
         this.runQuery(function(conn,completedQuery){
             conn.query(sql, (err, rows, fields) => {
                 if (!err){
