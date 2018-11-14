@@ -42,10 +42,4 @@ router.post("/commit",function(req,res){
     res.send(JSON.stringify("hello"));
 	
 });
-
-
-
-
-
-
 module.exports = router;
