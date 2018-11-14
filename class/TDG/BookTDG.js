@@ -20,12 +20,6 @@ class BookTDG {
 			});
 		};
 	}
-	/*
-		+ viewItems():
-		+ addItem(): void
-		+ modifyItem():
-		+ deleteItem();
-	*/
 	viewItems(callback){
 		let sql = 'SELECT BookDesc.idDesc, Title,Author,Format, Pages, Publisher, `ISBN-10`,`ISBN-13`, Language, COUNT(id) as Quantity FROM BookDesc LEFT JOIN BookPh ON BookPh.idDesc = BookDesc.idDesc GROUP BY (BookDesc.idDesc)' ; 
 		this.runQuery(function(conn,completedQuery){
@@ -44,7 +38,7 @@ class BookTDG {
 					msg.message=err.sqlMessage;;
 					callback(msg);
 				}
-				completedQuery("View Books");
+				completedQuery("[BookTDG] viewBooks()");
 			})
 		})
 	}
@@ -76,7 +70,7 @@ class BookTDG {
 					msg.message=err.sqlMessage;;
 					callback(msg);
 				}
-				completedQuery("Add Books");
+				completedQuery("[BookTDG] addItem()");
 			})
 		})
 	}
@@ -98,7 +92,7 @@ class BookTDG {
 					msg.message=err.sqlMessage;;
 					callback(msg);
 				}
-				completedQuery("Delete Book");
+				completedQuery("[BookTDG] deleteItem()");
 			})
 		})
 	}
@@ -106,7 +100,6 @@ class BookTDG {
 		let sql='   UPDATE `BookDesc`  '  + 
 				'   SET Title="'+item.title+'", Author="'+item.author+'", Format="'+item.format+'", Pages='+item.pages+', Publisher="'+item.publisher+'", `ISBN-10`='+item.ISBN10+', `ISBN-13`='+item.ISBN13+', Language="'+item.language+'"  '  + 
 				'  WHERE idDesc='+item.idDesc+';  ';
-				console.log(sql);
 		this.runQuery(function(conn,completedQuery){
 			conn.query(sql, (err, rows, fields) => {
 				if (!err){
@@ -123,7 +116,7 @@ class BookTDG {
 					msg.message=err.sqlMessage;;
 					callback(msg);
 				}
-				completedQuery("Modify Book");
+				completedQuery("[BookTDG] modifyItem()");
 			})
 		})
 	}

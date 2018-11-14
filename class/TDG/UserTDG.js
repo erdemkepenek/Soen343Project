@@ -23,7 +23,7 @@ class userTDG {
 	}
 
 	login (email, password,callback){
-		let sql= "SELECT FirstName,LastName, Address, email, phone, type FROM User WHERE email ='"+email+"' AND password = +'"+encrypt.sha512(password)+"'";
+		let sql= "SELECT UserId,FirstName,LastName, Address, email, phone, type FROM User WHERE email ='"+email+"' AND password = +'"+encrypt.sha512(password)+"'";
 		this.runQuery(function(conn,completedQuery){
 			conn.query(sql, (err, rows, fields) => {
 				if (!err){
@@ -49,13 +49,13 @@ class userTDG {
 					console.log(err);
 					callback(msg);
 				}
-				completedQuery("login");
+				completedQuery("[UserTDG] login()");
 			})
 		})
 	}
 	
 	viewAllUsers(callback){
-		let sql = 'SELECT * FROM User' ; 
+		let sql = 'SELECT UserId, FirstName, LastName, Address, email, phone, type FROM User' ; 
 		this.runQuery(function(conn,completedQuery){
 			conn.query(sql, (err, rows, fields) => {
 				if (!err){
@@ -72,7 +72,7 @@ class userTDG {
 					msg.message=err.sqlMessage;;
 					callback(msg);
 				}
-				completedQuery("View All Users");
+				completedQuery("[UserTDG] viewAllUsers()");
 			})
 		})
 	}
@@ -96,7 +96,7 @@ class userTDG {
 					msg.message=err.sqlMessage;;
 					callback(msg);
 				}
-				completedQuery("Add User");
+				completedQuery("[UserTDG] addUser()");
 			})
 		})
 	}
@@ -122,7 +122,7 @@ class userTDG {
 					msg.message=err.sqlMessage;;
 					callback(msg);
 				}
-				completedQuery("Modify User");
+				completedQuery("[UserTDG] modifyUser()");
 			})
 		})
 	}
@@ -145,7 +145,7 @@ class userTDG {
 					msg.message=err.sqlMessage;;
 					callback(msg);
 				}
-				completedQuery("Delete User");
+				completedQuery("[UserTDG] deleteUser()");
 			})
 		})
 	}

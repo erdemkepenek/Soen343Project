@@ -44,14 +44,14 @@ class MusicTDG {
 					msg.message=err.sqlMessage;;
 					callback(msg);
 				}
-				completedQuery("View Music");
+				completedQuery("[MusicTDG] viewItems()");
 			})
 		})
 	}
 	addItem(item, callback){
 		let sql=	 '   INSERT INTO `MusicDesc` (`Title`, `Artist`, `Label`, `Type`, `ReleaseDate`, `ASIN`)  '  + 
 					 '   VALUES  '  + 
-					 '       ("'+item.title+'", "'+item.artist+'", "'+item.label+'", '+item.type+', "'+item.releasedate+'", '+item.ASIN+'");  '  + 
+					 '       ("'+item.title+'", "'+item.artist+'", "'+item.label+'", "'+item.type+'", date "'+item.releaseDate+'", '+item.ASIN+');  '  + 
 					 '   SET @last_id_music = LAST_INSERT_ID();  '  + 
 					 '   INSERT INTO `Items` (id)  '  + 
 					 '   VALUES  '  + 
@@ -76,7 +76,7 @@ class MusicTDG {
 					msg.message=err.sqlMessage;;
 					callback(msg);
 				}
-				completedQuery("Add Music");
+				completedQuery("[MovieTDG] addItem()");
 			})
 		})
 	}
@@ -98,13 +98,13 @@ class MusicTDG {
 					msg.message=err.sqlMessage;;
 					callback(msg);
 				}
-				completedQuery("Delete Music");
+				completedQuery("[MusicTDG] deleteItem()");
 			})
 		})
 	}
 	modifyItem(item,callback){
 		let sql='   UPDATE `MusicDesc`  '  + 
-				'   SET Title="'+item.title+'", Artist="'+item.artist+'", Label="'+item.label+'", Type='+item.type+', ReleaseDate="'+item.releasedate+'", `ASIN`='+item.ASIN+'"  '  + 
+				'   SET Title="'+item.title+'", Artist="'+item.artist+'", Label="'+item.label+'", Type="'+item.type+'", ReleaseDate= date "'+item.releaseDate+'", `ASIN`='+item.ASIN+''+ 
 				'  WHERE idDesc='+item.idDesc+';  ';
 				console.log(sql);
 		this.runQuery(function(conn,completedQuery){
@@ -123,7 +123,7 @@ class MusicTDG {
 					msg.message=err.sqlMessage;;
 					callback(msg);
 				}
-				completedQuery("Modify Music");
+				completedQuery("[MusicTDG] modifyItem()");
 			})
 		})
 	}

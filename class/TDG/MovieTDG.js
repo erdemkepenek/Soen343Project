@@ -22,9 +22,6 @@ class MovieTDG {
         };
         
     }
-
-
-    
     viewItems(callback){
         let sql = 'SELECT MovieDesc.idDesc, Title,Director,Producers ,Actors, Language, Subtitles,'+
          'Dubbed,ReleaseDate,RunTime , COUNT(id) as Quantity FROM MovieDesc '+
@@ -45,7 +42,7 @@ class MovieTDG {
 					msg.message=err.sqlMessage;;
 					callback(msg);
 				}
-				completedQuery("View Movies");
+				completedQuery("[MovieTDG] viewItems");
 			})
 		})
     }
@@ -55,7 +52,7 @@ class MovieTDG {
     addItem(item, callback){
 		let sql=	 '   INSERT INTO `MovieDesc` (`Title`, `Director`, `Producers`, `Actors`, `Language`, `Subtitles`, `Dubbed`, `ReleaseDate`,`RunTime`)  '  + 
 					 '   VALUES  '  + 
-					 '       ("'+item.title+'", "'+item.director+'", "'+item.producers+'", '+item.actors+', "'+item.language+'", '+item.subtitles+', '+item.dubbed+', "'+item.releaseDate+'", "'+item.runTime+'");  '  + 
+					 '       ("'+item.title+'", "'+item.director+'", "'+item.producers+'", "'+item.actors+'", "'+item.language+'", "'+item.subtitles+'", "'+item.dubbed+'", date "'+item.releaseDate+'", "'+item.runTime+'");  '  + 
 					 '   SET @last_id_movie = LAST_INSERT_ID();  '  + 
 					 '   INSERT INTO `Items` (id)  '  + 
 					 '   VALUES  '  + 
@@ -82,7 +79,7 @@ class MovieTDG {
 					msg.message=err.sqlMessage;;
 					callback(msg);
 				}
-				completedQuery("Add Movies");
+				completedQuery("[MovieTDG] addItem()");
 			})
 		})
 	}
@@ -106,14 +103,14 @@ class MovieTDG {
 					msg.message=err.sqlMessage;;
 					callback(msg);
 				}
-				completedQuery("Delete Movie");
+				completedQuery("[MovieTDG] deleteItem()");
 			})
 		})
     }
     
     modifyItem(item,callback){
-		let sql='   UPDATE `BookDesc`  '  + 
-				'   SET Title="'+item.title+'", Director="'+item.director+'", Producers="'+item.producers+'", Actors='+item.actors+', Language="'+item.language+'", Subtitles = "'+item.subtitles+'", Dubbed = "'+item.dubbed+'", ReleaseDate = "'+ item.releaseDate+'", RunTime = "'+item.runTime+'"'  + 
+		let sql='   UPDATE `MovieDesc`  '  + 
+				'   SET Title="'+item.title+'", Director="'+item.director+'", Producers="'+item.producers+'", Actors="'+item.actors+'", Language="'+item.language+'", Subtitles = "'+item.subtitles+'", Dubbed = "'+item.dubbed+'", ReleaseDate = date "'+ item.releaseDate+'", RunTime = "'+item.runTime+'"'  + 
 				'  WHERE idDesc='+item.idDesc+';  ';
 				console.log(sql);
 		this.runQuery(function(conn,completedQuery){
@@ -132,7 +129,7 @@ class MovieTDG {
 					msg.message=err.sqlMessage;;
 					callback(msg);
 				}
-				completedQuery("Modify Movie");
+				completedQuery("[MovieTDG] modifyItem()");
 			})
 		})
 	}

@@ -20,12 +20,6 @@ class TransactionHistoryTDG {
             });
         };
     }
-    /*
-        + viewItems():
-        + addItem(): void
-        + modifyItem():
-        + deleteItem();
-    */
     viewActivity(callback){
         let sql = 'SELECT * FROM TransactionHistory' ;
         this.runQuery(function(conn,completedQuery){
@@ -48,10 +42,10 @@ class TransactionHistoryTDG {
             })
         })
     }
-    addActivity(id,type, callback){
-        let sql=	 '   INSERT INTO `TransactionHistory` (`userId`,`type`)  '  +
+    addActivity(id,type,itemId,callback){
+        let sql=	 '   INSERT INTO `TransactionHistory` (`userId`,`type`, `itemId`)  '  +
             '   VALUES  '  +
-            '       ("'+id+'", "'+type+'")';
+            '       ("'+id+'", "'+type+'",'+itemId+')';
         this.runQuery(function(conn,completedQuery){
             conn.query(sql, (err, rows, fields) => {
                 if (!err){
