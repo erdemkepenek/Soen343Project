@@ -4,17 +4,15 @@ const UnitOfWork = require("../UnitOfWork.js");
 
 class MusicMapper {
   constructor() {
-    console.log("from MusicMapper");
     this.MusicTDG = new MusicTDG();
     this.MusicUnitOfWork = new UnitOfWork();
-    this.MusicIdentitymap = new IdentityMap();
-
+    this.MusicIdentityMap = new IdentityMap();
   }
 
   viewItems(callback) {
+	console.log("[MusicMapper] viewItems()");
     let IDM = this.MusicIdentitymap;
     var result = IDM.getData();
-    //console.log(result);
     if (result.length == 0) {
       console.log("Getting from database");
       this.MusicTDG.viewItems(function(msg) {
@@ -27,59 +25,56 @@ class MusicMapper {
       callback(result);
     }
   }
-
-
   addItem(id, item, callback) {
+	console.log("[MusicMapper] addItem()");
     this.MusicUnitOfWork.addNew(id, item);
-    // this.MusicTDG.addItem(item,function(msg){
-    //   callback(msg);
-    // });
   }
   modifyItem(id, item, callback) {
+	console.log("[MusicMapper] modifyItem()");
     this.MusicUnitOfWork.addDirty(id, item);
-    // this.MusicTDG.modifyItem(item, function (msg) {
-    //   callback(msg);
-    // });
   }
   deleteItem(id, itemId, callback) {
+	console.log("[MusicMapper] deleteItem()");
     this.MusicUnitOfWork.addClean(id, itemId);
-    // this.MusicTDG.deleteItem(id, function (msg) {
-    //   callback(msg);
-    // });
   }
-
-  // emptyIDM(id){
-  //   let temp = this.MusicIdentitymap;
-  //   return temp.empty(id);
-  // }
-
+  viewUncommittedWork(id,callback){
+	console.log("[MusicMapper] viewUncommittedWork()");
+	let view = this.MusicUnitOfWork.viewUncommittedWork(id);
+	callback(view);
+  }
   commit(id, callback) {
+	console.log("[MusicMapper] commit()");
     let items = this.MusicUnitOfWork.commit(id);
-    console.log("commitss");
-    console.log(items);
-    //return items;
+	let g_msg = {};
+	g_msg.creation = [];
+	g_msg.modification = [];
+	g_msg.deletion = [];
     let add = items.registration;
     for (var i = 0; i < add.length; i++) {
       this.MusicTDG.addItem(add[i], function(msg) {
-        console.log(msg);
+        g_msg.creation.push(msg);
       });
     }
     let updates = items.updates;
     for (var i = 0; i < updates.length; i++) {
       this.MusicTDG.modifyItem(updates[i], function(msg) {
-        console.log(msg);
+        g_msg.modification.push(msg);
       });
     }
     let erase = items.erase;
     for (var i = 0; i < erase.length; i++) {
       this.MusicTDG.deleteItem(erase[i], function(msg) {
-        console.log(msg);
+        g_msg.deletion.push(msg);
       });
     }
-
     //empty IdentityMap
-    let IDM = this.MusicIdentitymap;
-    IDM.empty(id);
+    let IDM = this.MusicIdentityMap;
+    IDM.empty();
+	//NodeJS Side Effect of asynchronous, wait for request to database is sent 
+	this.wait = function(a){
+		callback(g_msg);
+	}
+	setTimeout(this.wait,2000);
 
   }
 

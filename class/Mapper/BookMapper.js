@@ -4,83 +4,79 @@ const UnitOfWork = require("../UnitOfWork.js");
 
 class BookMapper {
   constructor() {
-    console.log("from BookMapper");
     this.BookTDG = new BookTDG();
     this.BookUnitOfWork = new UnitOfWork();
-    this.BookIdentitymap = new IdentityMap();
+    this.BookIdentityMap = new IdentityMap();
 
   }
 
   viewItems(callback) {
-    let IDM = this.BookIdentitymap;
+	console.log("[BookMapper] viewItems()");
+    let IDM = this.BookIdentityMap;
     var result = IDM.getData();
-    //console.log(result);
     if (result.length == 0) {
-      console.log("Getting from database");
       this.BookTDG.viewItems(function(msg) {
         IDM.putData(msg);
         console.log(IDM.getData()[0]);
         callback(msg);
       });
     } else {
-      console.log("received from Identity Map");
       callback(result);
     }
   }
-
-
   addItem(id, item, callback) {
+	console.log("[BookMapper] addItem()"); 
     this.BookUnitOfWork.addNew(id, item);
-    // this.BookTDG.addItem(item,function(msg){
-    //   callback(msg);
-    // });
+    
   }
   modifyItem(id, item, callback) {
+	console.log("[BookMapper] modifyItem()");
     this.BookUnitOfWork.addDirty(id, item);
-    // this.BookTDG.modifyItem(item, function (msg) {
-    //   callback(msg);
-    // });
+    
   }
   deleteItem(id, itemId, callback) {
+	console.log("[BookMapper] deleteItem()");
     this.BookUnitOfWork.addClean(id, itemId);
-    // this.BookTDG.deleteItem(id, function (msg) {
-    //   callback(msg);
-    // });
+    
   }
-
-  // emptyIDM(id){
-  //   let temp = this.BookIdentitymap;
-  //   return temp.empty(id);
-  // }
-
+  viewUncommittedWork(id,callback){
+	console.log("[BookMapper] viewUncommittedWork()");
+	let view = this.BookUnitOfWork.viewUncommittedWork(id);
+	callback(view);
+  }
   commit(id, callback) {
+	console.log("[BookMapper] commit()");
     let items = this.BookUnitOfWork.commit(id);
-    console.log("commitss");
-    console.log(items);
-    //return items;
+	let g_msg = {};
+	g_msg.creation = [];
+	g_msg.modification = [];
+	g_msg.deletion = [];
     let add = items.registration;
     for (var i = 0; i < add.length; i++) {
       this.BookTDG.addItem(add[i], function(msg) {
-        console.log(msg);
+        g_msg.creation.push(msg);
       });
     }
     let updates = items.updates;
     for (var i = 0; i < updates.length; i++) {
       this.BookTDG.modifyItem(updates[i], function(msg) {
-        console.log(msg);
+        g_msg.modification.push(msg);
       });
     }
     let erase = items.erase;
     for (var i = 0; i < erase.length; i++) {
       this.BookTDG.deleteItem(erase[i], function(msg) {
-        console.log(msg);
+        g_msg.deletion.push(msg);
       });
     }
-
     //empty IdentityMap
-    let IDM = this.BookIdentitymap;
-    IDM.empty(id);
-
+    let IDM = this.BookIdentityMap;
+    IDM.empty();
+	//NodeJS Side Effect of asynchronous, wait for request to database is sent 
+	this.wait = function(a){
+		callback(g_msg);
+	}
+	setTimeout(this.wait,2000);
   }
 
 

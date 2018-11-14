@@ -4,17 +4,15 @@ const UnitOfWork = require("../UnitOfWork.js");
 
 class MagazineMapper {
   constructor() {
-    console.log("from MagazineMapper");
     this.MagazineTDG = new MagazineTDG();
     this.MagazineUnitOfWork = new UnitOfWork();
-    this.MagazineIdentitymap = new IdentityMap();
+    this.MagazineIdentityMap = new IdentityMap();
 
   }
-
   viewItems(callback) {
-    let IDM = this.MagazineIdentitymap;
+	console.log("[MagazineMapper] viewItems()");
+    let IDM = this.MagazineIdentityMap;
     var result = IDM.getData();
-    //console.log(result);
     if (result.length == 0) {
       console.log("Getting from database");
       this.MagazineTDG.viewItems(function(msg) {
@@ -27,59 +25,56 @@ class MagazineMapper {
       callback(result);
     }
   }
-
-
   addItem(id, item, callback) {
+	console.log("[MagazineMapper] addItem()");
     this.MagazineUnitOfWork.addNew(id, item);
-    // this.MagazineTDG.addItem(item,function(msg){
-    //   callback(msg);
-    // });
   }
   modifyItem(id, item, callback) {
+	console.log("[MagazineMapper] modifyItem()");
     this.MagazineUnitOfWork.addDirty(id, item);
-    // this.MagazineTDG.modifyItem(item, function (msg) {
-    //   callback(msg);
-    // });
   }
   deleteItem(id, itemId, callback) {
+	console.log("[MagazineMapper] deleteItem()");
     this.MagazineUnitOfWork.addClean(id, itemId);
-    // this.MagazineTDG.deleteItem(id, function (msg) {
-    //   callback(msg);
-    // });
   }
-
-  // emptyIDM(id){
-  //   let temp = this.MagazineIdentitymap;
-  //   return temp.empty(id);
-  // }
-
+  viewUncommittedWork(id,callback){
+	console.log("[MagazineMapper] viewUncommittedWork()");
+	let view = this.MagazineUnitOfWork.viewUncommittedWork(id);
+	callback(view);
+  }
   commit(id, callback) {
+    console.log("[MagazineMapper] commit()");
     let items = this.MagazineUnitOfWork.commit(id);
-    console.log("commitss");
-    console.log(items);
-    //return items;
+	let g_msg = {};
+	g_msg.creation = [];
+	g_msg.modification = [];
+	g_msg.deletion = [];
     let add = items.registration;
     for (var i = 0; i < add.length; i++) {
       this.MagazineTDG.addItem(add[i], function(msg) {
-        console.log(msg);
+        g_msg.creation.push(msg);
       });
     }
     let updates = items.updates;
     for (var i = 0; i < updates.length; i++) {
       this.MagazineTDG.modifyItem(updates[i], function(msg) {
-        console.log(msg);
+        g_msg.modification.push(msg);
       });
     }
     let erase = items.erase;
     for (var i = 0; i < erase.length; i++) {
       this.MagazineTDG.deleteItem(erase[i], function(msg) {
-        console.log(msg);
+        g_msg.deletion.push(msg);
       });
     }
-
     //empty IdentityMap
-    let IDM = this.MagazineIdentitymap;
-    IDM.empty(id);
+    let IDM = this.MagazineIdentityMap;
+    IDM.empty();
+	//NodeJS Side Effect of asynchronous, wait for request to database is sent 
+	this.wait = function(a){
+		callback(g_msg);
+	}
+	setTimeout(this.wait,2000);
 
   }
 

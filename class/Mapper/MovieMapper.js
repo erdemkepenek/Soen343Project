@@ -4,17 +4,15 @@ const UnitOfWork = require("../UnitOfWork.js");
 
 class MovieMapper {
   constructor() {
-    console.log("from MovieMapper");
     this.MovieTDG = new MovieTDG();
     this.MovieUnitOfWork = new UnitOfWork();
-    this.MovieIdentitymap = new IdentityMap();
+    this.MovieIdentityMap = new IdentityMap();
 
   }
-
   viewItems(callback) {
-    let IDM = this.MovieIdentitymap;
+	console.log("[MovieMapper] viewItems()");
+    let IDM = this.MovieIdentityMap;
     var result = IDM.getData();
-    //console.log(result);
     if (result.length == 0) {
       console.log("Getting from database");
       this.MovieTDG.viewItems(function(msg) {
@@ -27,59 +25,56 @@ class MovieMapper {
       callback(result);
     }
   }
-
-
   addItem(id, item, callback) {
+	console.log("[MovieMapper] addItem()");
     this.MovieUnitOfWork.addNew(id, item);
-    // this.MovieTDG.addItem(item,function(msg){
-    //   callback(msg);
-    // });
   }
   modifyItem(id, item, callback) {
+	console.log("[MovieMapper] modifyItem()");
     this.MovieUnitOfWork.addDirty(id, item);
-    // this.MovieTDG.modifyItem(item, function (msg) {
-    //   callback(msg);
-    // });
   }
   deleteItem(id, itemId, callback) {
+	console.log("[MovieMapper] deleteItem()");
     this.MovieUnitOfWork.addClean(id, itemId);
-    // this.MovieTDG.deleteItem(id, function (msg) {
-    //   callback(msg);
-    // });
   }
-
-  // emptyIDM(id){
-  //   let temp = this.MovieIdentitymap;
-  //   return temp.empty(id);
-  // }
-
+  viewUncommittedWork(id,callback){
+	console.log("[MovieMapper] viewUncommittedWork()");
+	let view = this.MovieUnitOfWork.viewUncommittedWork(id);
+	callback(view);
+  }
   commit(id, callback) {
+	console.log("[MovieMapper] commit()");
     let items = this.MovieUnitOfWork.commit(id);
-    console.log("commitss");
-    console.log(items);
-    //return items;
+	let g_msg = {};
+	g_msg.creation = [];
+	g_msg.modification = [];
+	g_msg.deletion = [];
     let add = items.registration;
     for (var i = 0; i < add.length; i++) {
       this.MovieTDG.addItem(add[i], function(msg) {
-        console.log(msg);
+        g_msg.creation.push(msg);
       });
     }
     let updates = items.updates;
     for (var i = 0; i < updates.length; i++) {
       this.MovieTDG.modifyItem(updates[i], function(msg) {
-        console.log(msg);
+        g_msg.modification.push(msg);
       });
     }
     let erase = items.erase;
     for (var i = 0; i < erase.length; i++) {
       this.MovieTDG.deleteItem(erase[i], function(msg) {
-        console.log(msg);
+        g_msg.deletion.push(msg);
       });
     }
-
     //empty IdentityMap
-    let IDM = this.MovieIdentitymap;
-    IDM.empty(id);
+    let IDM = this.MovieIdentityMap;
+    IDM.empty();
+	//NodeJS Side Effect of asynchronous, wait for request to database is sent 
+	this.wait = function(a){
+		callback(g_msg);
+	}
+	setTimeout(this.wait,2000);
 
   }
 

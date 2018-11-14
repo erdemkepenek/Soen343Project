@@ -10,19 +10,25 @@ class IdentityMap {
     }
 
     putData(item) {
+		console.log("[IdentityMap] putData()");
         let temp = item;
         console.log("Item being added");
         this.Items.push(temp);
+		
     }
 
 
     getData() {
+		console.log("[IdentityMap] getData()");
         return this.Items;
+		
     }
 
     empty() {
+		console.log("[IdentityMap] empty()");
         let temp = this.Items;
         temp.splice(0, temp.length);
+		
     }
 
 }
