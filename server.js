@@ -12,6 +12,7 @@ const LogActivityMapper = require("./class/Mapper/LogActivityMapper.js");
 const userTDG = require("./class/TDG/UserTDG.js");
 const logActivityTDG = require("./class/TDG/logActivityTDG.js");
 const transactionHistoryTDG = require("./class/TDG/transactionHistoryTDG.js");
+const LoanTDG = require("./class/TDG/LoanTDG.js");
 
 let item = {
   "idDesc": 28,
@@ -67,6 +68,12 @@ let user2 = {
 }
 
 
+myLoanTDG = new LoanTDG();
+var eglen = myLoanTDG.viewLoansForOneUser(7,function (msg) {
+  console.log(msg);
+  return msg; 
+}
+ );
 //myBookMapper = new BookMapper();
 //myBookMapper.viewItems(function(msg){
 //console.log(msg);
@@ -79,9 +86,9 @@ let user2 = {
 // myMagazineMapper.commit(3);
 // myTransactions = new TransactionHistoryMapper();
 // myTransactions.addActivity(3, 'loan');
-myLogActivity = new LogActivityMapper();
-myLogActivity.addActivity(3);
-myLogActivity.viewActivity();
+// myLogActivity = new LogActivityMapper();
+// myLogActivity.addActivity(3);
+// myLogActivity.viewActivity();
 
 // myBookMapper.deleteItem(, function (msg) {
 //   console.log(msg);
