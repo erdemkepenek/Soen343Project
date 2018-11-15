@@ -4,6 +4,8 @@ const MagazineMapper = require("./Mapper/MagazineMapper.js");
 const MovieMapper = require("./Mapper/MovieMapper.js");
 const TransactionHistoryMapper = require("./Mapper/TransactionHistoryMapper.js");
 const LogActivityMapper = require("./Mapper/LogActivityMapper");
+const UserMapper = require("./Mapper/UserMapper");
+const LoanMapper = require("./Mapper/LoanMapper");
 
 class Controller {
   constructor() {
@@ -13,6 +15,8 @@ class Controller {
     this.MovieMapper = new MovieMapper();
     this.TransactionHistory = new TransactionHistoryMapper();
     this.LogActivity = new LogActivityMapper();
+    this.UserMapper = new UserMapper();
+	this.LoanMapper = new LoanMapper();
   }
 
   // for BookMapper
@@ -151,17 +155,64 @@ class Controller {
   }
 
   transactionHistoryView(confirmation) {
-    this.TransactionHistory.viewActivity(confirmation(msg));
+    this.TransactionHistory.viewActivity(function(msg){
+		confirmation(msg);
+	});
   }
 
   // for LogActivityMapper
   logActivityMapperAdd(userId, action, confirmation) {
-    this.LogActivity.addActivity(userId, action, confirmation(msg));
+    this.LogActivity.addActivity(userId, action, function(msg){
+		confirmation(msg)
+	});
   }
 
   logActivityMapperView(confirmation) {
-    this.LogActivity.viewActivity(confirmation(msg));
+    this.LogActivity.viewActivity(function(msg){
+		confirmation(msg);
+	});
   }
+  
+   // for UserMapper
+  userLogin(email,password,confirmation){
+	  this.UserMapper.login(email, password,function(msg){
+		  confirmation(msg);
+	  });
+  }
+  userAdd(userId, user, confirmation) {
+    this.UserMapper.addUser(userId, user);
+    confirmation({ status: "true", message: "no message" });
+  }
+
+  userModify(userId, user, confirmation) {
+    this.UserMapper.modifyUser(userId, user);
+    confirmation({ status: "true", message: "no message" });
+  }
+
+  userDelete(userId, userId_del, confirmation) {
+    this.UserMapper.deleteUser(userId, userId_del);
+    confirmation({ status: "true", message: "no message" });
+  }
+
+  userView(confirmation) {
+    this.UserMapper.viewUsers(function(msg){
+		confirmation(msg);
+	});
+    
+  }
+
+  userUncommitedWork(userId, confirmation) {
+    this.UserMapper.viewUncommittedWork(userId,function(msg){
+		confirmation(msg);
+	});
+  }
+
+  userCommit(userId, confirmation) {
+    this.UserMapper.commit(userId, function(g_msg) {
+      confirmation(g_msg);
+    });
+  }
+  
 }
 
 module.exports = Controller;

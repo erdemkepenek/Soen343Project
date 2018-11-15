@@ -4,7 +4,6 @@ const UnitOfWork = require("../UnitOfWork.js");
 
 class LoanMapper {
   constructor() {
-    console.log("from LoanMapper");
     this.LoanTDG = new LoanTDG();
     this.LoanUnitOfWork = new UnitOfWork();
     this.LoanIdentitymap = new IdentityMap();
@@ -15,14 +14,11 @@ class LoanMapper {
     var result = IDM.getData();
     //console.log(result);
     if (result.length == 0) {
-      console.log("Getting from database");
       this.LoanTDG.viewAllLoans(function(msg) {
         IDM.putData(msg);
-        console.log(IDM.getData()[0]);
         callback(msg);
       });
     } else {
-      console.log("received from Identity Map");
       callback(result);
     }
   }

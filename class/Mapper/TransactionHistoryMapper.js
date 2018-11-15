@@ -31,4 +31,4 @@ class TransactionHistoryMapper {
   }
 }
 
-module.exports = LogActivityMapper;
+module.exports = TransactionHistoryMapper;
