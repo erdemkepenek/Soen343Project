@@ -31,18 +31,21 @@ class Controller {
   }
 
   bookDelete(userId, itemId, confirmation) {
-    this.BookMapper.deleteItem(userId, item);
+    this.BookMapper.deleteItem(userId, itemId);
     confirmation({ status: "true", message: "no message" });
   }
 
   bookView(confirmation) {
-    this.BookMapper.viewItems();
-    confirmation({ status: "true", message: "no message" });
+    this.BookMapper.viewItems(function(msg){
+      confirmation(msg);
+    })
   }
 
   bookUncommitedWork(userId, confirmation) {
-    this.BookMapper.viewUncommittedWork(userId);
-    confirmation({ status: "true", message: "no message" });
+    this.BookMapper.viewUncommittedWork(userId,function(msg){
+      confirmation(msg);
+    });
+    
   }
 
   bookCommit(userId, confirmation) {
@@ -63,22 +66,25 @@ class Controller {
   }
 
   magazineDelete(userId, itemId, confirmation) {
-    this.MagazineMapper.deleteItem(userId, item);
+    this.MagazineMapper.deleteItem(userId, itemId);
     confirmation({ status: "true", message: "no message" });
   }
 
   magazineView(confirmation) {
-    this.MagazineMapper.viewItems();
-    confirmation({ status: "true", message: "no message" });
+    this.MagazineMapper.viewItems(function (msg) {
+      confirmation(msg);
+    })
   }
 
   magazineUncommitedWork(userId, confirmation) {
-    this.MagazineMapper.viewUncommittedWork(userId);
-    confirmation({ status: "true", message: "no message" });
+    this.MagazineMapper.viewUncommittedWork(userId, function (msg) {
+      confirmation(msg);
+    });
+
   }
 
   magazineCommit(userId, confirmation) {
-    this.MagazineMapper.commit(userId, function(g_msg) {
+    this.MagazineMapper.commit(userId, function (g_msg) {
       confirmation(g_msg);
     });
   }
@@ -95,22 +101,25 @@ class Controller {
   }
 
   musicDelete(userId, itemId, confirmation) {
-    this.MusicMapper.deleteItem(userId, item);
+    this.MusicMapper.deleteItem(userId, itemId);
     confirmation({ status: "true", message: "no message" });
   }
 
   musicView(confirmation) {
-    this.MusicMapper.viewItems();
-    confirmation({ status: "true", message: "no message" });
+    this.MusicMapper.viewItems(function (msg) {
+      confirmation(msg);
+    })
   }
 
   musicUncommitedWork(userId, confirmation) {
-    this.MusicMapper.viewUncommittedWork(userId);
-    confirmation({ status: "true", message: "no message" });
+    this.MusicMapper.viewUncommittedWork(userId, function (msg) {
+      confirmation(msg);
+    });
+
   }
 
   musicCommit(userId, confirmation) {
-    this.MusicMapper.commit(userId, function(g_msg) {
+    this.MusicMapper.commit(userId, function (g_msg) {
       confirmation(g_msg);
     });
   }
@@ -127,22 +136,25 @@ class Controller {
   }
 
   movieDelete(userId, itemId, confirmation) {
-    this.MovieMapper.deleteItem(userId, item);
+    this.MovieMapper.deleteItem(userId, itemId);
     confirmation({ status: "true", message: "no message" });
   }
 
   movieView(confirmation) {
-    this.MovieMapper.viewItems();
-    confirmation({ status: "true", message: "no message" });
+    this.MovieMapper.viewItems(function (msg) {
+      confirmation(msg);
+    })
   }
 
   movieUncommitedWork(userId, confirmation) {
-    this.MovieMapper.viewUncommittedWork(userId);
-    confirmation({ status: "true", message: "no message" });
+    this.MovieMapper.viewUncommittedWork(userId, function (msg) {
+      confirmation(msg);
+    });
+
   }
 
   movieCommit(userId, confirmation) {
-    this.MovieMapper.commit(userId, function(g_msg) {
+    this.MovieMapper.commit(userId, function (g_msg) {
       confirmation(g_msg);
     });
   }

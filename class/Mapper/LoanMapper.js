@@ -24,20 +24,11 @@ class LoanMapper {
   }
 
   viewLoan(userId, callback) {
-    let IDM = this.LoanIdentitymap;
-    var result = IDM.getData();
-    //console.log(result);
-    if (result.length == 0) {
-      console.log("Getting from database");
-      this.LoanTDG.viewLoansForOneUser(userId, function(msg) {
-        IDM.putData(msg);
-        console.log(IDM.getData()[0]);
-        callback(msg);
-      });
-    } else {
-      console.log("received from Identity Map");
-      callback(result);
-    }
+    this.LoanTDG.viewLoansForOneUser(userId, function (msg) {
+      IDM.putData(msg);
+      console.log(IDM.getData()[0]);
+      callback(msg);
+    });
   }
 
   addLoanItem(userId, itemId, callback) {
@@ -55,13 +46,13 @@ class LoanMapper {
     //return items;
     let add = items.registration;
     for (var i = 0; i < add.length; i++) {
-      this.LoanTDG.loanItem(userId, add[i], function(msg) {
+      this.LoanTDG.loanItem(userId, add[i], function (msg) {
         console.log(msg);
       });
     }
     let updates = items.updates;
     for (var i = 0; i < updates.length; i++) {
-      this.LoanTDG.returnItem(userId, updates[i], function(msg) {
+      this.LoanTDG.returnItem(userId, updates[i], function (msg) {
         console.log(msg);
       });
     }
