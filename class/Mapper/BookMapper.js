@@ -13,7 +13,7 @@ class BookMapper {
   viewItems(callback) {
 	console.log("[BookMapper] viewItems()");
     let IDM = this.BookIdentityMap;
-    var result = IDM.getData();
+	let result = IDM.getData();
     if (result.length == 0) {
       this.BookTDG.viewItems(function(msg) {
         IDM.putData(msg);

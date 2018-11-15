@@ -20,6 +20,7 @@ router.get("/ab",function(req,res){
 router.post("/catalog/view",function(req,res){
 	res.setHeader('Content-Type', 'application/json');
 	myController.catalogView(function (msg) {
+		console.log(msg);
         res.send(JSON.stringify(msg));
     });
 })
