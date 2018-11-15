@@ -11,7 +11,7 @@ class MusicMapper {
 
   viewItems(callback) {
 	console.log("[MusicMapper] viewItems()");
-    let IDM = this.MusicIdentitymap;
+    let IDM = this.MusicIdentityMap;
     var result = IDM.getData();
     if (result.length == 0) {
       this.MusicTDG.viewItems(function(msg) {

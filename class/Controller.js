@@ -2,6 +2,10 @@ const BookMapper = require("./Mapper/BookMapper.js");
 const MusicMapper = require("./Mapper/MusicMapper.js");
 const MagazineMapper = require("./Mapper/MagazineMapper.js");
 const MovieMapper = require("./Mapper/MovieMapper.js");
+const TransactionHistoryMapper = require("./Mapper/TransactionHistoryMapper.js");
+const LogActivityMapper = require("./Mapper/LogActivityMapper");
+const UserMapper = require("./Mapper/UserMapper");
+const LoanMapper = require("./Mapper/LoanMapper");
 
 class Controller {
   constructor() {
@@ -9,6 +13,10 @@ class Controller {
     this.MusicMapper = new MusicMapper();
     this.MagazineMapper = new MagazineMapper();
     this.MovieMapper = new MovieMapper();
+    this.TransactionHistory = new TransactionHistoryMapper();
+    this.LogActivity = new LogActivityMapper();
+    this.UserMapper = new UserMapper();
+	this.LoanMapper = new LoanMapper();
   }
 
   // for BookMapper
@@ -23,18 +31,21 @@ class Controller {
   }
 
   bookDelete(userId, itemId, confirmation) {
-    this.BookMapper.deleteItem(userId, item);
+    this.BookMapper.deleteItem(userId, itemId);
     confirmation({ status: "true", message: "no message" });
   }
 
   bookView(confirmation) {
-    this.BookMapper.viewItems();
-    confirmation({ status: "true", message: "no message" });
+    this.BookMapper.viewItems(function(msg){
+      confirmation(msg);
+    })
   }
 
   bookUncommitedWork(userId, confirmation) {
-    this.BookMapper.viewUncommittedWork(userId);
-    confirmation({ status: "true", message: "no message" });
+    this.BookMapper.viewUncommittedWork(userId,function(msg){
+      confirmation(msg);
+    });
+    
   }
 
   bookCommit(userId, confirmation) {
@@ -55,22 +66,25 @@ class Controller {
   }
 
   magazineDelete(userId, itemId, confirmation) {
-    this.MagazineMapper.deleteItem(userId, item);
+    this.MagazineMapper.deleteItem(userId, itemId);
     confirmation({ status: "true", message: "no message" });
   }
 
   magazineView(confirmation) {
-    this.MagazineMapper.viewItems();
-    confirmation({ status: "true", message: "no message" });
+    this.MagazineMapper.viewItems(function (msg) {
+      confirmation(msg);
+    })
   }
 
   magazineUncommitedWork(userId, confirmation) {
-    this.MagazineMapper.viewUncommittedWork(userId);
-    confirmation({ status: "true", message: "no message" });
+    this.MagazineMapper.viewUncommittedWork(userId, function (msg) {
+      confirmation(msg);
+    });
+
   }
 
   magazineCommit(userId, confirmation) {
-    this.MagazineMapper.commit(userId, function(g_msg) {
+    this.MagazineMapper.commit(userId, function (g_msg) {
       confirmation(g_msg);
     });
   }
@@ -87,22 +101,25 @@ class Controller {
   }
 
   musicDelete(userId, itemId, confirmation) {
-    this.MusicMapper.deleteItem(userId, item);
+    this.MusicMapper.deleteItem(userId, itemId);
     confirmation({ status: "true", message: "no message" });
   }
 
   musicView(confirmation) {
-    this.MusicMapper.viewItems();
-    confirmation({ status: "true", message: "no message" });
+    this.MusicMapper.viewItems(function (msg) {
+      confirmation(msg);
+    })
   }
 
   musicUncommitedWork(userId, confirmation) {
-    this.MusicMapper.viewUncommittedWork(userId);
-    confirmation({ status: "true", message: "no message" });
+    this.MusicMapper.viewUncommittedWork(userId, function (msg) {
+      confirmation(msg);
+    });
+
   }
 
   musicCommit(userId, confirmation) {
-    this.MusicMapper.commit(userId, function(g_msg) {
+    this.MusicMapper.commit(userId, function (g_msg) {
       confirmation(g_msg);
     });
   }
@@ -119,25 +136,95 @@ class Controller {
   }
 
   movieDelete(userId, itemId, confirmation) {
-    this.MovieMapper.deleteItem(userId, item);
+    this.MovieMapper.deleteItem(userId, itemId);
     confirmation({ status: "true", message: "no message" });
   }
 
   movieView(confirmation) {
-    this.MovieMapper.viewItems();
-    confirmation({ status: "true", message: "no message" });
+    this.MovieMapper.viewItems(function (msg) {
+      confirmation(msg);
+    })
   }
 
   movieUncommitedWork(userId, confirmation) {
-    this.MovieMapper.viewUncommittedWork(userId);
-    confirmation({ status: "true", message: "no message" });
+    this.MovieMapper.viewUncommittedWork(userId, function (msg) {
+      confirmation(msg);
+    });
+
   }
 
   movieCommit(userId, confirmation) {
-    this.MovieMapper.commit(userId, function(g_msg) {
+    this.MovieMapper.commit(userId, function (g_msg) {
       confirmation(g_msg);
     });
   }
+
+  // for TransactionHistoryMapper
+  transactionHistoryAdd(userId, action, itemId, confirmation) {
+    this.TransactionHistory.addActivity(userId, action, itemId, function(msg) {
+      confirmation(msg);
+    });
+  }
+
+  transactionHistoryView(confirmation) {
+    this.TransactionHistory.viewActivity(function(msg){
+		confirmation(msg);
+	});
+  }
+
+  // for LogActivityMapper
+  logActivityMapperAdd(userId, action, confirmation) {
+    this.LogActivity.addActivity(userId, action, function(msg){
+		confirmation(msg)
+	});
+  }
+
+  logActivityMapperView(confirmation) {
+    this.LogActivity.viewActivity(function(msg){
+		confirmation(msg);
+	});
+  }
+  
+   // for UserMapper
+  userLogin(email,password,confirmation){
+	  this.UserMapper.login(email, password,function(msg){
+		  confirmation(msg);
+	  });
+  }
+  userAdd(userId, user, confirmation) {
+    this.UserMapper.addUser(userId, user);
+    confirmation({ status: "true", message: "no message" });
+  }
+
+  userModify(userId, user, confirmation) {
+    this.UserMapper.modifyUser(userId, user);
+    confirmation({ status: "true", message: "no message" });
+  }
+
+  userDelete(userId, userId_del, confirmation) {
+    this.UserMapper.deleteUser(userId, userId_del);
+    confirmation({ status: "true", message: "no message" });
+  }
+
+  userView(confirmation) {
+    this.UserMapper.viewUsers(function(msg){
+		confirmation(msg);
+	});
+    
+  }
+
+  userUncommitedWork(userId, confirmation) {
+    this.UserMapper.viewUncommittedWork(userId,function(msg){
+		confirmation(msg);
+	});
+  }
+
+  userCommit(userId, confirmation) {
+    this.UserMapper.commit(userId, function(g_msg) {
+      confirmation(g_msg);
+    });
+  }
+  
 }
 
 module.exports = Controller;
