@@ -51,7 +51,9 @@ router.post("/delete", function (req, res) {
 router.post("/view", function (req, res) {
     let user = req.body;
     res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify("hello"));
+	myController.userView(function(msg){	
+		res.send(JSON.stringify(msg));
+	})
 })
 router.post("/save/view", function (req, res) {
     let user = req.body;
