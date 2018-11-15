@@ -15,10 +15,10 @@ const transactionHistoryTDG = require("./class/TDG/transactionHistoryTDG.js");
 const LoanTDG = require("./class/TDG/LoanTDG.js");
 const itemTDG_ = require("./class/Mapper/LogActivityMapper.js");
 const itemTDG = require("./class/Controller.js");
-
+const Controller = require("./class/Controller.js");
 let item = {
-  "idDesc": 28,
-  "title": "samsung",
+  "idDesc": 29,
+  "title": "successEG",
   "author": "Shakespear",
   "format": "hardcopy",
   "pages": 342,
@@ -27,7 +27,18 @@ let item = {
   "ISBN13": null,
   "language": "english"
 }
+/*
+let myWork = new UnitOfWork();
+myWork.addNew(4,item);
+myWork.addDirty(4,item);
+myWork.addDirty(4,item);
+myWork.addDirty(3,item);
+myWork.addClean(4,35);
+myWork.addClean(4,44);
+let temp5 = myWork.commit(4);
+console.log(temp5);
 
+*/
 let item2 = {
   "id": 46,
   "idDesc": 26,
@@ -249,7 +260,7 @@ let user_2 = {
   type: 1,
   password: 'helloWorld',
 }
-let user_mod = {
+let user___mod = {
   UserId:880,	
   FirstName: 'TEST_AAAA',
   LastName: 'TEST',
@@ -261,14 +272,49 @@ let user_mod = {
 }
 
 "'+item.title+'", "'+item.publisher+'", "'+item.language+'", '+item.ISBN10+', '+item.ISBN13+'
-let kk = new itemTDG();
 // kk.bookView(function(msg){
 	// console.log(msg);
 // })
+let user_add = {
+  UserId: 881,
+  FirstName: 'TEST',
+  LastName: 'TEST',
+  Address: 'SOMEWHERE',
+  email: 'TEST@1111.COM',
+  phone: 2147483647,
+  password: "helloWorld",
+  type: 0
+}
+let user_mod = {
+  UserId: 770,
+  FirstName: 'CHANGED',
+  LastName: 'TEST',
+  Address: 'SOMEWHERE',
+  email: 'TEST@11111.COM',
+  phone: 2147483647,
+  password:"helloWorld",
+  type: 0
+}
+kk = new Controller();
+kk.catalogView(function(msg){
+	console.log(msg);
+})
+
+// kk.userLogin("TEST@9.COM","helloWorld",function(msg){
+	// console.log(msg);
+// })
+
+
+
+
 //myBookMapper = new BookMapper();
+/*
+myBookMapper=new BookMapper();
+>>>>>>> Stashed changes
 //myBookMapper.viewItems(function(msg){
 //console.log(msg);
 //});
+<<<<<<< Updated upstream
 
 //myTDGMAG = new MagazineTDG();
 //myTDGMAG.addItem(item3);
@@ -336,6 +382,12 @@ let kk = new itemTDG();
 // kk.modifyItem(item_magazine,function(msg){
 	// console.log(msg)
 // })
+
+/*
+myBookMapper.deleteItem(1, function (msg) {
+  console.log(msg);
+});
+*/
 
 
 // Serve static files from the React app

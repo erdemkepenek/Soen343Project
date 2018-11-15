@@ -245,6 +245,25 @@ class Controller {
 		confirmation(msg);
 	})
   }
+  catalogView(confirmation){
+	  let movie = this.MovieMapper;
+	  let music = this.MusicMapper;
+	  let magazine = this.MagazineMapper;
+	  let g_msg = {};
+	  this.BookMapper.viewItems(function(msg){
+		  g_msg.book = msg.data;
+		  movie.viewItems(function(msg){
+			  g_msg.movie = msg.data;
+			  magazine.viewItems(function(msg){
+				  g_msg.magazine = msg.data;
+				  music.viewItems(function(msg){
+					  g_msg.music = msg.data;
+					  confirmation(g_msg);
+				  })
+			  })
+		  })
+	  })
+  }
 }
 
 module.exports = Controller;
