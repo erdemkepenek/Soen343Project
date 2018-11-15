@@ -2,6 +2,8 @@ const BookMapper = require("./Mapper/BookMapper.js");
 const MusicMapper = require("./Mapper/MusicMapper.js");
 const MagazineMapper = require("./Mapper/MagazineMapper.js");
 const MovieMapper = require("./Mapper/MovieMapper.js");
+const TransactionHistoryMapper = require("./Mapper/TransactionHistoryMapper.js");
+const LogActivityMapper = require("./Mapper/LogActivityMapper");
 
 class Controller {
   constructor() {
@@ -9,6 +11,8 @@ class Controller {
     this.MusicMapper = new MusicMapper();
     this.MagazineMapper = new MagazineMapper();
     this.MovieMapper = new MovieMapper();
+    this.TransactionHistory = new TransactionHistoryMapper();
+    this.LogActivity = new LogActivityMapper();
   }
 
   // for BookMapper
@@ -137,6 +141,26 @@ class Controller {
     this.MovieMapper.commit(userId, function(g_msg) {
       confirmation(g_msg);
     });
+  }
+
+  // for TransactionHistoryMapper
+  transactionHistoryAdd(userId, action, itemId, confirmation) {
+    this.TransactionHistory.addActivity(userId, action, itemId, function(msg) {
+      confirmation(msg);
+    });
+  }
+
+  transactionHistoryView(confirmation) {
+    this.TransactionHistory.viewActivity(confirmation(msg));
+  }
+
+  // for LogActivityMapper
+  logActivityMapperAdd(userId, action, confirmation) {
+    this.LogActivity.addActivity(userId, action, confirmation(msg));
+  }
+
+  logActivityMapperView(confirmation) {
+    this.LogActivity.viewActivity(confirmation(msg));
   }
 }
 
