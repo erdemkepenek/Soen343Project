@@ -46,31 +46,12 @@ class HomepageLayout extends Component {
     }
 
     render() {
-       if(this.props.userProfile) {
-            /*let columnItems =[
-                {value : 'User ID', render : 'User ID', type : 'number'},
-                {value : 'First Name', render : 'First Name', type : 'text'},
-                {value : 'Last Name', render : 'Last Name', type : 'text'},
-                {value : 'Email', render : 'Email', type : 'text'},
-                {value : 'Phone', render : 'Phone', type : 'number'},
-                {value : 'Address', render : 'Address', type : 'text'},
-            ];
-            let tableItems = [];
-            this.props.users.map((userData)=>{
-                let arrData=[
-                    {value : userData.id, render : userData.id, type : 'number'},
-                    {value : userData.firstName, render : userData.firstName, type : 'text'},
-                    {value : userData.lastName, render : userData.lastName, type : 'text'},
-                    {value : userData.email, render : userData.email, type : 'text'},
-                    {value : userData.phone, render : userData.phone, type : 'number'},
-                    {value : userData.address, render : userData.address, type : 'text'},
-                    userData
-                ]
-                tableItems.push(arrData);
-
-            })*/
+       if(this.props.userProfile.type === 0) {
             return (<Redirect to={'/dashboard'}/>);
-        }else{
+        }
+        else if(this.props.userProfile.type === 1){
+           return (<Redirect to={'/adminpanel'}/>);
+       }else{
             return(<div className='main-container'>
                 <HeaderComponent />
                 <div className='MainContainer-ant-carousel'>

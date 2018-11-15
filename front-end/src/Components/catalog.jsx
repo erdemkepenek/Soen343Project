@@ -25,6 +25,7 @@ class Catalog extends Component {
     }
 
     componentDidMount() {
+        this.props.history.push(`/ecatalog`);
             tableArray= [];
             let book={
             Title: "Marc's book",
@@ -91,19 +92,19 @@ class Catalog extends Component {
         this.setState({addItem:data.value})
         switch(data.value){
             case 'Music':
-                this.props.history.push(`/addMusic/`);
+                this.props.history.push(`/addMusic`);
                 break;
             case 'Movie':
-                this.props.history.push(`/addMovie/`);
+                this.props.history.push(`/addMovie`);
                 break;
             case 'Magazine':
-                this.props.history.push(`/addMagazine/`);
+                this.props.history.push(`/addMagazine`);
                 break;
             case 'Book':
-                this.props.history.push(`/addBook/`);
+                this.props.history.push(`/addBook`);
                 break;
             default:
-                this.props.history.push(`/addMusic/`);
+                this.props.history.push(`/addMusic`);
                 break;
 
         }
@@ -111,7 +112,7 @@ class Catalog extends Component {
     
         openProfile=(data)=>{
             console.log(data);
-            this.props.history.push(`/ecatalog/`+data.BookTitle);
+            this.props.history.push(`/ecatalog/`+data.Title);
             this.setState({profile: data})
         }
 
@@ -152,9 +153,10 @@ class Catalog extends Component {
                                     You can select one of the item to see their details!
                                 </div>
                             </div>
+                            {this.props.userProfile.type === 1?
                             <div className='MainContainer-upper-container-button'>
                                 <Dropdown placeholder="Add Item" value={this.state.addItem} onChange={(e,value)=>this.addItem(value)} options={options}  selection />
-                            </div>
+                            </div>:''}
 
                             
                         </div>

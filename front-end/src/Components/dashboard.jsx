@@ -21,7 +21,10 @@ class Dashboard extends Component {
     render() {
         if(!this.props.userProfile) {
             return (<Redirect to={'/'}/>);
-        }else {
+        }else if(this.props.userProfile.type ===1){
+            return (<Redirect to={'/404'}/>);
+        }
+        else {
             return (
                 <div className='main-container'>
                     <HeaderComponent/>
@@ -46,24 +49,24 @@ class Dashboard extends Component {
                             </Grid.Column>
                             <Grid.Column>
                                 <div className='iconsDashboard' onClick={this.cart}>
-                                <Icon name='cart'  />
-                                <p>Cart</p>
+                                    <Icon name='cart'  />
+                                    <p>Cart</p>
                                 </div>
                             </Grid.Column>
                             </Grid.Row>
                             <Grid.Row columns={2}>
-                                <Grid.Column>
-                                    <div className='iconsDashboard' onClick={this.settings}>
-                                        <Icon name='cog' />
-                                        <p>Settings</p>
-                                    </div>
-                                </Grid.Column>
-                                <Grid.Column>
-                                    <div className='iconsDashboard' onClick={this.rentals}>
-                                        <Icon name='inbox' />
-                                        <p> Rentals</p>
-                                    </div>
-                                </Grid.Column>
+                            <Grid.Column>
+                                <div className='iconsDashboard' onClick={this.rentals}>
+                                    <Icon name='inbox' />
+                                    <p> Rentals</p>
+                                </div>
+                            </Grid.Column>
+                            <Grid.Column>
+                                <div className='iconsDashboard' onClick={this.settings}>
+                                    <Icon name='cog' />
+                                    <p>Settings</p>
+                                </div>
+                            </Grid.Column>
                             </Grid.Row>
                         </Grid>
                     </div>

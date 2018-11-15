@@ -25,10 +25,14 @@ class AdminPanel extends Component {
   addUser = () => this.props.history.push(`/adduser`);
   transactions = () => this.props.history.push(`/transactionhistory`);
   logactivity = () => this.props.history.push(`/logactivity`);
+  settings=()=>this.props.history.push(`/settings`);
+  catalog=()=>this.props.history.push(`/ecatalog`);
   render() {
     if (!this.props.userProfile) {
       return (<Redirect to={'/'}/>);
-    } else {
+    }else if(this.props.userProfile.type ===0){
+        return (<Redirect to={'/404'}/>);
+    }else {
       return (<div className='main-container'>
         <HeaderComponent/>
         <div className='MainContainer'>
@@ -45,32 +49,44 @@ class AdminPanel extends Component {
           <Grid textAlign='center' style={{
               height: '100%'
             }} verticalAlign='middle'>
-            <Grid.Row columns={2}>
+            <Grid.Row columns={3}>
               <Grid.Column>
-                <div className='iconsDashboard' onClick={this.users}>
+                  <div className='iconsDashboard2' onClick={this.catalog}>
+                      <Icon name='globe' />
+                      <p>  E-Catalog</p>
+                  </div>
+              </Grid.Column>
+              <Grid.Column>
+                <div className='iconsDashboard2' onClick={this.users}>
                   <Icon name='users'/>
                   <p>Users</p>
                 </div>
               </Grid.Column>
               <Grid.Column>
-                <div className='iconsDashboard' onClick={this.addUser}>
+                <div className='iconsDashboard2' onClick={this.addUser}>
                   <Icon name='inbox'/>
-                  <p>All Rentals</p>
+                  <p>Rentals</p>
                 </div>
               </Grid.Column>
             </Grid.Row>
-            <Grid.Row columns={2}>
+            <Grid.Row columns={3}>
               <Grid.Column>
-                <div className='iconsDashboard' onClick={this.transactions}>
+                <div className='iconsDashboard2' onClick={this.transactions}>
                   <Icon name='folder open'/>
                   <p>Transaction History</p>
                 </div>
               </Grid.Column>
               <Grid.Column>
-                <div className='iconsDashboard' onClick={this.logactivity}>
+                <div className='iconsDashboard2' onClick={this.logactivity}>
                   <Icon name='history'/>
                   <p>Log Activity</p>
                 </div>
+              </Grid.Column>
+              <Grid.Column>
+                  <div className='iconsDashboard2' onClick={this.settings}>
+                      <Icon name='cog' />
+                      <p>Settings</p>
+                  </div>
               </Grid.Column>
             </Grid.Row>
           </Grid>

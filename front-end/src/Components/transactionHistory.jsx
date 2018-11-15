@@ -10,8 +10,15 @@ import {Timeline, Card} from 'antd';
 import moment from "moment";
 import _ from 'lodash'
 import {Redirect} from "react-router";
-import {Pagination, Icon} from "semantic-ui-react";
+import {Pagination, Icon, Input, Dropdown, Button} from "semantic-ui-react";
 
+let historyDatashow = [];
+let historyDatashowAll = [];
+let optionsType =[
+    {key: 0, value: 'All', text: 'All'},
+    {key: 1, value: 'Loan', text: 'Loan'},
+    {key: 2, value: 'Return', text: 'Return'},
+]
 class TransactionHistory extends Component {
   constructor(props) {
     super(props);
@@ -20,48 +27,51 @@ class TransactionHistory extends Component {
       history: [],
       currentPage:1,
       itemsPerPage: 3,
+        typeOfTransaction: 'All'
     }
   }
     componentDidMount(){
+        historyDatashow=[];
+        historyDatashowAll=[];
         let arrayTest = [];
         let arrayObject1 = {
             key: 0,
-            action: 'Cart Added',
+            action: 'Loan',
             actionTakenBy: 'Line',
             color: 'green',
             time: moment(new Date).subtract(1, 'days').subtract(5, 'minutes').subtract(20, 'seconds').format()
         };
         let arrayObject = {
             key: 0,
-            action: 'Item Viewed',
+            action: 'Return',
             actionTakenBy: 'Manpreet',
             color: 'blue',
             time: moment(new Date).format()
         };
         let arrayObject2 = {
             key: 0,
-            action: 'Loaned Item',
+            action: 'Loan',
             actionTakenBy: 'Eglen',
             color: 'yellow',
             time: moment(new Date).subtract(2, 'days').format()
         };
         let arrayObject3 = {
             key: 0,
-            action: 'Returned Item',
+            action: 'Return',
             actionTakenBy: 'Mikee',
             color: 'gray',
             time: moment(new Date).subtract(5, 'minutes').format()
         };
         let arrayObject4 = {
             key: 0,
-            action: 'Empty Cart',
+            action: 'Loan',
             actionTakenBy: 'Marc',
             color: 'orange',
             time: moment(new Date).subtract(7, 'days').format()
         };
         let arrayObject5 = {
             key: 0,
-            action: 'User Deleted',
+            action: 'Return',
             actionTakenBy: 'Anthony',
             color: 'red',
             time: moment(new Date).subtract(2, 'hour').subtract(10, 'seconds').format()
@@ -73,7 +83,6 @@ class TransactionHistory extends Component {
         arrayTest.push(arrayObject3);
         arrayTest.push(arrayObject4);
         let years = [];
-        let historyDatashow = [];
         HistoryBuilder.historyBuilder(arrayTest,function(historyData){
             years=historyData
         })
@@ -115,6 +124,7 @@ class TransactionHistory extends Component {
                 i = i -1;
             })
         })
+        historyDatashowAll=historyDatashow;
         this.setState({fullHistory: historyDatashow})
         let indexOfLastTodo = this.state.currentPage * this.state.itemsPerPage;
         let indexOfFirstTodo = indexOfLastTodo - this.state.itemsPerPage;
@@ -131,7 +141,9 @@ class TransactionHistory extends Component {
   render() {
     if (!this.props.userProfile) {
       return (<Redirect to={'/'}/>);
-    } else {
+    } else if(this.props.userProfile.type ===0){
+        return (<Redirect to={'/404'}/>);
+    }else {
 
       return (<div className='main-container'>
         <HeaderComponent/>
@@ -146,7 +158,14 @@ class TransactionHistory extends Component {
                 You can see all the transaction history!
               </div>
             </div>
+              <div className='MainContainer-upper-container-button'>
+              <Dropdown selection
+                        placeholder={'Type of Transaction'}
+                        options={optionsType}
+                        value={this.state.typeOfTransaction}/>
+              </div>
           </div>
+
           {
             this.state.history.map((data,key) => {
               return data;

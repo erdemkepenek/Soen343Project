@@ -194,6 +194,8 @@ class MusicProfile extends Component {
         console.log(this.props.musicProfile);
         if(!this.props.userProfile) {
             return (<Redirect to={'/'}/>);
+        }else if(this.props.userProfile.type ===0 && !this.props.musicProfile){
+            return (<Redirect to={'/404'}/>);
         }else {
             return (
                 <div className='main-container'>

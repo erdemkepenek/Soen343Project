@@ -223,6 +223,8 @@ class BookProfile extends Component {
         console.log(this.props.bookProfile);
         if(!this.props.userProfile) {
             return (<Redirect to={'/'}/>);
+        }else if(this.props.userProfile.type ===0 && !this.props.bookProfile){
+            return (<Redirect to={'/404'}/>);
         }else {
             return (
                 <div className='main-container'>

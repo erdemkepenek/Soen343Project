@@ -54,7 +54,9 @@ class Users extends Component {
         if(!this.props.userProfile) {
             return (<Redirect to={'/'}/>);
         
-        } else if (this.state.profile){
+        }else if(this.props.userProfile.type ===0){
+            return (<Redirect to={'/404'}/>);
+        }else if (this.state.profile){
             return(<UserProfile 
                 closeProfile={this.closeProfile}
                     profile= { this.state.profile}/>)

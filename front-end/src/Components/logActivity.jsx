@@ -131,6 +131,8 @@ class LogActivity extends Component {
   render() {
     if (!this.props.userProfile) {
       return (<Redirect to={'/'}/>);
+    }else if(this.props.userProfile.type ===0){
+        return (<Redirect to={'/404'}/>);
     } else {
 
       return (<div className='main-container'>

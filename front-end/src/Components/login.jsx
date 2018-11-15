@@ -43,11 +43,24 @@ class Login extends Component {
         }else{
             let temp = this.props;
             let temp2 = this;
+            let user = {
+                FirstName: "Erdem",
+                LastName: "Kepenek",
+                Address: '0015 Concordia University, Montreal, Quebec',
+                email: email,
+                phone: 2147483647,
+                type: 1
+
+            }
             console.log(controller)
-            localStorage.setItem('jwtToken',JSON.stringify(email));
-            temp.dispatch({type: 'addUserProfile', data: email});
+            localStorage.setItem('jwtToken',JSON.stringify(user));
+            temp.dispatch({type: 'addUserProfile', data: user});
             temp2.loginConfirmation();
-            temp.history.push(`/dashboard`);
+            if(user.type ===1){
+                temp.history.push(`/adminpanel`)
+            }else{
+                temp.history.push(`/dashboard`);
+            }
             /*controller.login(email,password,function(data){
                 console.log(data)
                 localStorage.setItem('jwtToken',JSON.stringify(data[0].email));

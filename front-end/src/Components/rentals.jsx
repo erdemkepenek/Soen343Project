@@ -5,22 +5,29 @@ import {connect} from 'react-redux'
 import HeaderComponent from './Common/header/header'
 import FooterComponent from './Common/footer/footer'
 import {withRouter} from 'react-router-dom'
-import {Button, Form, Grid, Icon, Image, Message, Segment} from 'semantic-ui-react'
+import {Button, Dropdown, Form, Grid, Icon, Image, Message, Segment} from 'semantic-ui-react'
 import {Redirect} from "react-router";
 import DataTable from '../Components/Common/table/table'
 import RedirectItem from "./redirectItem"
-let tableArray= [];
+let tableArray= []
+const options = [
+    { key: 1, text: 'Book', value: "Book" },
+    { key: 2, text: 'Magazine', value: "Magazine" },
+    { key: 3, text: 'Music', value: "Music" },
+    { key: 4, text: 'Movie', value: "Movie" },
+]
+
 class Rentals extends Component {
     constructor(props) {
         super(props);
         this.state = {
         }
     }
-
     componentDidMount() {
+        this.props.history.push(`/rentals`);
         tableArray= [];
         let book={
-            BookTitle: "marc",
+            Title: "Marc's book",
             Author: "marc noon",
             Format: "marc format",
             Pages: 567,
@@ -30,18 +37,59 @@ class Rentals extends Component {
             ISBN13: "7927927892",
             Quantity: 67,
             Type: "Book",
-            Time: "2 days"
         }
         tableArray.push(book);
+        this.forceUpdate();
+
+        let music={
+            Title: "marc' music",
+            Artist: "marc noon",
+            MusicType: "marc type",
+            Label: "label marc",
+            ReleaseDate: "marc again",
+            ASIN: "TY157373",
+            Quantity: 67,
+            Type: "Music",
+        }
+        tableArray.push(music);
+        this.forceUpdate();
+
+        let magazine={
+            Title: "marc' magazine",
+            Publisher: "marc again",
+            Language: "marc's language",
+            Label: "label marc",
+            ISBN10: 1234567890,
+            ISBN13: "7927927892",
+            Quantity: 67,
+            Type: "Magazine",
+        }
+        tableArray.push(magazine);
+        this.forceUpdate();
+
+        let movie={
+            Title: "marc' movie",
+            Director: "marc noon",
+            Producers: "marc type",
+            Actors: "label marc",
+            Language: "marc's language",
+            Subtitles: "marc's language",
+            Dubbed: "marc's language",
+            ReleaseDate: "marc again",
+            RunTime: "TY157373",
+            Quantity: 67,
+            Type: "Movie",
+        }
+        tableArray.push(movie);
         this.forceUpdate();
     }
 
     closeProfile=()=>{
         this.setState({profile: ""})
     }
-
     openProfile=(data)=>{
         console.log(data);
+        this.props.history.push(`/rentals/`+data.Title);
         this.setState({profile: data})
     }
 
@@ -49,21 +97,22 @@ class Rentals extends Component {
         if(!this.props.userProfile) {
             return (<Redirect to={'/'}/>);
         }else if(this.state.profile) {
-            return (<RedirectItem closeProfile={this.closeProfile}
+            return (<RedirectItem rent closeProfile={this.closeProfile}
                                   profile= { this.state.profile}/>)
 
         }else{
             let columnItems =[
                 {value : 'Title', render : 'Title', type : 'text'},
                 {value : 'Type', render : 'Type', type : 'text'},
-                {value: 'Time', render: 'Time', type: 'text' },
+                {value : 'Quantity', render : 'Quantity', type : 'number'},
+
             ];
             let tableItems = [];
             tableArray.map((itemData)=>{
                 let arrData=[
-                    {value : itemData.BookTitle, render : itemData.BookTitle, type : 'text'},
+                    {value : itemData.Title, render : itemData.Title, type : 'text'},
                     {value : itemData.Type, render : itemData.Type, type : 'text'},
-                    { value: itemData.Time, render: itemData.Time, type: 'text' },
+                    {value : itemData.Quantity, render : itemData.Quantity, type : 'number'},
                     itemData
                 ]
                 tableItems.push(arrData);
@@ -78,9 +127,11 @@ class Rentals extends Component {
                                     Rentals
                                 </div>
                                 <div className="MainContainer-upper-container-second-text">
-                                    You can select one of the item to see their details!
+                                    You can select one of the item to see their details and to return!
                                 </div>
                             </div>
+
+
                         </div>
                         <DataTable
                             columnItems={columnItems}

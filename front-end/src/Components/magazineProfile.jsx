@@ -221,8 +221,20 @@ class MagazineProfile extends Component {
   closeProfile = () => {
     this.props.closeProfile();
   };
-    backToCatalog= ()=>
-    {this.props.history.push(`/ecatalog`);
+    backToCatalog= ()=> {
+      this.props.history.push(`/ecatalog`);
+        if(this.props.magazineProfile){
+            this.props.closeProfile();
+        }
+    }
+    backToCart= ()=> {
+        this.props.history.push(`/cart`);
+        if(this.props.magazineProfile){
+            this.props.closeProfile();
+        }
+    }
+    backToRentals= ()=> {
+        this.props.history.push(`/rentals`);
         if(this.props.magazineProfile){
             this.props.closeProfile();
         }
@@ -231,12 +243,20 @@ class MagazineProfile extends Component {
     {
         this.props.closeProfile();
     }
+    return=()=>{
+
+    }
+    addToCart=()=>{
+
+    }
 
   render() {
     console.log(this.props.magazineProfile);
     if (!this.props.userProfile) {
       return <Redirect to={"/"} />;
-    } else {
+    }else if(this.props.userProfile.type ===0 && !this.props.magazineProfile){
+        return (<Redirect to={'/404'}/>);
+    }else {
       return (
         <div className="main-container">
           <HeaderComponent closeProfileItem={this.props.magazineProfile ? this.closeProfile : ''} />
@@ -244,19 +264,24 @@ class MagazineProfile extends Component {
             <div className="MainContainer-upper-container">
               <div className="MainContainer-upper-container-text">
                 <div className="MainContainer-upper-container-first-text">
-                  {this.props.magazineProfile
-                    ? "Edit Magazine"
-                    : "Add Magazine"}
+                  {this.props.magazineProfile?
+                      (this.props.userProfile.type ===0 || this.props.rent ?
+                          "Magazine Details"
+                        : "Edit Magazine")
+                        : "Add Magazine"}
                 </div>
                 <div className="MainContainer-upper-container-second-text">
-                  {this.props.magazineProfile
-                    ? "You can edit a magazine"
+                  {this.props.magazineProfile?
+                  (this.props.userProfile.type ===0 || this.props.rent ?
+                      "You can see the details of magazine"
+                      : "You can edit a magazine")
                     : "You can add a new magazine to the system!"}
                 </div>
               </div>
                 <div className='MainContainer-upper-container-button'>
-                    <Button icon='user' content='Back to Catalog' onClick={this.backToCatalog}/>
-                    {this.props.magazineProfile?
+                    <Button icon='user' content={this.props.rent?'Back to Rentals' : (this.props.cart? 'Back to Cart' : 'Back to Catalog')}
+                            onClick={this.props.rent? this.backToRentals : (this.props.cart? this.backToCart : this.backToCatalog)}/>
+                    {this.props.magazineProfile && this.props.userProfile.type ===1 && !this.props.rent && !this.props.cart?
                         <Popconfirm title="Are you sure to delete this Magazine?" onConfirm={this.deleteMagazine} placement="bottomRight" okText="Yes" cancelText="No">
                             <Button icon='user' content='Delete Magazine'/>
                         </Popconfirm>
@@ -271,28 +296,29 @@ class MagazineProfile extends Component {
                 textAlign="center"
               >
                 {" "}
-                {this.props.magazineProfile
-                  ? "Edit a Magazine"
+                {this.props.magazineProfile?
+              (this.props.userProfile.type ===0  ?
+                  "Magazine Profile"
+                  : "Edit a Magazine")
                   : "Create a Magazine"}
               </Header>
-              <Form.Group width="equal">
                 <Form.Input
+                  fluid
                   icon="newspaper outline"
                   iconPosition="left"
                   placeholder="Bel Ami"
                   label="Title:"
+                  disabled={this.props.userProfile.type ===0 || this.props.rent}
                   value={this.state.Title}
                   error={this.state.errorTitle}
                   onChange={this.changeTitle}
-                  width={8}
                 />
-              </Form.Group>
-
               <Form.Input
                 fluid
                 icon="user"
                 iconPosition="left"
                 placeholder="John"
+                disabled={this.props.userProfile.type ===0 || this.props.rent}
                 value={this.state.publisher}
                 error={this.state.errorPublisher}
                 onChange={this.changePublisher}
@@ -303,6 +329,7 @@ class MagazineProfile extends Component {
                 icon="language"
                 iconPosition="left"
                 label="Language: "
+                disabled={this.props.userProfile.type ===0 || this.props.rent}
                 placeholder="Ex: English"
                 value={this.state.language}
                 error={this.state.errorLanguage}
@@ -313,6 +340,7 @@ class MagazineProfile extends Component {
                 icon="tag"
                 iconPosition="left"
                 label="Label: "
+                disabled={this.props.userProfile.type ===0 || this.props.rent}
                 placeholder="Label"
                 value={this.state.label}
                 error={this.state.errorLabel}
@@ -324,6 +352,7 @@ class MagazineProfile extends Component {
                 icon="id card"
                 iconPosition="left"
                 placeholder="Ex: 1524796972"
+                disabled={this.props.userProfile.type ===0 ||  this.props.rent}
                 value={this.state.ISBN10}
                 error={this.state.errorISBN10}
                 onChange={this.changeISBN10}
@@ -336,6 +365,7 @@ class MagazineProfile extends Component {
                 iconPosition="left"
                 placeholder="Ex: 3"
                 value={this.state.quantity}
+                disabled={this.props.userProfile.type ===0 || this.props.rent}
                 error={this.state.errorQuantity}
                 onChange={this.changeQuantity}
                 label="Quantity: "
@@ -345,12 +375,14 @@ class MagazineProfile extends Component {
                 fluid
                 icon="id card"
                 iconPosition="left"
+                disabled={this.props.userProfile.type ===0 || this.props.rent}
                 label="ISBN-13: "
                 placeholder="Ex: 978-1524796976"
                 value={this.state.ISBN13}
                 error={this.state.errorISBN13}
                 onChange={this.changeISBN13}
               />
+              {this.props.userProfile.type ===1 && !this.props.rent?
               <Button
                 className="login-button"
                 fluid
@@ -362,8 +394,26 @@ class MagazineProfile extends Component {
                 }
               >
                 {this.props.magazineProfile ? "Edit Magazine" : "Add Magazine"}
-              </Button>
+              </Button>: (this.props.rent || this.props.cart?
+                          <Button
+                              className="login-button"
+                              fluid
+                              size="large"
+                              onClick={
+                                  this.props.rent
+                                      ? this.return
+                                      : this.addToCart
+                              }
+                          >
+                              {this.props.rent ? "Return Magazine" : "Add Magazine to Cart"}
+                          </Button>: '')}
             </Form>
+              {this.props.rent || this.props.cart || !this.props.magazineProfile ?
+                  '':
+              <div className='nextprevButton-container'>
+                  <Button icon='long arrow alternate left' content='Previus Item' onClick={this.backToCatalog}/>
+                  <Button icon='long arrow alternate right' labelPosition='right' content='Next Item' onClick={this.backToCatalog}/>
+              </div>}
           </div>
 
           <FooterComponent />
