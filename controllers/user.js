@@ -1,35 +1,52 @@
 const express = require('express');
+const Controller = require("../class/Controller.js");
 const router = express.Router();
+
+myController = new Controller();
 
 router.post("/login", function (req, res) {
     let user = req.body;
     res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify("hello"));
+	myController.userLogin(user.email,user.password,function(msg){	
+		myController.logActivityMapperAdd(msg.data.UserId,"login",function(msg_log){
+			res.send(JSON.stringify(msg));
+		})
+	})
+ 
 });
 
 router.post("/logout", function (req, res) {
     let user = req.body;
     res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify("hello"));
+	myController.logActivityMapperAdd(user.userId,user.data,function(msg){
+		res.send(JSON.stringify(msg));
+	})
 });
 
 
 router.post("/add", function (req, res) {
     let user = req.body;
     res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify("hello"));
+	myController.userAdd(user.userId,user.data,function(msg){	
+		res.send(JSON.stringify(msg));
+	})
+    
 });
 
 router.post("/modify", function (req, res) {
     let user = req.body;
     res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify("hello"));
+    myController.userModify(user.userId,user.data,function(msg){	
+		res.send(JSON.stringify(msg));
+	})
 });
 
 router.post("/delete", function (req, res) {
     let user = req.body;
     res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify("hello"));
+    myController.userDelete(user.userId,user.data.UserId,function(msg){	
+		res.send(JSON.stringify(msg));
+	})
 });
 router.post("/view", function (req, res) {
     let user = req.body;
@@ -39,13 +56,17 @@ router.post("/view", function (req, res) {
 router.post("/save/view", function (req, res) {
     let user = req.body;
     res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify("hello"));
+	myController.userUncommitedWork(user.userId,function(msg){	
+		res.send(JSON.stringify(msg));
+	})
 });
 
 router.post("/commit", function (req, res) {
     let user = req.body;
     res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify("hello"));
+    myController.userCommit(user.userId,function(msg){	
+		res.send(JSON.stringify(msg));
+	})
 });
 
 
