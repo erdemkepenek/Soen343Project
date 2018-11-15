@@ -1,19 +1,19 @@
 const TransactionHistoryTDG = require("../TDG/TransactionHistoryTDG.js");
 const IdentityMap = require("../IdentityMap.js");
 
-class LogActivityMapper {
+class TransactionHistoryMapper {
   constructor() {
     this.TransactionHistoryTDG = new TransactionHistoryTDG();
-	this.TransactionHistoryIdentityMap = new IdentityMap();
+    this.TransactionHistoryIdentityMap = new IdentityMap();
   }
 
-  addActivity(id,action,itemId,callback) {
-	console.log("[LogActivityMapper] addActivity()");
-	let IDM = this.TransactionHistoryIdentityMap;
-    this.TransactionHistoryTDG.addActivity(id,action,itemId,function(msg){
-		callback(msg);
-		IDM.empty();
-	});
+  addActivity(id, action, itemId, callback) {
+    console.log("[LogActivityMapper] addActivity()");
+    let IDM = this.TransactionHistoryIdentityMap;
+    this.TransactionHistoryTDG.addActivity(id, action, itemId, function(msg) {
+      callback(msg);
+      IDM.empty();
+    });
   }
 
   viewActivity(callback) {
@@ -25,11 +25,10 @@ class LogActivityMapper {
         IDM.putData(msg);
         callback(msg);
       });
-    }else {
+    } else {
       callback(result);
     }
   }
-
 }
 
 module.exports = LogActivityMapper;
