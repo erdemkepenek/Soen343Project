@@ -20,7 +20,7 @@ class BookMapper {
         callback(msg);
       });
     } else {
-      callback(result);
+      callback(result[0]);
     }
   }
   addItem(id, item, callback) {

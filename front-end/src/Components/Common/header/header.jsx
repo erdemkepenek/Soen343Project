@@ -1,9 +1,12 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
-import axios from 'axios'
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router-dom'
 import {Container,Dropdown, Icon, Menu, Visibility,} from 'semantic-ui-react'
+import ApiCalls from '../../../class/apiCalls'
+
+
+let apicall = new ApiCalls;
 
 class HeaderComponent extends Component { //
     constructor(props) {
@@ -24,9 +27,15 @@ class HeaderComponent extends Component { //
         this.props.history.push(`/ecatalog`);}
     rentals=()=>this.props.history.push(`/rentals`);
     logout=()=> {
-        localStorage.removeItem("jwtToken");
-        this.props.dispatch({type: 'addUserProfile', data: ''});
-        this.props.history.push(`/login`);
+        let temp = this.props;
+        let temp2 = this;
+        console.log(this.props.userProfile.UserId)
+        apicall.logOut(temp.userProfile.UserId,function(data){
+            localStorage.removeItem("jwtToken");
+            temp.dispatch({type: 'addUserProfile', data: ''});
+            temp.history.push(`/login`);
+        });
+
     }
     users = () => this.props.history.push(`/users`);
     login=()=> this.props.history.push(`/login`);

@@ -263,7 +263,7 @@ class MovieProfile extends Component {
                         <div className='MainContainer-upper-container-button'>
                             <Button icon='user' content={this.props.rent?'Back to Rentals' : (this.props.cart? 'Back to Cart' : 'Back to Catalog')}
                                     onClick={this.props.rent? this.backToRentals : (this.props.cart? this.backToCart : this.backCatalog)}/>
-                            {this.props.magazineProfile && this.props.userProfile.type ===1 && !this.props.rent && !this.props.cart?
+                            {this.props.movieProfile && this.props.userProfile.type ===1 && !this.props.rent && !this.props.cart?
                                 <Popconfirm title="Are you sure to delete this Movie?" onConfirm={this.deleteMovie} placement="bottomRight" okText="Yes" cancelText="No">
                                     <Button icon='user' content='Delete Movie'/>
                                 </Popconfirm>
@@ -277,7 +277,10 @@ class MovieProfile extends Component {
                         </div>
                         <Form size='large' className='SettingsForm'>
                             <Header as='h2' className='login-Header' style={{marginTop:'3%'}}textAlign='center'> {
-                                this.props.movieProfile? "Edit a Movie" : "Create a Movie"}
+                                this.props.movieProfile?
+                                    (this.props.userProfile.type ===0 || this.props.rent  ?
+                                        "Movie Profile":
+                                    "Edit a Movie") : "Create a Movie"}
                             </Header>
                             <Form.Group width='equal'>
                                 <Form.Input
@@ -387,7 +390,7 @@ class MovieProfile extends Component {
                                         {this.props.rent ? "Return Movie" : "Add Movie to Cart"}
                                     </Button>: '')}
                         </Form>
-                        {this.props.rent || this.props.cart || !this.props.magazineProfile ?
+                        {this.props.rent || this.props.cart || !this.props.movieProfile ?
                             '':
                             <div className='nextprevButton-container'>
                                 <Button icon='long arrow alternate left' content='Previus Item' onClick={this.backToCatalog}/>

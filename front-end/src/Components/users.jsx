@@ -9,6 +9,10 @@ import {Button, Form, Grid, Icon, Image, Message, Segment} from 'semantic-ui-rea
 import {Redirect} from "react-router";
 import DataTable from '../Components/Common/table/table';
 import UserProfile from "./userProfile";
+import ApiCalls from '../class/apiCalls'
+
+
+let apicall = new ApiCalls;
 
 let tableArray = [];
 
@@ -19,24 +23,12 @@ class Users extends Component {
         }
     }
     componentDidMount() {
-    /*    axios.get('/client').then(
-            function (response, err) {
-                console.log(response)
-            }.bind(this)
-        ); */
         tableArray= [];
-        let marc={
-            FirstName: "marc",
-            LastName:"noon",
-            email: "marc@gmail,com",
-            phone: 672672,
-            Address: "267 guy",
-            type: 1,
-            id: 627822,
-        
-        }
-        tableArray.push(marc);
-        this.forceUpdate();
+        let this1=this;
+        apicall.viewUsers(function(data){
+            tableArray=data
+            this1.forceUpdate();
+        });
     }
 
     closeProfile=()=>{
@@ -74,7 +66,7 @@ class Users extends Component {
             let tableItems = [];
         tableArray.map((userData)=>{
                 let arrData=[
-                    {value : userData.id, render : userData.id, type : 'number'},
+                    {value : userData.UserId, render : userData.UserId, type : 'number'},
                     {value : userData.FirstName, render : userData.FirstName, type : 'text'},
                     {value : userData.LastName, render : userData.LastName, type : 'text'},
                     {value : userData.email, render : userData.email, type : 'text'},

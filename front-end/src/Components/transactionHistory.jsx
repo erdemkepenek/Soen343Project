@@ -11,6 +11,10 @@ import moment from "moment";
 import _ from 'lodash'
 import {Redirect} from "react-router";
 import {Pagination, Icon, Input, Dropdown, Button} from "semantic-ui-react";
+import ApiCalls from '../class/apiCalls'
+
+
+let apicall = new ApiCalls;
 
 let historyDatashow = [];
 let historyDatashowAll = [];
@@ -31,7 +35,7 @@ class TransactionHistory extends Component {
     }
   }
     componentDidMount(){
-        historyDatashow=[];
+        /*historyDatashow=[];
         historyDatashowAll=[];
         let arrayTest = [];
         let arrayObject1 = {
@@ -81,55 +85,64 @@ class TransactionHistory extends Component {
         arrayTest.push(arrayObject);
         arrayTest.push(arrayObject2);
         arrayTest.push(arrayObject3);
-        arrayTest.push(arrayObject4);
+        arrayTest.push(arrayObject4);*/
         let years = [];
-        HistoryBuilder.historyBuilder(arrayTest,function(historyData){
-            years=historyData
-        })
-        _.forEachRight(years, function(value, key) {
-            let i = 12;
-            _.forEachRight(value, function(value2, key2) {
-                if(value2.filled){
-                    _.forEachRight(value2, function(value3, key3) {
-                        if(Array.isArray(value3) && value3.length > 0){
-                            let historySubDataShow = [];
-                            let arraySorted = value3;
-                            arraySorted.sort(function compare(a, b) {
-                                var dateA = moment(a.time || "YYYY-MM-DD HH:mm");
-                                var dateB = moment(b.time || "YYYY-MM-DD HH:mm");
-                                return dateB - dateA;
-                            });
-                            arraySorted.map((historyData)=>{
-                                historySubDataShow.push(historyData)
-                            })
-                            let arrData =(<div className='History-Main-Container'>
-                                <div style={{margin: '10px 0', fontWeight:'600', textTransform:'uppercase', color:'#34495e',  fontSize:'0.8em'}}>
-                                    {(parseInt(key3) <10 ? '0'+key3 : key3)+'/'+(i < 10 ? '0'+i.toString(): i.toString())+'/'+key}</div>
-                                <Timeline id={"history-timeline"} >
-                                    {historySubDataShow.map((historySubData)=>{
-                                        console.log(historySubData)
-                                        return(<Timeline.Item  color={historySubData.color}>
-                                            <Card>
-                                                {historySubData.action? historySubData.action : 'N/A action'} by {historySubData.actionTakenBy? historySubData.actionTakenBy: 'N/A'}
-                                                {' '} at {historySubData.time ? moment(historySubData.time).format("HH:mm:ss") : 'N/A'}
-                                            </Card>
-                                        </Timeline.Item>)
-                                    })}
-                                </Timeline>
-                            </div>)
-                            historyDatashow.push(arrData)
-                        }
-                    })
-                }
-                i = i -1;
+        let this1=this;
+        let state=this.state;
+        apicall.viewTransactionHistory(function(data){
+            data.map((datahistory)=>{
+                datahistory.timeStamp=moment(datahistory.timeStamp).format('YYYY-MM-DD HH:mm');
             })
-        })
-        historyDatashowAll=historyDatashow;
-        this.setState({fullHistory: historyDatashow})
-        let indexOfLastTodo = this.state.currentPage * this.state.itemsPerPage;
-        let indexOfFirstTodo = indexOfLastTodo - this.state.itemsPerPage;
-        let currentTodos = historyDatashow.slice(indexOfFirstTodo, indexOfLastTodo);
-        this.setState({history: currentTodos})
+            let timeStampedArray = data
+            HistoryBuilder.historyBuilder(timeStampedArray,function(historyData){
+                years=historyData
+            })
+            _.forEachRight(years, function(value, key) {
+                let i = 12;
+                _.forEachRight(value, function(value2, key2) {
+                    if(value2.filled){
+                        _.forEachRight(value2, function(value3, key3) {
+                            if(Array.isArray(value3) && value3.length > 0){
+                                let historySubDataShow = [];
+                                let arraySorted = value3;
+                                arraySorted.sort(function compare(a, b) {
+                                    var dateA = moment(a.timeStamp || "YYYY-MM-DD HH:mm");
+                                    var dateB = moment(b.timeStamp || "YYYY-MM-DD HH:mm");
+                                    return dateB - dateA;
+                                });
+                                arraySorted.map((history)=>{
+                                    historySubDataShow.push(history)
+                                })
+                                let arrData =(<div className='History-Main-Container'>
+                                    <div style={{margin: '10px 0', fontWeight:'600', textTransform:'uppercase', color:'#34495e',  fontSize:'0.8em'}}>
+                                        {(parseInt(key3) <10 ? '0'+key3 : key3)+'/'+(i < 10 ? '0'+i.toString(): i.toString())+'/'+key}</div>
+                                    <Timeline id={"history-timeline"} >
+                                        {historySubDataShow.map((historySubData)=>{
+                                            console.log(historySubData)
+                                            return(<Timeline.Item  color={historySubData.type === 'return' ? 'green' : 'blue'}>
+                                                <Card>
+                                                    {historySubData.type? historySubData.type : 'N/A action'} by User ID {historySubData.userId? historySubData.userId: 'N/A'}
+                                                    {' '} at {historySubData.timeStamp ? moment(historySubData.timeStamp).format("HH:mm:ss") : 'N/A'}
+                                                </Card>
+                                            </Timeline.Item>)
+                                        })}
+                                    </Timeline>
+                                </div>)
+                                historyDatashow.push(arrData)
+                            }
+                        })
+                    }
+                    i = i -1;
+                })
+            })
+            historyDatashowAll=historyDatashow;
+            this1.setState({fullHistory: historyDatashow})
+            let indexOfLastTodo = state.currentPage * state.itemsPerPage;
+            let indexOfFirstTodo = indexOfLastTodo - state.itemsPerPage;
+            let currentTodos = historyDatashow.slice(indexOfFirstTodo, indexOfLastTodo);
+            this1.setState({history: currentTodos})
+            this1.forceUpdate();
+        });
     }
     pageChange(event, data) {
         this.setState({currentPage: data.activePage,});

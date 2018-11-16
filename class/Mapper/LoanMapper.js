@@ -20,7 +20,7 @@ class LoanMapper {
         callback(msg);
       });
     } else {
-      callback(result);
+      callback(result[0]);
     }
   }
 

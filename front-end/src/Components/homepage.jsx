@@ -14,8 +14,8 @@ import {withRouter} from 'react-router-dom'
 import _ from 'lodash'
 import {Button, Image} from 'semantic-ui-react'
 import DataTable from '../Components/Common/table/table'
-import Controller from '../class/controller'
-let controller = new Controller;
+import ApiCalls from '../class/apiCalls'
+let controller = new ApiCalls;
 
 class HomepageLayout extends Component {
     constructor(props) {

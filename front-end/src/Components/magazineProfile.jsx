@@ -32,10 +32,10 @@ class MagazineProfile extends Component {
         : "",
       label: this.props.magazineProfile ? this.props.magazineProfile.Label : "",
       ISBN10: this.props.magazineProfile
-        ? this.props.magazineProfile.ISBN10
+        ? this.props.magazineProfile['ISBN-10']
         : "",
       ISBN13: this.props.magazineProfile
-        ? this.props.magazineProfile.ISBN13
+        ? this.props.magazineProfile['ISBN-13']
         : "",
       quantity: this.props.magazineProfile
         ? this.props.magazineProfile.Quantity
@@ -297,7 +297,7 @@ class MagazineProfile extends Component {
               >
                 {" "}
                 {this.props.magazineProfile?
-              (this.props.userProfile.type ===0  ?
+              (this.props.userProfile.type ===0 || this.props.rent  ?
                   "Magazine Profile"
                   : "Edit a Magazine")
                   : "Create a Magazine"}

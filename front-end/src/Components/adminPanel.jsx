@@ -27,6 +27,7 @@ class AdminPanel extends Component {
   logactivity = () => this.props.history.push(`/logactivity`);
   settings=()=>this.props.history.push(`/settings`);
   catalog=()=>this.props.history.push(`/ecatalog`);
+    rentals=()=>this.props.history.push(`/rentals`);
   render() {
     if (!this.props.userProfile) {
       return (<Redirect to={'/'}/>);
@@ -63,7 +64,7 @@ class AdminPanel extends Component {
                 </div>
               </Grid.Column>
               <Grid.Column>
-                <div className='iconsDashboard2' onClick={this.addUser}>
+                <div className='iconsDashboard2' onClick={this.rentals}>
                   <Icon name='inbox'/>
                   <p>Rentals</p>
                 </div>

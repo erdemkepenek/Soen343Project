@@ -7,20 +7,25 @@ myController = new Controller();
 router.post("/login", function (req, res) {
     let user = req.body;
     res.setHeader('Content-Type', 'application/json');
-	myController.userLogin(user.email,user.password,function(msg){	
-		myController.logActivityMapperAdd(msg.data.UserId,"login",function(msg_log){
-			res.send(JSON.stringify(msg));
-		})
+	myController.userLogin(user.email,user.password,function(msg){	console.log(msg)
+		if(msg.success === 'true'){
+            myController.logActivityMapperAdd(msg.data.UserId,"login",function(msg_log){
+                res.send(JSON.stringify(msg));
+            })
+		}else{
+            res.send(JSON.stringify(msg));
+		}
+
 	})
  
 });
 
 router.post("/logout", function (req, res) {
-    let user = req.body;
+    let data = req.body;
     res.setHeader('Content-Type', 'application/json');
-	myController.logActivityMapperAdd(user.userId,user.data,function(msg){
-		res.send(JSON.stringify(msg));
-	})
+    myController.logActivityMapperAdd(data.data.UserId,"logout",function(msg){
+        res.send(JSON.stringify(msg));
+    })
 });
 
 

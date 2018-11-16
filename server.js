@@ -295,10 +295,6 @@ let user_mod = {
   password:"helloWorld",
   type: 0
 }
-kk = new Controller();
-kk.catalogView(function(msg){
-	console.log(msg);
-})
 
 // kk.userLogin("TEST@9.COM","helloWorld",function(msg){
 	// console.log(msg);

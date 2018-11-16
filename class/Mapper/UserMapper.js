@@ -19,7 +19,7 @@ class UserMapper {
         callback(msg);
       });
     } else {
-      callback(result);
+      callback(result[0]);
     }
   }
   login(email,password,callback) {
