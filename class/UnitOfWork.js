@@ -65,6 +65,14 @@ class UnitOfWork {
       this.erase.push(temp);
     }
   }
+  removeClean(id, index_) {
+    console.log("[UnitOfWork] removeClean()");
+    let index = this.getUserIndex(id, this.erase);
+    if (index > -1 && index_ < this.erase[index][1].length) {
+      this.erase[index][1].splice(index_, 1);
+      //console.log(this.erase[index][1]);
+    }
+  }
   viewUncommittedWork(id) {
     console.log("[UnitOfWork] viewUncommittedWork()");
     let temp = {};
