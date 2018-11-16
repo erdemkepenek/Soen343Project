@@ -47,6 +47,14 @@ class UnitOfWork {
       this.updates.push(temp);
     }
   }
+  removeDirty(id, index_) {
+    console.log("[UnitOfWork] removeDirty()");
+    let index = this.getUserIndex(id, this.updates);
+    if (index > -1 && index_ < this.updates[index][1].length) {
+      this.updates[index][1].splice(index_, 1);
+      //console.log(this.updates[index][1]);
+    }
+  }
   addClean(id, itemId) {
     console.log("[UnitOfWork] addClean()");
     let index = this.getUserIndex(id, this.erase);
