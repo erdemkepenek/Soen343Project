@@ -9,9 +9,11 @@ import Movie from "../images/movie.png";
 import Book from "../images/book.jpg";
 import {withRouter} from "react-router-dom";
 import connect from "react-redux/es/connect/connect";
-import Controller from '../class/controller'
 import {Redirect} from "react-router";
-let controller = new Controller;
+import ApiCalls from '../class/apiCalls'
+
+
+let apicall = new ApiCalls;
 class Login extends Component {
     constructor(props) {
         super(props);
@@ -20,6 +22,7 @@ class Login extends Component {
             password: '',
             errorEmail:false,
             errorPassword:false,
+            loading:false,
         }
     }
     changeEmail=(e)=>{
@@ -39,22 +42,27 @@ class Login extends Component {
             if(!password){
                 this.setState({errorPassword: true})
             }
-            this.loginError();
+            this.loginMissing();
         }else{
+            this.setState({loading:true})
             let temp = this.props;
             let temp2 = this;
-            console.log(controller)
-            localStorage.setItem('jwtToken',JSON.stringify(email));
-            temp.dispatch({type: 'addUserProfile', data: email});
-            temp2.loginConfirmation();
-            temp.history.push(`/dashboard`);
-            /*controller.login(email,password,function(data){
-                console.log(data)
-                localStorage.setItem('jwtToken',JSON.stringify(data[0].email));
-                temp.dispatch({type: 'addUserProfile', data: data[0].email});
-                temp2.loginConfirmation();
-                temp.history.push(`/dashboard`);
-            });*/
+            apicall.login(email,password,function(data){
+                temp2.setState({loading:false})
+                if(data.success === 'false'){
+                    temp2.loginError();
+                }else {
+                    temp.dispatch({type: 'addUserProfile', data: data.data});
+                    localStorage.setItem('jwtToken', JSON.stringify(data.data));
+                    temp.dispatch({type: 'addUserProfile', data: data.data});
+                    temp2.loginConfirmation();
+                    if (data.data.type === 1) {
+                        temp.history.push(`/adminpanel`)
+                    } else {
+                        temp.history.push(`/dashboard`);
+                    }
+                }
+            });
         }
     }
     loginConfirmation = () => {
@@ -67,7 +75,14 @@ class Login extends Component {
     loginError = () => {
         notification.error({
             message: 'Error',
-            description: 'You information is Missing!',
+            description: 'You have entered wrong username or password!',
+            duration:6,
+        });
+    };
+    loginMissing = () => {
+        notification.error({
+            message: 'Error',
+            description: 'Your information is missing!',
             duration:6,
         });
     };
@@ -82,7 +97,7 @@ class Login extends Component {
                     <div className='login-form'>
                         <Grid textAlign='center' style={{height: '100%'}} verticalAlign='middle'>
                             <Grid.Column style={{maxWidth: 450, opacity: 0.9}}>
-                                <Form size='large'>
+                                <Form size='large' loading={this.state.loading}>
                                     <Segment stacked>
                                         <Header as='h2' className='login-Header' textAlign='center'>Log-in to your
                                             account

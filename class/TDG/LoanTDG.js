@@ -34,23 +34,13 @@ class LoanTDG {
     + returnItem():
     + viewItems():
 	*/
-  loanItem(userId, itemId, callback) {
+  loanItem(userId, itemDesc, category, callback) {
     let loanDate = this.getCurrentDateWithAddition(0);
     let returnDate = this.getCurrentDateWithAddition(7);
     let sql =
-      "   UPDATE `Items`  " +
-      "   SET available=0 WHERE id =" +
-      itemId +
-      ";  " +
-      "INSERT INTO `Loan` (`UserId`, `itemId`, `loanDate`, `returnDate`) VALUES (" +
-      userId +
-      "," +
-      itemId +
-      ",'" +
-      loanDate +
-	  "','" +
-	  returnDate +
-      "');";
+		"set @item_id = getIDPh("+itemDesc+",'"+category+"');"+
+		"update `Items` set available = 0 where id = @item_id;"+
+		"INSERT INTO `Loan` (`UserId`, `itemId`, `loanDate`, `returnDate`) VALUES ("+userId+", @item_id, '"+loanDate+"', '"+returnDate+"');"
     console.log(sql);
     this.runQuery(function (conn, completedQuery) {
       conn.query(sql, (err, rows, fields) => {

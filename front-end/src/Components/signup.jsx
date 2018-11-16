@@ -12,7 +12,10 @@ import connect from "react-redux/es/connect/connect";
 import { notification } from 'antd';
 import {Redirect} from "react-router";
 import axios from 'axios'
+import ApiCalls from '../class/apiCalls'
 
+
+let apicall = new ApiCalls;
 class Signup extends Component {
     constructor(props) {
         super(props);
@@ -29,6 +32,7 @@ class Signup extends Component {
             errorAddress:false,
             errorEmail:false,
             errorPassword:false,
+            loading:false,
         }
     }
     login=()=> this.props.history.push(`/login`);
@@ -80,25 +84,34 @@ class Signup extends Component {
             }
             this.signupError();
         }else{
+            this.setState({loading:true})
             let data={
-                firstName: firstName,
-                lastName: lastName,
-                phone: phone,
-                address: address,
-                email: email,
-                password: password,
-                type: false
+                userId: 9999,
+                data:{
+                    FirstName: firstName,
+                    LastName: lastName,
+                    phone: phone,
+                    Address: address,
+                    email: email,
+                    password: password,
+                    type: 0
+                }
             }
-            axios.post('/auth/signup',data).then(
-                function (response, err) {
-                    console.log(response)
-                    if(response.data){
-                        this.signupConfirmation();
-                        this.props.history.push(`/login`);
-                    }
-                }.bind(this)
-            );
+            let temp = this.props;
+            let temp2 = this;
             console.log(data)
+            apicall.signUp(data,function(data){
+                apicall.commit(function(data){
+                    temp2.setState({loading:false})
+                    if(data.creation[0].success === 'true'){
+                        temp2.signupConfirmation();
+                        temp.history.push(`/login`)
+                    }else {
+                        temp2.messageError(data.creation[0].message)
+                    }
+
+                })
+            });
 
         }
     }
@@ -116,6 +129,13 @@ class Signup extends Component {
             duration:6,
         });
     };
+    messageError = (data) => {
+        notification.error({
+            message: 'Error',
+            description: data,
+            duration:6,
+        });
+    };
     render() {
         if(this.props.userProfile) {
             return (<Redirect to={'/dashboard'}/>);
@@ -126,7 +146,7 @@ class Signup extends Component {
                     <div className='signup-form'>
                         <Grid textAlign='center' style={{height: '100%'}}>
                             <Grid.Column style={{maxWidth: 450, opacity: 0.9}}>
-                                <Form size='large'>
+                                <Form size='large' loading={this.state.loading}>
                                     <Segment stacked>
                                         <Header as='h2' className='login-Header' textAlign='center'>Create an account
                                         </Header>

@@ -11,7 +11,12 @@ import moment from "moment";
 import _ from 'lodash'
 import {Redirect} from "react-router";
 import {Pagination, Icon} from "semantic-ui-react";
+import ApiCalls from '../class/apiCalls'
 
+
+let apicall = new ApiCalls;
+let historyDatashow = [];
+let historyDatashowAll = [];
 class LogActivity extends Component {
   constructor(props) {
     super(props);
@@ -23,103 +28,63 @@ class LogActivity extends Component {
     }
   }
     componentDidMount(){
-        let arrayTest = [];
-        let arrayObject1 = {
-            key: 0,
-            action: 'Cart Added',
-            actionTakenBy: 'Line',
-            color: 'green',
-            time: moment(new Date).subtract(1, 'days').subtract(5, 'minutes').subtract(20, 'seconds').format()
-        };
-        let arrayObject = {
-            key: 0,
-            action: 'Item Viewed',
-            actionTakenBy: 'Manpreet',
-            color: 'blue',
-            time: moment(new Date).format()
-        };
-        let arrayObject2 = {
-            key: 0,
-            action: 'Loaned Item',
-            actionTakenBy: 'Eglen',
-            color: 'yellow',
-            time: moment(new Date).subtract(2, 'days').format()
-        };
-        let arrayObject3 = {
-            key: 0,
-            action: 'Returned Item',
-            actionTakenBy: 'Mikee',
-            color: 'gray',
-            time: moment(new Date).subtract(5, 'minutes').format()
-        };
-        let arrayObject4 = {
-            key: 0,
-            action: 'Empty Cart',
-            actionTakenBy: 'Marc',
-            color: 'orange',
-            time: moment(new Date).subtract(7, 'days').format()
-        };
-        let arrayObject5 = {
-            key: 0,
-            action: 'User Deleted',
-            actionTakenBy: 'Anthony',
-            color: 'red',
-            time: moment(new Date).subtract(2, 'hour').subtract(10, 'seconds').format()
-        };
-        arrayTest.push(arrayObject5)
-        arrayTest.push(arrayObject1);
-        arrayTest.push(arrayObject);
-        arrayTest.push(arrayObject2);
-        arrayTest.push(arrayObject3);
-        arrayTest.push(arrayObject4);
         let years = [];
-        let historyDatashow = [];
-        HistoryBuilder.historyBuilder(arrayTest,function(historyData){
-            years=historyData
-        })
-        _.forEachRight(years, function(value, key) {
-            let i = 12;
-            _.forEachRight(value, function(value2, key2) {
-                if(value2.filled){
-                    _.forEachRight(value2, function(value3, key3) {
-                        if(Array.isArray(value3) && value3.length > 0){
-                            let historySubDataShow = [];
-                            let arraySorted = value3;
-                            arraySorted.sort(function compare(a, b) {
-                                var dateA = moment(a.time || "YYYY-MM-DD HH:mm");
-                                var dateB = moment(b.time || "YYYY-MM-DD HH:mm");
-                                return dateB - dateA;
-                            });
-                            arraySorted.map((historyData)=>{
-                                historySubDataShow.push(historyData)
-                            })
-                            let arrData =(<div className='History-Main-Container'>
-                                <div style={{margin: '10px 0', fontWeight:'600', textTransform:'uppercase', color:'#34495e',  fontSize:'0.8em'}}>
-                                    {(parseInt(key3) <10 ? '0'+key3 : key3)+'/'+(i < 10 ? '0'+i.toString(): i.toString())+'/'+key}</div>
-                                <Timeline id={"history-timeline"} >
-                                    {historySubDataShow.map((historySubData)=>{
-                                        console.log(historySubData)
-                                        return(<Timeline.Item  color={historySubData.color}>
-                                            <Card>
-                                                {historySubData.action? historySubData.action : 'N/A action'} by {historySubData.actionTakenBy? historySubData.actionTakenBy: 'N/A'}
-                                                {' '} at {historySubData.time ? moment(historySubData.time).format("HH:mm:ss") : 'N/A'}
-                                            </Card>
-                                        </Timeline.Item>)
-                                    })}
-                                </Timeline>
-                            </div>)
-                            historyDatashow.push(arrData)
-                        }
-                    })
-                }
-                i = i -1;
+        let this1=this;
+        let state=this.state;
+        apicall.viewLogActivity(function(data) {
+            HistoryBuilder.historyBuilder(data, function (historyData) {
+                years = historyData
             })
+            _.forEachRight(years, function (value, key) {
+                let i = 12;
+                _.forEachRight(value, function (value2, key2) {
+                    if (value2.filled) {
+                        _.forEachRight(value2, function (value3, key3) {
+                            if (Array.isArray(value3) && value3.length > 0) {
+                                let historySubDataShow = [];
+                                let arraySorted = value3;
+                                arraySorted.sort(function compare(a, b) {
+                                    var dateA = moment(a.time || "YYYY-MM-DD HH:mm");
+                                    var dateB = moment(b.time || "YYYY-MM-DD HH:mm");
+                                    return dateB - dateA;
+                                });
+                                arraySorted.map((historyData) => {
+                                    historySubDataShow.push(historyData)
+                                })
+                                let arrData = (<div className='History-Main-Container'>
+                                    <div style={{
+                                        margin: '10px 0',
+                                        fontWeight: '600',
+                                        textTransform: 'uppercase',
+                                        color: '#34495e',
+                                        fontSize: '0.8em'
+                                    }}>
+                                        {(parseInt(key3) < 10 ? '0' + key3 : key3) + '/' + (i < 10 ? '0' + i.toString() : i.toString()) + '/' + key}</div>
+                                    <Timeline id={"history-timeline"}>
+                                        {historySubDataShow.map((historySubData) => {
+                                            console.log(historySubData)
+                                            return (<Timeline.Item color={historySubData.color}>
+                                                <Card>
+                                                    {historySubData.action ? historySubData.action : 'N/A action'} by User ID {historySubData.userId? historySubData.userId: 'N/A'}
+                                                    {' '} at {historySubData.timeStamp ? moment(historySubData.timeStamp).format("HH:mm:ss") : 'N/A'}
+                                                </Card>
+                                            </Timeline.Item>)
+                                        })}
+                                    </Timeline>
+                                </div>)
+                                historyDatashow.push(arrData)
+                            }
+                        })
+                    }
+                    i = i - 1;
+                })
+            })
+            this1.setState({fullHistory: historyDatashow})
+            let indexOfLastTodo = state.currentPage * state.itemsPerPage;
+            let indexOfFirstTodo = indexOfLastTodo - state.itemsPerPage;
+            let currentTodos = historyDatashow.slice(indexOfFirstTodo, indexOfLastTodo);
+            this1.setState({history: currentTodos})
         })
-        this.setState({fullHistory: historyDatashow})
-        let indexOfLastTodo = this.state.currentPage * this.state.itemsPerPage;
-        let indexOfFirstTodo = indexOfLastTodo - this.state.itemsPerPage;
-        let currentTodos = historyDatashow.slice(indexOfFirstTodo, indexOfLastTodo);
-        this.setState({history: currentTodos})
     }
     pageChange(event, data) {
         this.setState({currentPage: data.activePage,});
@@ -131,6 +96,8 @@ class LogActivity extends Component {
   render() {
     if (!this.props.userProfile) {
       return (<Redirect to={'/'}/>);
+    }else if(this.props.userProfile.type ===0){
+        return (<Redirect to={'/404'}/>);
     } else {
 
       return (<div className='main-container'>

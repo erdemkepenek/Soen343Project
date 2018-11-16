@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
+import React, { Fragment, Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import 'semantic-ui-css/semantic.min.css';
 import 'antd/dist/antd.css';
+import {Redirect } from 'react-router'
 import { BrowserRouter , Route, Switch ,HashRouter,withRouter, Link} from 'react-router-dom';
 import HomePage from './Components/homepage.jsx'
 import Login from './Components/login'
@@ -22,6 +23,7 @@ import Movie from './Components/movieProfile'
 import Music from './Components/musicProfile'
 import Magazine from './Components/magazineProfile'
 import Book from './Components/bookProfile'
+import Page404 from './Components/404page'
 class App extends Component {
     componentDidMount(){
         /*this.props.dispatch({type: 'addUserProfile', data: 'hello' });*/
@@ -35,19 +37,23 @@ class App extends Component {
         <Route exact path="/signup" component={Signup} />
         <Route exact path="/dashboard" component={Dashboard} />
         <Route exact path="/cart" component={Cart} />
-        <Route exact path="/rentals" component={Rentals} />
-        <Route exact path="/ecatalog" component={Catalog} />
-        <Route exact path="/ecatalog/:title" component={Catalog} />
+      <Route exact path="/cart/:title" component={Cart} />
         <Route exact path="/settings" component={Settings} />
+        <Route exact path="/rentals" component={Rentals} />
+      <Route exact path="/rentals/:title" component={Rentals} />
+      <Route exact path="/adduser" component={UserProfile} />
+      <Route exact path="/addBook" component={Book} />
+      <Route exact path="/addMagazine" component={Magazine} />
+      <Route exact path="/addMusic" component={Music} />
+      <Route exact path="/addMovie" component={Movie} />
         <Route exact path="/users" component={Users} />
-        <Route exact path="/adduser" component={UserProfile} />
-        <Route exact path="/addBook" component={Book} />
-        <Route exact path="/addMagazine" component={Magazine} />
-        <Route exact path="/addMusic" component={Music} />
-        <Route exact path="/addMovie" component={Movie} />
-        <Route exact path="/adminpanel" component={Adminpanel} />
-        <Route exact path="/logactivity" component={LogActivity} />
-        <Route exact path="/transactionhistory" component={TransactionHistory} />
+      <Route exact path="/adminpanel" component={Adminpanel} />
+      <Route exact path="/logactivity" component={LogActivity} />
+      <Route exact path="/transactionhistory" component={TransactionHistory} />
+     <Route exact path="/ecatalog" component={Catalog} />
+    <Route exact path="/ecatalog/:title" component={Catalog} />
+      <Route exact path="/404" component={Page404}/>
+      <Redirect from="*" to="/404" />
           </Switch>
     );
   }

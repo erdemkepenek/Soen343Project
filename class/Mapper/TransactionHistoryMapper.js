@@ -26,7 +26,7 @@ class TransactionHistoryMapper {
         callback(msg);
       });
     } else {
-      callback(result);
+      callback(result[0]);
     }
   }
 }

@@ -16,14 +16,13 @@ class BookProfile extends Component {
         this.state = {
 
             Title: this.props.bookProfile? this.props.bookProfile.Title : "",
-
             author: this.props.bookProfile? this.props.bookProfile.Author : "",
             format: this.props.bookProfile? this.props.bookProfile.Format : "",
             pages: this.props.bookProfile? this.props.bookProfile.Pages : "",
             publisher: this.props.bookProfile? this.props.bookProfile.Publisher : "",
             language: this.props.bookProfile? this.props.bookProfile.Language : "",
-            ISBN10: this.props.bookProfile? this.props.bookProfile.ISBN10 : "",
-            ISBN13: this.props.bookProfile? this.props.bookProfile.ISBN13 : "",
+            ISBN10: this.props.bookProfile? this.props.bookProfile['ISBN-10'] : "",
+            ISBN13: this.props.bookProfile? this.props.bookProfile['ISBN-13'] : "",
             quantity: this.props.bookProfile? this.props.bookProfile.Quantity : "",
             errorTitle: false,
             errorAuthor: false,
@@ -212,10 +211,28 @@ class BookProfile extends Component {
             this.props.closeProfile();
             } 
     }
+    backToCart= ()=> {
+        this.props.history.push(`/cart`);
+        if(this.props.magazineProfile){
+            this.props.closeProfile();
+        }
+    }
+    backToRentals= ()=> {
+        this.props.history.push(`/rentals`);
+        if(this.props.magazineProfile){
+            this.props.closeProfile();
+        }
+    }
 
     deleteBook = ()=>
     {
         this.props.closeProfile();
+    }
+    return=()=>{
+
+    }
+    addToCart=()=>{
+
     }
 
 
@@ -223,6 +240,8 @@ class BookProfile extends Component {
         console.log(this.props.bookProfile);
         if(!this.props.userProfile) {
             return (<Redirect to={'/'}/>);
+        }else if(this.props.userProfile.type ===0 && !this.props.bookProfile){
+            return (<Redirect to={'/404'}/>);
         }else {
             return (
                 <div className='main-container'>
@@ -231,16 +250,24 @@ class BookProfile extends Component {
                         <div className="MainContainer-upper-container">
                             <div className="MainContainer-upper-container-text">
                                 <div className="MainContainer-upper-container-first-text">
-                                   {this.props.bookProfile? "Edit Book" : "Add Book"}
+                                   {this.props.bookProfile?
+                                       (this.props.userProfile.type ===0 || this.props.rent ?
+                                           "Book Details":"Edit Book") : "Add Book"}
                                 </div>
                                 <div className="MainContainer-upper-container-second-text">
-                                {this.props.bookProfile? "You can edit a book" : "You can add a new book to the system!"}
+                                {this.props.bookProfile?
+                                    (this.props.userProfile.type ===0 || this.props.rent ?
+                                        "You can see the details of Music":
+                                    "You can edit a book")
+                                    : "You can add a new book to the system!"}
                                     
                                 </div>
                             </div>
                             <div className='MainContainer-upper-container-button'>
+                                <Button icon='user' content={this.props.rent?'Back to Rentals' : (this.props.cart? 'Back to Cart' : 'Back to Catalog')}
+                                        onClick={this.props.rent? this.backToRentals : (this.props.cart? this.backToCart : this.backToCatalog)}/>
                                 <Button icon='user' content='Back to Catalog' onClick={this.backToCatalog}/>
-                                {this.props.bookProfile?
+                                {this.props.bookProfile && this.props.userProfile.type ===1 && !this.props.rent && !this.props.cart?
                                 <Popconfirm title="Are you sure to delete this User?" onConfirm={this.deleteBook} placement="bottomRight" okText="Yes" cancelText="No">
                                     <Button icon='user' content='Delete Book'/>
                                 </Popconfirm>
@@ -249,7 +276,10 @@ class BookProfile extends Component {
                         </div>
                         <Form size='large' className='SettingsForm'>
                             <Header as='h2' className='login-Header' style={{marginTop:'3%'}}textAlign='center'> {
-                                this.props.bookProfile? "Edit a Book" : "Create a Book"}
+                                this.props.bookProfile?
+                                    (this.props.userProfile.type ===0 || this.props.rent  ?
+                                        "Magazine Profile":
+                                    "Edit a Book") : "Create a Book"}
                             </Header>
                             <Form.Group width='equal'>
                                 <Form.Input
@@ -257,6 +287,7 @@ class BookProfile extends Component {
                                     iconPosition='left'
                                     placeholder='Bel Ami'
                                     label='Title:'
+                                    disabled={this.props.userProfile.type ===0 || this.props.rent}
                                     value={this.state.Title}
                                     error={this.state.errorTitle}
                                     onChange={this.changeTitle}
@@ -266,6 +297,7 @@ class BookProfile extends Component {
                                     iconPosition='left'
                                     placeholder='Dylon'
                                     label='Author:'
+                                    disabled={this.props.userProfile.type ===0 || this.props.rent}
                                     value={this.state.author}
                                     error={this.state.errorAuthor}
                                     onChange={this.changeAuthor}
@@ -275,6 +307,7 @@ class BookProfile extends Component {
                                 fluid icon='file outline'
                                 iconPosition='left'
                                 placeholder='Ex: Digital'
+                                disabled={this.props.userProfile.type ===0 || this.props.rent}
                                 value={this.state.format}
                                 error={this.state.errorFormat}
                                 onChange={this.changeFormat}
@@ -283,6 +316,7 @@ class BookProfile extends Component {
                                 fluid icon='sort numeric down'
                                 iconPosition='left'
                                 placeholder='Ex: 500'
+                                disabled={this.props.userProfile.type ===0 || this.props.rent}
                                 value={this.state.pages}
                                 error={this.state.errorPages}
                                 onChange={this.changePages}
@@ -294,6 +328,7 @@ class BookProfile extends Component {
                                 fluid icon='user'
                                 iconPosition='left'
                                 placeholder='John'
+                                disabled={this.props.userProfile.type ===0 || this.props.rent}
                                 value={this.state.publisher}
                                 error={this.state.errorPublisher}
                                 onChange={this.changePublisher}
@@ -302,6 +337,7 @@ class BookProfile extends Component {
                                 fluid icon='language'
                                 iconPosition='left'
                                 label='Language: '
+                                disabled={this.props.userProfile.type ===0 || this.props.rent}
                                 placeholder='Ex: English'
                                 value={this.state.language}
                                 error={this.state.errorLanguage}
@@ -312,6 +348,7 @@ class BookProfile extends Component {
                                 iconPosition='left'
                                 placeholder='Ex: 1524796972'
                                 value={this.state.ISBN10}
+                                disabled={this.props.userProfile.type ===0 || this.props.rent}
                                 error={this.state.errorISBN10}
                                 onChange={this.changeISBN10}
                                 label='ISBN-10: '
@@ -320,6 +357,7 @@ class BookProfile extends Component {
                                 fluid icon='sort numeric down'
                                 iconPosition='left'
                                 placeholder='Ex: 3'
+                                disabled={this.props.userProfile.type ===0 || this.props.rent}
                                 value={this.state.quantity}
                                 error={this.state.errorQuantity}
                                 onChange={this.changeQuantity}
@@ -330,13 +368,33 @@ class BookProfile extends Component {
                                 iconPosition='left'
                                 label='ISBN-13: '
                                 placeholder='Ex: 978-1524796976'
+                                disabled={this.props.userProfile.type ===0 || this.props.rent}
                                 value={this.state.ISBN13}
                                 error={this.state.errorISBN13}
                                 onChange={this.changeISBN13}    />
+                            {this.props.userProfile.type ===1 && !this.props.rent?
                             <Button className='login-button' fluid size='large' onClick={this.props.bookProfile? this.editBook :this.addBook}>
                             {this.props.bookProfile? "Edit Book" : "Add Book"}
-                            </Button>
+                            </Button>:(this.props.rent || this.props.cart?
+                                    <Button
+                                        className="login-button"
+                                        fluid
+                                        size="large"
+                                        onClick={
+                                            this.props.rent
+                                                ? this.return
+                                                : this.addToCart
+                                        }
+                                    >
+                                        {this.props.rent ? "Return Magazine" : "Add Magazine to Cart"}
+                                    </Button>: '')}
                         </Form>
+                        {this.props.rent || this.props.cart || !this.props.bookProfile ?
+                            '':
+                            <div className='nextprevButton-container'>
+                                <Button icon='long arrow alternate left' content='Previus Item' onClick={this.backToCatalog}/>
+                                <Button icon='long arrow alternate right' labelPosition='right' content='Next Item' onClick={this.backToCatalog}/>
+                            </div>}
                     </div>
 
                     <FooterComponent/>

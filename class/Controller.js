@@ -225,6 +225,26 @@ class Controller {
     });
   }
   
+  //for LoanMapper
+  loanAddItem(userId, itemId, confirmation){
+	this.LoanMapper.addLoanItem(userId,itemId); 
+	confirmation({ status: "true", message: "no message" });
+  }
+  
+  loanAddReturn(userId, itemId, confirmation){
+	this.LoanMapper.addReturnItem(userId,itemId); 
+	confirmation({ status: "true", message: "no message" });
+  }
+  loanUncommitedWork(userId,confirmation){
+	  this.LoanMapper.viewUncommittedWork(userId, function(msg){
+		  confirmation(msg);
+	  })
+  }
+  loanCommit(userId,confirmation){
+	this.LoanMapper.commit(userId, function(msg){
+		confirmation(msg);
+	})
+  }
 }
 
 module.exports = Controller;

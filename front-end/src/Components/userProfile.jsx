@@ -24,7 +24,7 @@ class AddUser extends Component {
             address:this.props.profile? this.props.profile.Address : "",
             email:this.props.profile? this.props.profile.email : "",
             password: '',
-            type: this.props.profile? (this.props.profile.type=== 1 ? "Client" : "Administrator") : "",
+            type: this.props.profile? (this.props.profile.type=== 1 ? "Administrator" : "Client") : "",
             errorFirstName:false,
             errorLastName:false,
             errorPhone:false,
@@ -190,6 +190,8 @@ class AddUser extends Component {
     render() {
         if(!this.props.userProfile) {
             return (<Redirect to={'/'}/>);
+        }else if(this.props.userProfile.type ===0){
+            return (<Redirect to={'/404'}/>);
         }else {
             return (
                 <div className='main-container'>

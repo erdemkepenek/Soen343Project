@@ -185,18 +185,34 @@ class MovieProfile extends Component {
     closeProfile=()=>{
         this.props.closeProfile();
     }
-    backCatalog= ()=>
-    {this.props.history.push(`/ecatalog`);
+    backCatalog= ()=>{this.props.history.push(`/ecatalog`);
     if(this.props.movieProfile){
         this.props.closeProfile();
     } 
+    }
+    backToCart= ()=> {
+        this.props.history.push(`/cart`);
+        if(this.props.magazineProfile){
+            this.props.closeProfile();
+        }
+    }
+    backToRentals= ()=> {
+        this.props.history.push(`/rentals`);
+        if(this.props.magazineProfile){
+            this.props.closeProfile();
+        }
     }
     deleteMovie = ()=>
     {
         this.props.closeProfile();
     }
-   
 
+    return=()=>{
+
+    }
+    addToCart=()=>{
+
+    }
 
     addConfirmation = () => {
         notification.success({
@@ -218,6 +234,8 @@ class MovieProfile extends Component {
         console.log(this.props.movieProfile);
         if(!this.props.userProfile) {
             return (<Redirect to={'/'}/>);
+        }else if(this.props.userProfile.type ===0 && !this.props.movieProfile){
+            return (<Redirect to={'/404'}/>);
         }else {
             return (
                 <div className='main-container'>
@@ -226,17 +244,26 @@ class MovieProfile extends Component {
                         <div className="MainContainer-upper-container">
                             <div className="MainContainer-upper-container-text">
                                 <div className="MainContainer-upper-container-first-text">
-                                   {this.props.movieProfile? "Edit Movie" : "Add Movie"}
+                                   {this.props.movieProfile?
+                                       (this.props.userProfile.type ===0 || this.props.rent ?
+                                           "Movie Details":
+                                           "Edit Movie")
+                                       : "Add Movie"}
                                 </div>
                                 <div className="MainContainer-upper-container-second-text">
-                                {this.props.movieProfile? "You can edit a Movie" : "You can add a new movie to the system!"}
+                                {this.props.movieProfile?
+                                    (this.props.userProfile.type ===0 || this.props.rent ?
+                                        "You can see the details of magazine":
+                                    "You can edit a Movie") :
+                                    "You can add a new movie to the system!"}
                                     
                                 </div>
                             </div>
 
                         <div className='MainContainer-upper-container-button'>
-                                <Button icon='user' content='Movie to Catalog' onClick={this.backCatalog}/>
-                                {this.props.movieProfile?
+                            <Button icon='user' content={this.props.rent?'Back to Rentals' : (this.props.cart? 'Back to Cart' : 'Back to Catalog')}
+                                    onClick={this.props.rent? this.backToRentals : (this.props.cart? this.backToCart : this.backCatalog)}/>
+                            {this.props.movieProfile && this.props.userProfile.type ===1 && !this.props.rent && !this.props.cart?
                                 <Popconfirm title="Are you sure to delete this Movie?" onConfirm={this.deleteMovie} placement="bottomRight" okText="Yes" cancelText="No">
                                     <Button icon='user' content='Delete Movie'/>
                                 </Popconfirm>
@@ -250,7 +277,10 @@ class MovieProfile extends Component {
                         </div>
                         <Form size='large' className='SettingsForm'>
                             <Header as='h2' className='login-Header' style={{marginTop:'3%'}}textAlign='center'> {
-                                this.props.movieProfile? "Edit a Movie" : "Create a Movie"}
+                                this.props.movieProfile?
+                                    (this.props.userProfile.type ===0 || this.props.rent  ?
+                                        "Movie Profile":
+                                    "Edit a Movie") : "Create a Movie"}
                             </Header>
                             <Form.Group width='equal'>
                                 <Form.Input
@@ -258,6 +288,7 @@ class MovieProfile extends Component {
                                     iconPosition='left'
                                     placeholder='Bel Ami'
                                     label='Title:'
+                                    disabled={this.props.userProfile.type ===0 || this.props.rent}
                                     value={this.state.Title}
                                     error={this.state.errorTitle}
                                     onChange={this.changeTitle}
@@ -267,6 +298,7 @@ class MovieProfile extends Component {
                                     iconPosition='left'
                                     placeholder='Dylon'
                                     label='Director:'
+                                    disabled={this.props.userProfile.type ===0 || this.props.rent}
                                     value={this.state.director}
                                     error={this.state.errorDirector}
                                     onChange={this.changeDirector}
@@ -276,6 +308,7 @@ class MovieProfile extends Component {
                                 fluid icon='user'
                                 iconPosition='left'
                                 placeholder='Ex: Digital'
+                                disabled={this.props.userProfile.type ===0 || this.props.rent}
                                 value={this.state.producers}
                                 error={this.state.errorProducers}
                                 onChange={this.changeProducers}
@@ -284,6 +317,7 @@ class MovieProfile extends Component {
                                 fluid icon='sort numeric down'
                                 iconPosition='left'
                                 placeholder='Ex: 500'
+                                disabled={this.props.userProfile.type ===0 || this.props.rent}
                                 value={this.state.actors}
                                 error={this.state.errorActors}
                                 onChange={this.changeActors}
@@ -295,6 +329,7 @@ class MovieProfile extends Component {
                                 fluid icon='language'
                                 iconPosition='left'
                                 placeholder='John'
+                                disabled={this.props.userProfile.type ===0 || this.props.rent}
                                 value={this.state.subtitles}
                                 error={this.state.errorSubtitles}
                                 onChange={this.changeSubtitles}
@@ -304,6 +339,7 @@ class MovieProfile extends Component {
                                 iconPosition='left'
                                 label='Language: '
                                 placeholder='Ex: English'
+                                disabled={this.props.userProfile.type ===0 || this.props.rent}
                                 value={this.state.language}
                                 error={this.state.errorLanguage}
                                 onChange={this.changeLanguage}    />
@@ -313,6 +349,7 @@ class MovieProfile extends Component {
                                 iconPosition='left'
                                 placeholder='Ex: 1524796972'
                                 value={this.state.dubbed}
+                                disabled={this.props.userProfile.type ===0 || this.props.rent}
                                 error={this.state.errorDubbed}
                                 onChange={this.changeDubbed}
                                 label='Dubbed: '
@@ -322,6 +359,7 @@ class MovieProfile extends Component {
                                 iconPosition='left'
                                 placeholder='Ex: 3'
                                 value={this.state.releaseDate}
+                                disabled={this.props.userProfile.type ===0 || this.props.rent}
                                 error={this.state.errorReleaseDate}
                                 onChange={this.changeReleaseDate}
                                 label='Release date: '
@@ -330,14 +368,34 @@ class MovieProfile extends Component {
                                 fluid icon='calendar alternate outline'
                                 iconPosition='left'
                                 label='Run Time: '
+                                disabled={this.props.userProfile.type ===0 || this.props.rent}
                                 placeholder='Ex: 978-1524796976'
                                 value={this.state.runTime}
                                 error={this.state.errorReleaseDate}
                                 onChange={this.changeRunTime}    />
-                            <Button className='login-button' fluid size='large' onClick={this.props.movieProfile? this.editMovie :this.addMovie}>
+                            {this.props.userProfile.type ===1 && !this.props.rent?
+                            <Button className='login-button' fluid size='large' onClick={this.props.movieProfile? this.editmovie :this.addmovie}>
                             {this.props.movieProfile? "Edit Movie" : "Add Movie"}
-                            </Button>
+                            </Button>:(this.props.rent || this.props.cart?
+                                    <Button
+                                        className="login-button"
+                                        fluid
+                                        size="large"
+                                        onClick={
+                                            this.props.rent
+                                                ? this.return
+                                                : this.addToCart
+                                        }
+                                    >
+                                        {this.props.rent ? "Return Movie" : "Add Movie to Cart"}
+                                    </Button>: '')}
                         </Form>
+                        {this.props.rent || this.props.cart || !this.props.movieProfile ?
+                            '':
+                            <div className='nextprevButton-container'>
+                                <Button icon='long arrow alternate left' content='Previus Item' onClick={this.backToCatalog}/>
+                                <Button icon='long arrow alternate right' labelPosition='right' content='Next Item' onClick={this.backToCatalog}/>
+                            </div>}
                     </div>
 
                     <FooterComponent/>

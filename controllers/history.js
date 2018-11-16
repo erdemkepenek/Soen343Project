@@ -1,16 +1,23 @@
 const express = require('express');
+const Controller = require("../class/Controller.js");
 const router = express.Router();
 
+myController = new Controller();
+
 router.post("/transaction/view", function (req, res) {
-    let user = req.body;
+    let data = req.body;
     res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify("hello"));
+    myController.transactionHistoryView(function (msg) {
+        res.send(JSON.stringify(msg));
+    });
 });
 
 router.post("/log/view", function (req, res) {
-    let user = req.body;
+    let data = req.body;
     res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify("hello"));
+    myController.logActivityMapperView(function (msg) {
+        res.send(JSON.stringify(msg));
+    });
 });
 
 module.exports = router;

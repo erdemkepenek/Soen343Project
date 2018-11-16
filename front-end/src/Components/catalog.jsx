@@ -9,6 +9,9 @@ import {Menu, Dropdown, Button} from 'semantic-ui-react'
 import {Redirect} from "react-router";
 import DataTable from '../Components/Common/table/table'
 import RedirectItem from "./redirectItem"
+import ApiCalls from '../class/apiCalls'
+let apicall = new ApiCalls;
+
 let tableArray= []
 const options = [
     { key: 1, text: 'Book', value: "Book" },
@@ -25,63 +28,34 @@ class Catalog extends Component {
     }
 
     componentDidMount() {
+        this.props.history.push(`/ecatalog`);
             tableArray= [];
-            let book={
-            Title: "Marc's book",
-            Author: "marc noon",
-            Format: "marc format",
-            Pages: 567,
-            Publisher: "marc again",
-            Language: "marc's language",
-            ISBN10: 1234567890,
-            ISBN13: "7927927892",
-            Quantity: 67,
-            Type: "Book",
-            }
-            tableArray.push(book);
-            this.forceUpdate();
-
-            let music={
-                Title: "marc' music",
-                Artist: "marc noon",
-                MusicType: "marc type",
-                Label: "label marc",
-                ReleaseDate: "marc again",
-                ASIN: "TY157373",
-                Quantity: 67,
-                Type: "Music",
-                }
-                tableArray.push(music);
-            this.forceUpdate();
-
-            let magazine={
-                Title: "marc' magazine",
-                Publisher: "marc again",
-                Language: "marc's language",
-                Label: "label marc",
-                ISBN10: 1234567890,
-                ISBN13: "7927927892",
-                Quantity: 67,
-                Type: "Magazine",
-                }
-                tableArray.push(magazine);
-            this.forceUpdate();
-            
-            let movie={
-                Title: "marc' movie",
-                Director: "marc noon",
-                Producers: "marc type",
-                Actors: "label marc",
-                Language: "marc's language",
-                Subtitles: "marc's language",
-                Dubbed: "marc's language",
-                ReleaseDate: "marc again",
-                RunTime: "TY157373",
-                Quantity: 67,
-                Type: "Movie",
-                }
-                tableArray.push(movie);
-                this.forceUpdate();
+            let this1= this;
+        apicall.viewBook(function(dataBook){
+            dataBook.map((bookData)=>{
+                bookData.Type='Book'
+                tableArray.push(bookData)
+            })
+            apicall.viewMagazine(function(dataMagazine){
+                dataMagazine.map((magazineData)=>{
+                    magazineData.Type='Magazine'
+                    tableArray.push(magazineData)
+                })
+                apicall.viewMovie(function(dataMovie){
+                    dataMovie.map((movieData)=>{
+                        movieData.Type='Movie'
+                        tableArray.push(movieData)
+                    })
+                    apicall.viewMusic(function(dataMusic){
+                        dataMusic.map((musicData)=>{
+                            musicData.Type='Music'
+                            tableArray.push(musicData)
+                            this1.forceUpdate();
+                        })
+                    });
+                });
+            });
+        });
         }
     
         closeProfile=()=>{
@@ -91,19 +65,19 @@ class Catalog extends Component {
         this.setState({addItem:data.value})
         switch(data.value){
             case 'Music':
-                this.props.history.push(`/addMusic/`);
+                this.props.history.push(`/addMusic`);
                 break;
             case 'Movie':
-                this.props.history.push(`/addMovie/`);
+                this.props.history.push(`/addMovie`);
                 break;
             case 'Magazine':
-                this.props.history.push(`/addMagazine/`);
+                this.props.history.push(`/addMagazine`);
                 break;
             case 'Book':
-                this.props.history.push(`/addBook/`);
+                this.props.history.push(`/addBook`);
                 break;
             default:
-                this.props.history.push(`/addMusic/`);
+                this.props.history.push(`/addMusic`);
                 break;
 
         }
@@ -111,7 +85,7 @@ class Catalog extends Component {
     
         openProfile=(data)=>{
             console.log(data);
-            this.props.history.push(`/ecatalog/`+data.BookTitle);
+            this.props.history.push(`/ecatalog/`+data.Title);
             this.setState({profile: data})
         }
 
@@ -152,9 +126,10 @@ class Catalog extends Component {
                                     You can select one of the item to see their details!
                                 </div>
                             </div>
+                            {this.props.userProfile.type === 1?
                             <div className='MainContainer-upper-container-button'>
                                 <Dropdown placeholder="Add Item" value={this.state.addItem} onChange={(e,value)=>this.addItem(value)} options={options}  selection />
-                            </div>
+                            </div>:''}
 
                             
                         </div>

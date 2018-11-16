@@ -31,7 +31,7 @@ class userTDG {
 						let msg = {};
 						msg.success="true";
 						msg.message="no message";
-						msg.login=rows[0];
+						msg.data=rows[0];
 						callback(msg);
 					}
 					else{
