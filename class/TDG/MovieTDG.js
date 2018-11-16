@@ -24,7 +24,7 @@ class MovieTDG {
     }
     viewItems(callback){
         let sql = 'SELECT MovieDesc.idDesc, Title,Director,Producers ,Actors, Language, Subtitles,'+
-         'Dubbed,ReleaseDate,RunTime , COUNT(id) as Quantity FROM MovieDesc '+
+         'Dubbed,ReleaseDate,RunTime ,COUNT(CASE WHEN available THEN 1 END)as available, COUNT(id) as Quantity FROM MovieDesc '+
          'LEFT JOIN MoviePh ON MoviePh.idDesc = MovieDesc.idDesc GROUP BY (MovieDesc.idDesc)' ; 
 		this.runQuery(function(conn,completedQuery){
 			conn.query(sql, (err, rows, fields) => {

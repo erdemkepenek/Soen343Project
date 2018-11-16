@@ -101,6 +101,7 @@ class Catalog extends Component {
                 {value : 'Title', render : 'Title', type : 'text'},
                 {value : 'Type', render : 'Type', type : 'text'},
                 {value : 'Quantity', render : 'Quantity', type : 'number'},
+                {value : 'Available', render : 'Available', type : 'number'},
                 
             ];
             let tableItems = [];
@@ -109,6 +110,7 @@ class Catalog extends Component {
                     {value : itemData.Title, render : itemData.Title, type : 'text'},
                     {value : itemData.Type, render : itemData.Type, type : 'text'},
                     {value : itemData.Quantity, render : itemData.Quantity, type : 'number'},
+                    {value : itemData.available, render : itemData.available, type : 'number'},
                     itemData
                 ]
                 tableItems.push(arrData);
