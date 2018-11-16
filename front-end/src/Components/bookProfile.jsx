@@ -278,7 +278,7 @@ class BookProfile extends Component {
                             <Header as='h2' className='login-Header' style={{marginTop:'3%'}}textAlign='center'> {
                                 this.props.bookProfile?
                                     (this.props.userProfile.type ===0 || this.props.rent  ?
-                                        "Magazine Profile":
+                                        "Book Profile":
                                     "Edit a Book") : "Create a Book"}
                             </Header>
                             <Form.Group width='equal'>
@@ -375,7 +375,7 @@ class BookProfile extends Component {
                             {this.props.userProfile.type ===1 && !this.props.rent?
                             <Button className='login-button' fluid size='large' onClick={this.props.bookProfile? this.editBook :this.addBook}>
                             {this.props.bookProfile? "Edit Book" : "Add Book"}
-                            </Button>:(this.props.rent || this.props.cart?
+                            </Button>:(!this.props.cart?
                                     <Button
                                         className="login-button"
                                         fluid
@@ -386,7 +386,7 @@ class BookProfile extends Component {
                                                 : this.addToCart
                                         }
                                     >
-                                        {this.props.rent ? "Return Magazine" : "Add Magazine to Cart"}
+                                        {this.props.rent ? "Return Book" : "Add Book to Cart"}
                                     </Button>: '')}
                         </Form>
                         {this.props.rent || this.props.cart || !this.props.bookProfile ?

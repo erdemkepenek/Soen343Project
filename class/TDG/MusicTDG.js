@@ -27,7 +27,7 @@ class MusicTDG {
 		+ deleteItem();
 	*/
 	viewItems(callback){
-		let sql = 'SELECT MusicDesc.idDesc, Title, Artist , Label, Type, ReleaseDate, ASIN, COUNT(id) as Quantity FROM MusicDesc LEFT JOIN MusicPh ON MusicPh.idDesc = MusicDesc.idDesc GROUP BY (MusicDesc.idDesc)' ; 
+		let sql = 'SELECT MusicDesc.idDesc, Title, Artist , Label, Type, ReleaseDate, ASIN, COUNT(CASE WHEN available THEN 1 END)as available, COUNT(id) as Quantity FROM MusicDesc LEFT JOIN MusicPh ON MusicPh.idDesc = MusicDesc.idDesc GROUP BY (MusicDesc.idDesc)' ;
 		this.runQuery(function(conn,completedQuery){
 			conn.query(sql, (err, rows, fields) => {
 				if (!err){
