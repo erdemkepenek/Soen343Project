@@ -42,6 +42,10 @@ class MagazineMapper {
 	console.log("[MagazineMapper] deleteItem()");
     this.MagazineUnitOfWork.addClean(id, itemId);
   }
+  removeDeleteItem(id, index_){
+	console.log("[MagazineMapper] removeDeleteItem()"); 
+    this.BookUnitOfWork.removeClean(id, index_);
+  }
   viewUncommittedWork(id,callback){
 	console.log("[MagazineMapper] viewUncommittedWork()");
 	let view = this.MagazineUnitOfWork.viewUncommittedWork(id);

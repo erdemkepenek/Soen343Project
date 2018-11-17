@@ -42,6 +42,10 @@ class MovieMapper {
 	console.log("[MovieMapper] deleteItem()");
     this.MovieUnitOfWork.addClean(id, itemId);
   }
+  removeDeleteItem(id, index_){
+	console.log("[MovieMapper] removeDeleteItem()"); 
+    this.BookUnitOfWork.removeClean(id, index_);
+  }
   viewUncommittedWork(id,callback){
 	console.log("[MovieMapper] viewUncommittedWork()");
 	let view = this.MovieUnitOfWork.viewUncommittedWork(id);

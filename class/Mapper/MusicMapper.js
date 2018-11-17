@@ -42,6 +42,10 @@ class MusicMapper {
 	console.log("[MusicMapper] deleteItem()");
     this.MusicUnitOfWork.addClean(id, itemId);
   }
+  removeDeleteItem(id, index_){
+	console.log("[MusicMapper] removeDeleteItem()"); 
+    this.BookUnitOfWork.removeClean(id, index_);
+  }
   viewUncommittedWork(id,callback){
 	console.log("[MusicMapper] viewUncommittedWork()");
 	let view = this.MusicUnitOfWork.viewUncommittedWork(id);
