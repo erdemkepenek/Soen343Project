@@ -40,7 +40,10 @@ class UserMapper {
   modifyUser(id, user, callback) {
 	console.log("[UserMapper] modifyUser()");
     this.UserUnitOfWork.addDirty(id, user);
-    
+  }
+  removeModifyUser(id, index_){
+	console.log("[UserMapper] removeModifyUser()"); 
+    this.BookUnitOfWork.removeDirty(id, index_);
   }
   deleteUser(id, userId, callback) {
 	console.log("[UserMapper] deleteUser()");

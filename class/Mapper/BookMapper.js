@@ -35,7 +35,10 @@ class BookMapper {
   modifyItem(id, item, callback) {
 	console.log("[BookMapper] modifyItem()");
     this.BookUnitOfWork.addDirty(id, item);
-    
+  }
+  removeModifyItem(id, index_){
+	console.log("[BookMapper] removeModifyItem()"); 
+    this.BookUnitOfWork.removeDirty(id, index_);
   }
   deleteItem(id, itemId, callback) {
 	console.log("[BookMapper] deleteItem()");

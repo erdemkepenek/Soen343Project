@@ -34,6 +34,10 @@ class MusicMapper {
 	console.log("[MusicMapper] modifyItem()");
     this.MusicUnitOfWork.addDirty(id, item);
   }
+  removeModifyItem(id, index_){
+	console.log("[MusicMapper] removeModifyItem()"); 
+    this.BookUnitOfWork.removeDirty(id, index_);
+  }
   deleteItem(id, itemId, callback) {
 	console.log("[MusicMapper] deleteItem()");
     this.MusicUnitOfWork.addClean(id, itemId);

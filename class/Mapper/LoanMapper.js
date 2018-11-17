@@ -32,7 +32,6 @@ class LoanMapper {
       callback(msg);
     });
   }
-
   addLoanItem(userId, itemId, callback) {
 	console.log("[LoanMapper] addLoantItem()");
     this.LoanUnitOfWork.addNew(userId, itemId);
@@ -44,6 +43,10 @@ class LoanMapper {
   addReturnItem(userId, itemId, callback) {
 	console.log("[LoanMapper] addReturnItem()");
     this.LoanUnitOfWork.addDirty(userId, itemId);
+  }
+  removeReturnItem(id, index_){
+	console.log("[UserMapper] removeReturnItem()"); 
+    this.BookUnitOfWork.removeDirty(id, index_);
   }
   viewUncommittedWork(id,callback){
 	console.log("[LoanMapper] viewUncommittedWork()");
