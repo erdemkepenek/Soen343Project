@@ -22,9 +22,9 @@ class LoanTDG {
     // a helper method to get current Date
     this.getCurrentDateWithAddition = function (days) {
       var date = new Date();
-	  date.setDate(date.getDate()+days);
+      date.setDate(date.getDate() + days);
       var tmp =
-        date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate();
+        date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
       return tmp;
     };
   }
@@ -36,12 +36,33 @@ class LoanTDG {
 	*/
   loanItem(userId, itemDesc, category, callback) {
     let loanDate = this.getCurrentDateWithAddition(0);
-    let returnDate = this.getCurrentDateWithAddition(7);
+    var returnDate;
+
+    if (category == 'magazine') {
+      let msg = "Magazine can not be loaned";
+      callback(msg);
+      return msg;
+    }
+    else {
+      switch (category) {
+        case 'book':
+          returnDate = this.getCurrentDateWithAddition(7);
+          break;
+        case 'movie':
+          returnDate = this.getCurrentDateWithAddition(2);
+          break;
+        case 'music':
+          returnDate = this.getCurrentDateWithAddition(2);
+          break;
+      }
+    }
     let sql =
-		"set @item_id = getIDPh("+itemDesc+",'"+category+"');"+
-		"update `Items` set available = 0 where id = @item_id;"+
-		"INSERT INTO `Loan` (`UserId`, `itemId`, `loanDate`, `returnDate`) VALUES ("+userId+", @item_id, '"+loanDate+"', '"+returnDate+"');"
+      "set @item_id = getIDPh(" + itemDesc + ",'" + category + "');" +
+      "update `Items` set available = 0 where id = @item_id;" +
+      "INSERT INTO `Loan` (`UserId`, `itemId`, `loanDate`, `returnDate`) VALUES (" + userId + ", @item_id, '" + loanDate + "', '" + returnDate + "');"
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
     console.log(sql);
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
     this.runQuery(function (conn, completedQuery) {
       conn.query(sql, (err, rows, fields) => {
         if (!err) {
@@ -68,7 +89,7 @@ class LoanTDG {
       "   UPDATE `Items` SET available=1 WHERE id = " +
       itemId +
       ";  " +
-      " DELETE from `Loan` where UserId="+userId+" and itemId="+itemId
+      " DELETE from `Loan` where UserId=" + userId + " and itemId=" + itemId
     console.log(sql);
     this.runQuery(function (conn, completedQuery) {
       conn.query(sql, (err, rows, fields) => {
@@ -104,7 +125,7 @@ class LoanTDG {
         if (!err) {
           msg.success = "true";
           msg.message = "no message";
-		  msg.data = {};
+          msg.data = {};
           //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
           conn.query(sqlMagazine, (err, rows, fields) => {
             if (!err) {
@@ -172,17 +193,17 @@ class LoanTDG {
     let msg = {}; //array that will keep all the loan data
 
     //get all the loaned books
-    let sqlBook = 'SELECT * FROM BookDesc INNER JOIN(SELECT * FROM BookPh INNER JOIN (SELECT * FROM Loan WHERE UserId = "'+userId+'") AS UserLoans ON BookPh.id = UserLoans.itemId) AS T ON BookDesc.idDesc = T.idDesc';
-    let sqlMagazine = 'SELECT * FROM MagazineDesc INNER JOIN(SELECT * FROM MagazinePh INNER JOIN (SELECT * FROM Loan WHERE UserId = "' + userId +'") AS UserLoans ON MagazinePh.id = UserLoans.itemId) AS T ON MagazineDesc.idDesc = T.idDesc';
-    let sqlMusic = 'SELECT * FROM MusicDesc INNER JOIN(SELECT * FROM MusicPh INNER JOIN (SELECT * FROM Loan WHERE UserId = "' + userId +'") AS UserLoans ON MusicPh.id = UserLoans.itemId) AS T ON MusicDesc.idDesc = T.idDesc';
-    let sqlMovies = 'SELECT * FROM MovieDesc INNER JOIN(SELECT * FROM MoviePh INNER JOIN (SELECT * FROM Loan WHERE UserId = "' + userId +'") AS UserLoans ON MoviePh.id = UserLoans.itemId) AS T ON MovieDesc.idDesc = T.idDesc';
+    let sqlBook = 'SELECT * FROM BookDesc INNER JOIN(SELECT * FROM BookPh INNER JOIN (SELECT * FROM Loan WHERE UserId = "' + userId + '") AS UserLoans ON BookPh.id = UserLoans.itemId) AS T ON BookDesc.idDesc = T.idDesc';
+    let sqlMagazine = 'SELECT * FROM MagazineDesc INNER JOIN(SELECT * FROM MagazinePh INNER JOIN (SELECT * FROM Loan WHERE UserId = "' + userId + '") AS UserLoans ON MagazinePh.id = UserLoans.itemId) AS T ON MagazineDesc.idDesc = T.idDesc';
+    let sqlMusic = 'SELECT * FROM MusicDesc INNER JOIN(SELECT * FROM MusicPh INNER JOIN (SELECT * FROM Loan WHERE UserId = "' + userId + '") AS UserLoans ON MusicPh.id = UserLoans.itemId) AS T ON MusicDesc.idDesc = T.idDesc';
+    let sqlMovies = 'SELECT * FROM MovieDesc INNER JOIN(SELECT * FROM MoviePh INNER JOIN (SELECT * FROM Loan WHERE UserId = "' + userId + '") AS UserLoans ON MoviePh.id = UserLoans.itemId) AS T ON MovieDesc.idDesc = T.idDesc';
 
     this.runQuery(function (conn, completedQuery) {
       conn.query(sqlBook, (err, rows, fields) => {
         if (!err) {
           msg.success = "true";
           msg.message = "no message";
-		  msg.data = {};
+          msg.data = {};
           //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
           conn.query(sqlMagazine, (err, rows, fields) => {
             if (!err) {
