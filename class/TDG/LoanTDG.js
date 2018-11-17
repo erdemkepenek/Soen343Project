@@ -36,12 +36,33 @@ class LoanTDG {
 	*/
   loanItem(userId, itemDesc, category, callback) {
     let loanDate = this.getCurrentDateWithAddition(0);
-    let returnDate = this.getCurrentDateWithAddition(7);
+    var returnDate;
+
+if (category == 'magazine'){
+let msg = "Magazine can not be loaned";
+callback(msg);
+return msg;
+}
+else{
+    switch (category) {
+      case 'book':
+        returnDate = this.getCurrentDateWithAddition(7);
+        break;
+      case 'movie':
+        returnDate = this.getCurrentDateWithAddition(2);
+        break;
+      case 'music':
+        returnDate = this.getCurrentDateWithAddition(2);
+        break;
+    }
+  }
     let sql =
 		"set @item_id = getIDPh("+itemDesc+",'"+category+"');"+
 		"update `Items` set available = 0 where id = @item_id;"+
 		"INSERT INTO `Loan` (`UserId`, `itemId`, `loanDate`, `returnDate`) VALUES ("+userId+", @item_id, '"+loanDate+"', '"+returnDate+"');"
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
     console.log(sql);
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
     this.runQuery(function (conn, completedQuery) {
       conn.query(sql, (err, rows, fields) => {
         if (!err) {
