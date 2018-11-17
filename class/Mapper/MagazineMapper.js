@@ -34,6 +34,10 @@ class MagazineMapper {
 	console.log("[MagazineMapper] modifyItem()");
     this.MagazineUnitOfWork.addDirty(id, item);
   }
+  removeModifyItem(id, index_){
+	console.log("[MagazineMapper] removeModifyItem()"); 
+    this.BookUnitOfWork.removeDirty(id, index_);
+  }
   deleteItem(id, itemId, callback) {
 	console.log("[MagazineMapper] deleteItem()");
     this.MagazineUnitOfWork.addClean(id, itemId);
