@@ -26,6 +26,10 @@ class MovieMapper {
 	console.log("[MovieMapper] addItem()");
     this.MovieUnitOfWork.addNew(id, item);
   }
+  removeNewItem(id, index_){
+	console.log("[MovieMapper] removeNewItem()"); 
+    this.BookUnitOfWork.removeNew(id, index_);
+  }
   modifyItem(id, item, callback) {
 	console.log("[MovieMapper] modifyItem()");
     this.MovieUnitOfWork.addDirty(id, item);

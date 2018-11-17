@@ -37,7 +37,10 @@ class LoanMapper {
 	console.log("[LoanMapper] addLoantItem()");
     this.LoanUnitOfWork.addNew(userId, itemId);
   }
-
+  removeLoanItem(id, index_){
+	console.log("[LoanMapper] removeLoanItem()"); 
+    this.BookUnitOfWork.removeNew(id, index_);
+  }
   addReturnItem(userId, itemId, callback) {
 	console.log("[LoanMapper] addReturnItem()");
     this.LoanUnitOfWork.addDirty(userId, itemId);
