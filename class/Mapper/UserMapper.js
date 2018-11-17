@@ -48,7 +48,10 @@ class UserMapper {
   deleteUser(id, userId, callback) {
 	console.log("[UserMapper] deleteUser()");
     this.UserUnitOfWork.addClean(id, userId);
-    
+  }
+  removeDeleteUser(id, index_){
+	console.log("[UserMapper] removeDeleteUser()"); 
+    this.BookUnitOfWork.removeClean(id, index_);
   }
   viewUncommittedWork(id,callback){
 	console.log("[UserMapper] viewUncommittedWork()");

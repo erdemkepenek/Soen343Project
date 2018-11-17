@@ -43,7 +43,10 @@ class BookMapper {
   deleteItem(id, itemId, callback) {
 	console.log("[BookMapper] deleteItem()");
     this.BookUnitOfWork.addClean(id, itemId);
-    
+  }
+  removeDeleteItem(id, index_){
+	console.log("[BookMapper] removeDeleteItem()"); 
+    this.BookUnitOfWork.removeClean(id, index_);
   }
   viewUncommittedWork(id,callback){
 	console.log("[BookMapper] viewUncommittedWork()");
