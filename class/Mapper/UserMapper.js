@@ -33,6 +33,10 @@ class UserMapper {
     this.UserUnitOfWork.addNew(id, user);
     
   }
+  removeNewUser(id, index_){
+	console.log("[UserMapper] removeNewUser()"); 
+    this.BookUnitOfWork.removeNew(id, index_);
+  }
   modifyUser(id, user, callback) {
 	console.log("[UserMapper] modifyUser()");
     this.UserUnitOfWork.addDirty(id, user);
