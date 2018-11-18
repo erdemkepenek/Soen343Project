@@ -26,13 +26,25 @@ class MusicMapper {
 	console.log("[MusicMapper] addItem()");
     this.MusicUnitOfWork.addNew(id, item);
   }
+  removeNewItem(id, index_){
+	console.log("[MusicMapper] removeNewItem()"); 
+    this.MusicUnitOfWork.removeNew(id, index_);
+  }
   modifyItem(id, item, callback) {
 	console.log("[MusicMapper] modifyItem()");
     this.MusicUnitOfWork.addDirty(id, item);
   }
+  removeModifyItem(id, index_){
+	console.log("[MusicMapper] removeModifyItem()"); 
+    this.MusicUnitOfWork.removeDirty(id, index_);
+  }
   deleteItem(id, itemId, callback) {
 	console.log("[MusicMapper] deleteItem()");
     this.MusicUnitOfWork.addClean(id, itemId);
+  }
+  removeDeleteItem(id, index_){
+	console.log("[MusicMapper] removeDeleteItem()"); 
+    this.MusicUnitOfWork.removeClean(id, index_);
   }
   viewUncommittedWork(id,callback){
 	console.log("[MusicMapper] viewUncommittedWork()");

@@ -24,12 +24,37 @@ router.post("/modify", function (req, res) {
 router.post("/delete", function (req, res) {
     let data = req.body;
     res.setHeader('Content-Type', 'application/json');
-    myController.magazineDelete(data.userId, data.item.id, function (msg) {
+    myController.magazineDelete(data.userId, data.item, function (msg) {
         res.send(JSON.stringify(msg));
     });
 
 });
+router.post("/remove/add", function (req, res) {
+    let data = req.body;
+    console.log(req.body);
+    res.setHeader('Content-Type', 'application/json');
+    myController.magazineRemoveAdd(data.userId, data.index, function (msg) {
+        res.send(JSON.stringify(msg));
+    });
+});
 
+router.post("/remove/modify", function (req, res) {
+    let data = req.body;
+    console.log(req.body);
+    res.setHeader('Content-Type', 'application/json');
+    myController.magazineRemoveModify(data.userId, data.index, function (msg) {
+        res.send(JSON.stringify(msg));
+    });
+});
+
+router.post("/remove/delete", function (req, res) {
+    let data = req.body;
+    console.log(req.body);
+    res.setHeader('Content-Type', 'application/json');
+    myController.magazineRemoveDelete(data.userId, data.index, function (msg) {
+        res.send(JSON.stringify(msg));
+    });
+});
 router.post("/view", function (req, res) {
     res.setHeader('Content-Type', 'application/json');
     myController.magazineView(function (msg) {

@@ -28,15 +28,25 @@ class BookMapper {
     this.BookUnitOfWork.addNew(id, item);
     
   }
+  removeNewItem(id, index_){
+	console.log("[BookMapper] removeNewItem()"); 
+    this.BookUnitOfWork.removeNew(id, index_);
+  }
   modifyItem(id, item, callback) {
 	console.log("[BookMapper] modifyItem()");
     this.BookUnitOfWork.addDirty(id, item);
-    
+  }
+  removeModifyItem(id, index_){
+	console.log("[BookMapper] removeModifyItem()"); 
+    this.BookUnitOfWork.removeDirty(id, index_);
   }
   deleteItem(id, itemId, callback) {
 	console.log("[BookMapper] deleteItem()");
     this.BookUnitOfWork.addClean(id, itemId);
-    
+  }
+  removeDeleteItem(id, index_){
+	console.log("[BookMapper] removeDeleteItem()"); 
+    this.BookUnitOfWork.removeClean(id, index_);
   }
   viewUncommittedWork(id,callback){
 	console.log("[BookMapper] viewUncommittedWork()");

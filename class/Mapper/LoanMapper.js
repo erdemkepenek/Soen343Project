@@ -50,6 +50,10 @@ class LoanMapper {
 	console.log("[LoanMapper] addReturnItem()");
     this.LoanUnitOfWork.addDirty(userId, item);
   }
+  removeReturnItem(id, index_){
+	console.log("[UserMapper] removeReturnItem()"); 
+    this.BookUnitOfWork.removeDirty(id, index_);
+  }
   viewUncommittedWork(id,callback){
 	console.log("[LoanMapper] viewUncommittedWork()");
 	let view = this.LoanUnitOfWork.viewUncommittedWork(id);

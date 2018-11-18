@@ -29,8 +29,8 @@ class UnitOfWork {
       this.registration.push(temp);
     }
   }
-  removeNew(id, index_, item) {
-    console.log("[UnitOfWork] addNew()");
+  removeNew(id, index_) {
+    console.log("[UnitOfWork] removeNew()");
     let index = this.getUserIndex(id, this.registration);
     if (index > -1 && index_ < this.registration[index][1].length) {
       this.registration[index][1].splice(index_, 1);

@@ -7,7 +7,6 @@ class MagazineMapper {
     this.MagazineTDG = new MagazineTDG();
     this.MagazineUnitOfWork = new UnitOfWork();
     this.MagazineIdentityMap = new IdentityMap();
-
   }
   viewItems(callback) {
 	console.log("[MagazineMapper] viewItems()");
@@ -26,13 +25,25 @@ class MagazineMapper {
 	console.log("[MagazineMapper] addItem()");
     this.MagazineUnitOfWork.addNew(id, item);
   }
+  removeNewItem(id, index_){
+	console.log("[MagazineMapper] removeNewItem()"); 
+    this.MagazineUnitOfWork.removeNew(id, index_);
+  }
   modifyItem(id, item, callback) {
 	console.log("[MagazineMapper] modifyItem()");
     this.MagazineUnitOfWork.addDirty(id, item);
   }
+  removeModifyItem(id, index_){
+	console.log("[MagazineMapper] removeModifyItem()"); 
+    this.MagazineUnitOfWork.removeDirty(id, index_);
+  }
   deleteItem(id, itemId, callback) {
 	console.log("[MagazineMapper] deleteItem()");
     this.MagazineUnitOfWork.addClean(id, itemId);
+  }
+  removeDeleteItem(id, index_){
+	console.log("[MagazineMapper] removeDeleteItem()"); 
+    this.MagazineUnitOfWork.removeClean(id, index_);
   }
   viewUncommittedWork(id,callback){
 	console.log("[MagazineMapper] viewUncommittedWork()");
@@ -72,10 +83,7 @@ class MagazineMapper {
 		callback(g_msg);
 	}
 	setTimeout(this.wait,2000);
-
   }
-
-
 }
 
 module.exports = MagazineMapper;

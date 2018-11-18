@@ -24,10 +24,36 @@ router.post("/modify", function (req, res) {
 router.post("/delete", function (req, res) {
     let data = req.body;
     res.setHeader('Content-Type', 'application/json');
-    myController.musicDelete(data.userId, data.item.id, function (msg) {
+    myController.musicDelete(data.userId, data.item, function (msg) {
         res.send(JSON.stringify(msg));
     });
 
+});
+router.post("/remove/add", function (req, res) {
+    let data = req.body;
+    console.log(req.body);
+    res.setHeader('Content-Type', 'application/json');
+    myController.musicRemoveAdd(data.userId, data.index, function (msg) {
+        res.send(JSON.stringify(msg));
+    });
+});
+
+router.post("/remove/modify", function (req, res) {
+    let data = req.body;
+    console.log(req.body);
+    res.setHeader('Content-Type', 'application/json');
+    myController.musicRemoveModify(data.userId, data.index, function (msg) {
+        res.send(JSON.stringify(msg));
+    });
+});
+
+router.post("/remove/delete", function (req, res) {
+    let data = req.body;
+    console.log(req.body);
+    res.setHeader('Content-Type', 'application/json');
+    myController.musicRemoveDelete(data.userId, data.index, function (msg) {
+        res.send(JSON.stringify(msg));
+    });
 });
 
 router.post("/view", function (req, res) {

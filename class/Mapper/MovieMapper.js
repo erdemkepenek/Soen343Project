@@ -26,13 +26,25 @@ class MovieMapper {
 	console.log("[MovieMapper] addItem()");
     this.MovieUnitOfWork.addNew(id, item);
   }
+  removeNewItem(id, index_){
+	console.log("[MovieMapper] removeNewItem()"); 
+    this.MovieUnitOfWork.removeNew(id, index_);
+  }
   modifyItem(id, item, callback) {
 	console.log("[MovieMapper] modifyItem()");
     this.MovieUnitOfWork.addDirty(id, item);
   }
+  removeModifyItem(id, index_){
+	console.log("[MovieMapper] removeModifyItem()"); 
+    this.MovieUnitOfWork.removeDirty(id, index_);
+  }
   deleteItem(id, itemId, callback) {
 	console.log("[MovieMapper] deleteItem()");
     this.MovieUnitOfWork.addClean(id, itemId);
+  }
+  removeDeleteItem(id, index_){
+	console.log("[MovieMapper] removeDeleteItem()"); 
+    this.MovieUnitOfWork.removeClean(id, index_);
   }
   viewUncommittedWork(id,callback){
 	console.log("[MovieMapper] viewUncommittedWork()");
