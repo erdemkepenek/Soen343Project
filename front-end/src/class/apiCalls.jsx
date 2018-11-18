@@ -64,6 +64,24 @@ class ApiCalls extends Component {
             }.bind(this)
         );
     }
+
+/* ===============================================================================================================================*/
+                /*                   BOOOOOK                        */
+/* =================================================================================================================================*/
+
+    viewBook=(callback)=> {
+        axios.post('/book/view').then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if (response.data) {
+                    console.log(response.data.data)
+                    callback(response.data.data)
+                }
+
+            }.bind(this)
+        );
+    }
     viewWorkBook=(userId,callback)=>{
         axios.post('/book/save/view',{userId:userId}).then(
             function (response, err) {
@@ -84,19 +102,6 @@ class ApiCalls extends Component {
                 if(response.data){
                     callback(response.data);
                 }
-            }.bind(this)
-        );
-    }
-    viewBook=(callback)=> {
-        axios.post('/book/view').then(
-            function (response, err) {
-                console.log(response)
-                console.log(err)
-                if (response.data) {
-                    console.log(response.data.data)
-                    callback(response.data.data)
-                }
-
             }.bind(this)
         );
     }
@@ -198,6 +203,9 @@ class ApiCalls extends Component {
             }.bind(this)
         );
     }
+/* ===============================================================================================================================*/
+/*                          MOVIE                                        */
+/*==================================================================================================================================*/
     viewMovie=(callback)=>{
         axios.post('/movie/view').then(
             function (response, err) {
@@ -211,6 +219,9 @@ class ApiCalls extends Component {
             }.bind(this)
         );
     }
+/* ===============================================================================================================================*/
+/*                     MAGAZINE                                             */
+/*==================================================================================================================================*/
     viewMagazine=(callback)=>{
         axios.post('/magazine/view').then(
             function (response, err) {
@@ -224,6 +235,130 @@ class ApiCalls extends Component {
             }.bind(this)
         );
     }
+    viewWorkMagazine=(userId,callback)=>{
+        axios.post('/magazine/save/view',{userId:userId}).then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
+    commitMagazine=(userId,callback)=> {
+        axios.post('/magazine/commit',{userId:userId}).then(
+            function (response, err) {
+                console.log(response)
+                if(response.data){
+                    callback(response.data);
+                }
+            }.bind(this)
+        );
+    }
+    addMagazine=(userId,item,callback)=>{
+        console.log({userId:userId,item:item})
+        axios.post('/magazine/add',{userId:userId,item:item}).then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
+    editMagazine=(userId,item,callback)=>{
+        console.log({userId:userId,item:item})
+        axios.post('/magazine/modify',{userId:userId,item:item}).then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
+    deleteMagazine=(userId,item,callback)=>{
+        console.log({userId:userId,item:item})
+        axios.post('/magazine/delete',{userId:userId,item:item}).then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
+    removeWorkMagazineDelete=(userId,index,callback)=>{
+        console.log({userId:userId,index:index})
+        axios.post('/magazine/remove/delete',{userId:userId,index:index}).then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
+    removeWorkMagazineAdd=(userId,index,callback)=>{
+        console.log({userId:userId,index:index})
+        axios.post('/magazine/remove/add',{userId:userId,index:index}).then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
+    removeWorkMagazineModify=(userId,index,callback)=>{
+        console.log({userId:userId,index:index})
+        axios.post('/magazine/remove/modify',{userId:userId,index:index}).then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
+    addMagazineCopy=(userId,quantity,item,callback)=>{
+        console.log({userId:userId,quantity:quantity,item:item})
+        axios.post('/magazine/add/copy',{userId:userId,quantity:quantity,item:item}).then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
+/* ===============================================================================================================================*/
+/*                       Music                                            */
+/*====================================================================================================================================*/
     viewMusic=(callback)=>{
         axios.post('/music/view').then(
             function (response, err) {
@@ -236,6 +371,7 @@ class ApiCalls extends Component {
             }.bind(this)
         );
     }
+/* ===============================================================================================================================*/
 
     login=(email, password,callback)=> {
         axios.post('/user/login',{

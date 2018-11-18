@@ -145,13 +145,20 @@ class BookProfile extends Component {
             data['ISBN-13']=ISBN13;
             let temp = this;
             apicall.editBook(this.props.userProfile.UserId,data,function(callbackData){
-                apicall.addBookCopy(temp.props.userProfile.UserId,numberOfCopies,data,function(callbackData2){
+                if(numberOfCopies >0){
+                    apicall.addBookCopy(temp.props.userProfile.UserId,numberOfCopies,data,function(callbackData2){
+                        temp.setState({loading:false})
+                        temp.editConfirmation();
+                        temp.closeProfile();
+                        temp.props.history.push(`/ecatalog`);
+
+                    })
+                }else{
                     temp.setState({loading:false})
                     temp.editConfirmation();
                     temp.closeProfile();
                     temp.props.history.push(`/ecatalog`);
-
-                })
+                }
             });
         }
     }
