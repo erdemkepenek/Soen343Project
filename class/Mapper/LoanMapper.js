@@ -9,7 +9,7 @@ class LoanMapper {
     this.LoanIdentitymap = new IdentityMap();
   }
 
-  viewLoans(callback) {
+  viewAllLoans(callback) {
 	console.log("[LoanMapper] viewLoans()");
     let IDM = this.LoanIdentitymap;
     var result = IDM.getData();
@@ -17,42 +17,52 @@ class LoanMapper {
     if (result.length == 0) {
       this.LoanTDG.viewAllLoans(function(msg) {
         IDM.putData(msg);
-        callback(msg);
+        callback(msg.data);
       });
     } else {
       callback(result[0]);
     }
   }
 
-  viewLoan(userId, callback) {
-	console.log("[LoanMapper] viewLoan()");
-    this.LoanTDG.viewLoansForOneUser(userId, function (msg) {
-      IDM.putData(msg);
-      console.log(IDM.getData()[0]);
-      callback(msg);
-    });
+  //The below method helps to view loans of one specific user
+  viewUserLoans(userId,callback) {
+    console.log("[LoanMapper] viewLoans()");
+    let IDM = this.LoanIdentitymap;
+    var result = IDM.getData();
+    //console.log(result);
+    if (result.length == 0) {
+      this.LoanTDG.viewUserLoans(userId,function (msg) {
+        IDM.putData(msg);
+        callback(msg.data);
+      });
+    } else {
+      callback(result[0]);
+    }
   }
+  
 
-  addLoanItem(userId, itemId, callback) {
+  addLoanItem(userId, item, callback) {
 	console.log("[LoanMapper] addLoantItem()");
-    this.LoanUnitOfWork.addNew(userId, itemId);
+    this.LoanUnitOfWork.addNew(userId, item);
   }
 
-  addReturnItem(userId, itemId, callback) {
+  addReturnItem(userId, item, callback) {
 	console.log("[LoanMapper] addReturnItem()");
-    this.LoanUnitOfWork.addDirty(userId, itemId);
+    this.LoanUnitOfWork.addDirty(userId, item);
   }
   viewUncommittedWork(id,callback){
 	console.log("[LoanMapper] viewUncommittedWork()");
 	let view = this.LoanUnitOfWork.viewUncommittedWork(id);
 	callback(view);
   }
+
+
   commit(userId, callback) {
 	console.log("[LoanMapper] commit()");
     let items = this.LoanUnitOfWork.commit(userId);
     console.log("commitss");
     console.log(items);
-    //return items;
+  
     let add = items.registration;
     for (var i = 0; i < add.length; i++) {
       this.LoanTDG.loanItem(userId, add[i].idDesc, add[i].category, function (msg) {
@@ -61,7 +71,7 @@ class LoanMapper {
     }
     let updates = items.updates;
     for (var i = 0; i < updates.length; i++) {
-      this.LoanTDG.returnItem(userId, updates[i].id, function (msg) {
+      this.LoanTDG.returnItem(userId, updates[i].itemId, function (msg) {
         console.log(msg);
       });
     }
