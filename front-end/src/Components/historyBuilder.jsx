@@ -22,11 +22,11 @@ export function historyBuilder(history, callback) {
   }
   if (history) {
     history.map((historyData) => {
-      let historyYear = moment(historyData.time).format('YYYY');
-      let historyMonth = moment(historyData.time).format('MMMM');
-      let historyDay = parseInt(moment(historyData.time).format('DD')) < 10
-        ? moment(historyData.time).format('DD').replace("0", "")
-        : moment(historyData.time).format('DD');
+      let historyYear = moment(historyData.timeStamp).format('YYYY');
+      let historyMonth = moment(historyData.timeStamp).format('MMMM');
+      let historyDay = parseInt(moment(historyData.timeStamp).format('DD')) < 10
+        ? moment(historyData.timeStamp).format('DD').replace("0", "")
+        : moment(historyData.timeStamp).format('DD');
       year[historyYear][historyMonth][historyDay].push(historyData);
       year[historyYear][historyMonth]["filled"] = true;
     })

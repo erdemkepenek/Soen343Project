@@ -10,78 +10,18 @@ import {Redirect} from "react-router";
 import DataTable from '../Components/Common/table/table'
 import RedirectItem from "./redirectItem"
 let tableArray= []
-const options = [
-    { key: 1, text: 'Book', value: "Book" },
-    { key: 2, text: 'Magazine', value: "Magazine" },
-    { key: 3, text: 'Music', value: "Music" },
-    { key: 4, text: 'Movie', value: "Movie" },
-]
 
 class Cart extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            loading:false,
         }
     }
     componentDidMount() {
         this.props.history.push(`/cart`);
-        tableArray= [];
-        let book={
-            Title: "Marc's book",
-            Author: "marc noon",
-            Format: "marc format",
-            Pages: 567,
-            Publisher: "marc again",
-            Language: "marc's language",
-            ISBN10: 1234567890,
-            ISBN13: "7927927892",
-            Quantity: 67,
-            Type: "Book",
-        }
-        tableArray.push(book);
-        this.forceUpdate();
 
-        let music={
-            Title: "marc' music",
-            Artist: "marc noon",
-            MusicType: "marc type",
-            Label: "label marc",
-            ReleaseDate: "marc again",
-            ASIN: "TY157373",
-            Quantity: 67,
-            Type: "Music",
-        }
-        tableArray.push(music);
-        this.forceUpdate();
 
-        let magazine={
-            Title: "marc' magazine",
-            Publisher: "marc again",
-            Language: "marc's language",
-            Label: "label marc",
-            ISBN10: 1234567890,
-            ISBN13: "7927927892",
-            Quantity: 67,
-            Type: "Magazine",
-        }
-        tableArray.push(magazine);
-        this.forceUpdate();
-
-        let movie={
-            Title: "marc' movie",
-            Director: "marc noon",
-            Producers: "marc type",
-            Actors: "label marc",
-            Language: "marc's language",
-            Subtitles: "marc's language",
-            Dubbed: "marc's language",
-            ReleaseDate: "marc again",
-            RunTime: "TY157373",
-            Quantity: 67,
-            Type: "Movie",
-        }
-        tableArray.push(movie);
-        this.forceUpdate();
     }
 
     closeProfile=()=>{
@@ -139,6 +79,7 @@ class Cart extends Component {
                             columnItems={columnItems}
                             data={tableItems}
                             itemsPerPage={10}
+                            loading={this.state.loading}
                             clickRow={this.openProfile}/>
                     </div>
 

@@ -6,18 +6,20 @@ import HeaderComponent from "./Common/header/header";
 import FooterComponent from "./Common/footer/footer";
 import { withRouter } from "react-router-dom";
 import {
-  Button,
-  Form,
-  Grid,
-  Header,
-  Icon,
-  Image,
-  Message,
-  Segment
+    Button, Dropdown,
+    Form,
+    Grid,
+    Header,
+    Icon,
+    Image,
+    Message,
+    Segment
 } from "semantic-ui-react";
 import { Redirect } from "react-router";
 
-import {notification, Popconfirm} from "antd";
+import {Modal, notification} from "antd";
+
+let options=[];
 
 class MagazineProfile extends Component {
   constructor(props) {
@@ -40,15 +42,30 @@ class MagazineProfile extends Component {
       quantity: this.props.magazineProfile
         ? this.props.magazineProfile.Quantity
         : "",
+        available: this.props.magazineProfile? this.props.magazineProfile.available : '',
+        copy: '',
       errorTitle: false,
       errorPublisher: false,
       errorLanguage: false,
       errorLabel: false,
       errorISBN10: false,
       errorISBN13: false,
-      errorQuantity: false
+        modal1Visible:false,
+        deleteID: '',
+        loading:false,
     };
   }
+    componentDidMount(){
+        if(this.props.magazineProfile && this.props.userProfile.type ===1 && !this.props.rent && !this.props.cart){
+            options=[
+                {text:"Copy ID 1", value:1,key:1},
+                {text:"Copy ID 2", value:2,key:2},
+                {text:"Copy ID 3", value:3,key:3},
+                {text:"Copy ID 4", value:4,key:4},
+                {text:"All Copies", value:null,key:null},
+            ]
+        }
+    }
 
   changeTitle = e => {
     this.setState({ Title: e.target.value });
@@ -74,10 +91,13 @@ class MagazineProfile extends Component {
     this.setState({ ISBN10: e.target.value });
     this.setState({ errorISBN13: false });
   };
-  changeQuantity = e => {
-    this.setState({ quantity: e.target.value });
-    this.setState({ errorQuantity: false });
-  };
+    changeCopy=(e)=>{
+        if(e.target.value > 0 || !e.target.value){
+            this.setState({copy:e.target.value})
+        }else{
+            this.setState({copy:0})
+        }
+    }
 
   editMagazine = () => {
     let {
@@ -87,7 +107,7 @@ class MagazineProfile extends Component {
       label,
       ISBN10,
       ISBN13,
-      quantity
+        copy
     } = this.state;
     if (
       !Title ||
@@ -95,8 +115,7 @@ class MagazineProfile extends Component {
       !language ||
       !label ||
       !ISBN10 ||
-      !ISBN13 ||
-      !quantity
+      !ISBN13
     ) {
       if (!Title) {
         this.setState({ errorTitle: true });
@@ -116,9 +135,6 @@ class MagazineProfile extends Component {
       if (!ISBN13) {
         this.setState({ errorISBN13: true });
       }
-      if (!quantity) {
-        this.setState({ errorQuantity: true });
-      }
       this.magazineError();
     } else {
       let data = {
@@ -128,8 +144,8 @@ class MagazineProfile extends Component {
         ISBN13: ISBN13,
         Language: language,
         Label: label,
-        Quantity: quantity
       };
+      console.log(copy)
       console.log(data);
 
       this.editConfirmation();
@@ -154,7 +170,7 @@ class MagazineProfile extends Component {
       label,
       ISBN10,
       ISBN13,
-      quantity
+        copy,
     } = this.state;
     if (
       !Title ||
@@ -162,8 +178,7 @@ class MagazineProfile extends Component {
       !language ||
       !label ||
       !ISBN10 ||
-      !ISBN13 ||
-      !quantity
+      !ISBN13
     ) {
       if (!Title) {
         this.setState({ errorTitle: true });
@@ -183,9 +198,6 @@ class MagazineProfile extends Component {
       if (!ISBN13) {
         this.setState({ errorISBN13: true });
       }
-      if (!quantity) {
-        this.setState({ errorQuantity: true });
-      }
       this.magazineError();
     } else {
       let data = {
@@ -195,8 +207,8 @@ class MagazineProfile extends Component {
         ISBN13: ISBN13,
         Language: language,
         Label: label,
-        Quantity: quantity
       };
+      console.log(copy)
       console.log(data);
 
       this.addConfirmation();
@@ -243,10 +255,20 @@ class MagazineProfile extends Component {
     {
         this.props.closeProfile();
     }
-    return=()=>{
-
+    handleModal=(e,modal1Visible)=> {
+        e.preventDefault()
+        this.setState({ modal1Visible, deleteID:''});
     }
-    addToCart=()=>{
+    deleteCopy=(data)=>{
+        this.setState({deleteID:data.value})
+    }
+    backToWork=()=>{
+        this.props.history.push(`/workecatalog`);
+        if(this.props.musicProfile){
+            this.props.closeProfile();
+        }
+    }
+    removeFromWork=()=>{
 
     }
 
@@ -259,56 +281,75 @@ class MagazineProfile extends Component {
     }else {
       return (
         <div className="main-container">
+            <Modal
+                centered
+                closable
+                title="Are you sure to Delete copy of this Magazine?"
+                visible={this.state.modal1Visible}
+                onOk={this.deleteMagazine}
+                okText="Delete"
+                okButtonProps={{disabled: !this.state.deleteID}}
+                onCancel={(e)=>this.handleModal(e,false)}
+            >
+                <p>Note: Deleting all copies of the book will result deleting this record.</p>
+                <div className='MainContainer-upper-container-button' style={{textAlign:'center'}}>
+                    <Dropdown placeholder="Choose Copy to Delete" value={this.state.deleteID}
+                              onChange={(e, value) => this.deleteCopy(value)} options={options}
+                              selection/>
+                </div>
+            </Modal>
           <HeaderComponent closeProfileItem={this.props.magazineProfile ? this.closeProfile : ''} />
           <div className="MainContainer">
             <div className="MainContainer-upper-container">
               <div className="MainContainer-upper-container-text">
                 <div className="MainContainer-upper-container-first-text">
                   {this.props.magazineProfile?
-                      (this.props.userProfile.type ===0 || this.props.rent ?
+                      (this.props.userProfile.type ===0 || this.props.rent || this.props.work?
                           "Magazine Details"
                         : "Edit Magazine")
                         : "Add Magazine"}
                 </div>
                 <div className="MainContainer-upper-container-second-text">
                   {this.props.magazineProfile?
-                  (this.props.userProfile.type ===0 || this.props.rent ?
+                  (this.props.userProfile.type ===0 || this.props.rent || this.props.work?
                       "You can see the details of magazine"
                       : "You can edit a magazine")
                     : "You can add a new magazine to the system!"}
                 </div>
               </div>
                 <div className='MainContainer-upper-container-button'>
+                    {this.props.work?<Button content='Back to Work' onClick={this.backToWork}/>:
                     <Button icon='user' content={this.props.rent?'Back to Rentals' : (this.props.cart? 'Back to Cart' : 'Back to Catalog')}
-                            onClick={this.props.rent? this.backToRentals : (this.props.cart? this.backToCart : this.backToCatalog)}/>
-                    {this.props.magazineProfile && this.props.userProfile.type ===1 && !this.props.rent && !this.props.cart?
-                        <Popconfirm title="Are you sure to delete this Magazine?" onConfirm={this.deleteMagazine} placement="bottomRight" okText="Yes" cancelText="No">
-                            <Button icon='user' content='Delete Magazine'/>
-                        </Popconfirm>
+                            onClick={this.props.rent? this.backToRentals : (this.props.cart? this.backToCart : this.backToCatalog)}/>}
+                    {this.props.magazineProfile && this.props.userProfile.type ===1 && !this.props.rent && !this.props.cart && !this.props.work?
+                            <Button icon='user' content='Delete Magazine' onClick={(e)=>this.handleModal(e,true)}/>
                         : ''}
                 </div>
             </div>
-            <Form size="large" className="SettingsForm">
+            <Form size="large" className="SettingsForm" loading={this.state.loading}>
               <Header
                 as="h2"
                 className="login-Header"
                 style={{ marginTop: "3%" }}
                 textAlign="center"
               >
-                {" "}
                 {this.props.magazineProfile?
-              (this.props.userProfile.type ===0 || this.props.rent  ?
+              (this.props.userProfile.type ===0 || this.props.rent || this.props.work ?
                   "Magazine Profile"
                   : "Edit a Magazine")
                   : "Create a Magazine"}
               </Header>
+                {this.props.magazineProfile && this.props.userProfile.type ===1 && !this.props.work && !this.props.rent && !this.props.cart?
+                    <Header as='h3' className='quantityHeader'>Quantity: ({this.state.quantity})</Header>: ''}
+                {this.props.magazineProfile && !this.props.work && !this.props.rent && !this.props.cart?
+                    <Header as='h3' className='quantityHeader'>Available: ({this.state.available})</Header>: ''}
                 <Form.Input
                   fluid
                   icon="newspaper outline"
                   iconPosition="left"
                   placeholder="Bel Ami"
                   label="Title:"
-                  disabled={this.props.userProfile.type ===0 || this.props.rent}
+                  disabled={this.props.userProfile.type ===0 || this.props.rent|| this.props.work}
                   value={this.state.Title}
                   error={this.state.errorTitle}
                   onChange={this.changeTitle}
@@ -318,7 +359,7 @@ class MagazineProfile extends Component {
                 icon="user"
                 iconPosition="left"
                 placeholder="John"
-                disabled={this.props.userProfile.type ===0 || this.props.rent}
+                disabled={this.props.userProfile.type ===0 || this.props.rent|| this.props.work}
                 value={this.state.publisher}
                 error={this.state.errorPublisher}
                 onChange={this.changePublisher}
@@ -329,7 +370,7 @@ class MagazineProfile extends Component {
                 icon="language"
                 iconPosition="left"
                 label="Language: "
-                disabled={this.props.userProfile.type ===0 || this.props.rent}
+                disabled={this.props.userProfile.type ===0 || this.props.rent|| this.props.work}
                 placeholder="Ex: English"
                 value={this.state.language}
                 error={this.state.errorLanguage}
@@ -340,7 +381,7 @@ class MagazineProfile extends Component {
                 icon="tag"
                 iconPosition="left"
                 label="Label: "
-                disabled={this.props.userProfile.type ===0 || this.props.rent}
+                disabled={this.props.userProfile.type ===0 || this.props.rent|| this.props.work}
                 placeholder="Label"
                 value={this.state.label}
                 error={this.state.errorLabel}
@@ -352,7 +393,7 @@ class MagazineProfile extends Component {
                 icon="id card"
                 iconPosition="left"
                 placeholder="Ex: 1524796972"
-                disabled={this.props.userProfile.type ===0 ||  this.props.rent}
+                disabled={this.props.userProfile.type ===0 ||  this.props.rent|| this.props.work}
                 value={this.state.ISBN10}
                 error={this.state.errorISBN10}
                 onChange={this.changeISBN10}
@@ -361,27 +402,24 @@ class MagazineProfile extends Component {
               />
               <Form.Input
                 fluid
-                icon="sort numeric down"
-                iconPosition="left"
-                placeholder="Ex: 3"
-                value={this.state.quantity}
-                disabled={this.props.userProfile.type ===0 || this.props.rent}
-                error={this.state.errorQuantity}
-                onChange={this.changeQuantity}
-                label="Quantity: "
-                type="number"
-              />
-              <Form.Input
-                fluid
                 icon="id card"
                 iconPosition="left"
-                disabled={this.props.userProfile.type ===0 || this.props.rent}
+                disabled={this.props.userProfile.type ===0 || this.props.rent|| this.props.work}
                 label="ISBN-13: "
                 placeholder="Ex: 978-1524796976"
                 value={this.state.ISBN13}
                 error={this.state.errorISBN13}
                 onChange={this.changeISBN13}
               />
+                {this.props.userProfile.type ===1 && !this.props.rent && !this.props.cart && !this.props.work?
+                    <Form.Input
+                        fluid icon='sort numeric down'
+                        iconPosition='left'
+                        placeholder='Ex: 1'
+                        value={this.state.copy}
+                        onChange={this.changeCopy}
+                        label={this.props.magazineProfile ? 'Number of Copies would you like to add:' : 'Number of Copies would you like to Add: (default: 1)' }
+                        type= "number"/>:''}
               {this.props.userProfile.type ===1 && !this.props.rent?
               <Button
                 className="login-button"
@@ -389,26 +427,14 @@ class MagazineProfile extends Component {
                 size="large"
                 onClick={
                   this.props.magazineProfile
-                    ? this.editMagzine
-                    : this.addMagzine
+                    ? (this.props.work ? this.removeFromWork :this.editMagazine)
+                    : this.addMagazine
                 }
               >
-                {this.props.magazineProfile ? "Edit Magazine" : "Add Magazine"}
-              </Button>: (this.props.rent || this.props.cart?
-                          <Button
-                              className="login-button"
-                              fluid
-                              size="large"
-                              onClick={
-                                  this.props.rent
-                                      ? this.return
-                                      : this.addToCart
-                              }
-                          >
-                              {this.props.rent ? "Return Magazine" : "Add Magazine to Cart"}
-                          </Button>: '')}
+                {this.props.magazineProfile ?(this.props.work? "Remove From Work": "Edit Magazine") : "Add Magazine"}
+              </Button>: ''}
             </Form>
-              {this.props.rent || this.props.cart || !this.props.magazineProfile ?
+              {this.props.rent || this.props.cart || !this.props.magazineProfile || this.props.work ?
                   '':
               <div className='nextprevButton-container'>
                   <Button icon='long arrow alternate left' content='Previus Item' onClick={this.backToCatalog}/>

@@ -20,7 +20,7 @@ class LoanMapper {
         callback(msg.data);
       });
     } else {
-      callback(result[0]);
+      callback(result[0].data);
     }
   }
 
@@ -36,7 +36,7 @@ class LoanMapper {
         callback(msg.data);
       });
     } else {
-      callback(result[0]);
+      callback(result[0].data);
     }
   }
 

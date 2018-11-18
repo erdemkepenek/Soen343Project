@@ -48,7 +48,7 @@ router.post("/modify", function (req, res) {
 router.post("/delete", function (req, res) {
     let user = req.body;
     res.setHeader('Content-Type', 'application/json');
-    myController.userDelete(user.userId,user.data.UserId,function(msg){	
+    myController.userDelete(user.userId,user.data,function(msg){
 		res.send(JSON.stringify(msg));
 	})
 });

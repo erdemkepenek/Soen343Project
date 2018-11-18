@@ -24,13 +24,23 @@ class Catalog extends Component {
         super(props);
         this.state = {
             addItem: '',
+            loading:false
         }
     }
 
     componentDidMount() {
         this.props.history.push(`/ecatalog`);
-            tableArray= [];
-            let this1= this;
+        this.loadCatalog();
+        }
+    
+    closeProfile=()=>{
+            this.setState({profile: ""})
+    }
+    loadCatalog=()=>{
+        this.setState({loading:true})
+        tableArray= [];
+        let this1= this;
+
         apicall.viewBook(function(dataBook){
             dataBook.map((bookData)=>{
                 bookData.Type='Book'
@@ -50,16 +60,14 @@ class Catalog extends Component {
                         dataMusic.map((musicData)=>{
                             musicData.Type='Music'
                             tableArray.push(musicData)
+                            this1.setState({loading:false})
                             this1.forceUpdate();
                         })
                     });
                 });
             });
         });
-        }
-    
-        closeProfile=()=>{
-            this.setState({profile: ""})
+
     }
     addItem=(data)=>{
         this.setState({addItem:data.value})
@@ -83,12 +91,14 @@ class Catalog extends Component {
         }
     }
     
-        openProfile=(data)=>{
-            console.log(data);
-            this.props.history.push(`/ecatalog/`+data.Title);
-            this.setState({profile: data})
-        }
-
+    openProfile=(data)=>{
+        console.log(data);
+        this.props.history.push(`/ecatalog/`+data.Title);
+        this.setState({profile: data})
+    }
+    work=()=>{
+        this.props.history.push(`/workecatalog`);
+    }
     render() {
         if(!this.props.userProfile) {
             return (<Redirect to={'/'}/>);
@@ -115,36 +125,40 @@ class Catalog extends Component {
                 ]
                 tableItems.push(arrData);
             })
-            return (
-                <div className='main-container'>
-                    <HeaderComponent/>
-                    <div className='MainContainer'>
-                        <div className="MainContainer-upper-container">
-                            <div className="MainContainer-upper-container-text">
-                                <div className="MainContainer-upper-container-first-text">
-                                    Catalog
+                return (
+                    <div className='main-container'>
+                        <HeaderComponent/>
+                        <div className='MainContainer'>
+                            <div className="MainContainer-upper-container">
+                                <div className="MainContainer-upper-container-text">
+                                    <div className="MainContainer-upper-container-first-text">
+                                        Catalog
+                                    </div>
+                                    <div className="MainContainer-upper-container-second-text">
+                                        You can select one of the item to see their details!
+                                    </div>
                                 </div>
-                                <div className="MainContainer-upper-container-second-text">
-                                    You can select one of the item to see their details!
-                                </div>
+                                {this.props.userProfile.type === 1 ?
+                                    <div className='MainContainer-upper-container-button'>
+                                        <Button content='Work Catalog' onClick={this.work}/>
+                                        <Dropdown placeholder="Add Item" value={this.state.addItem}
+                                                  onChange={(e, value) => this.addItem(value)} options={options}
+                                                  selection/>
+                                    </div> : ''}
+
+
                             </div>
-                            {this.props.userProfile.type === 1?
-                            <div className='MainContainer-upper-container-button'>
-                                <Dropdown placeholder="Add Item" value={this.state.addItem} onChange={(e,value)=>this.addItem(value)} options={options}  selection />
-                            </div>:''}
-
-                            
+                            <DataTable
+                                columnItems={columnItems}
+                                data={tableItems}
+                                itemsPerPage={10}
+                                loading={this.state.loading}
+                                clickRow={this.openProfile}/>
                         </div>
-                        <DataTable
-                            columnItems={columnItems}
-                            data={tableItems}
-                            itemsPerPage={10}
-                            clickRow={this.openProfile}/>
-                    </div>
 
-                    <FooterComponent/>
-                </div>
-            )
+                        <FooterComponent/>
+                    </div>
+                )
         }
     }
 }

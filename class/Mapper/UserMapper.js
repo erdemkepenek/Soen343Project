@@ -79,7 +79,7 @@ class UserMapper {
     }
     let erase = users.erase;
     for (var i = 0; i < erase.length; i++) {
-      this.UserTDG.deleteUser(erase[i], function(msg) {
+      this.UserTDG.deleteUser(erase[i].UserId, function(msg) {
         g_msg.deletion.push(msg);
       });
     }
