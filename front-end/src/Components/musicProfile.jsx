@@ -207,13 +207,13 @@ class MusicProfile extends Component {
     }
     backToCart= ()=> {
         this.props.history.push(`/cart`);
-        if(this.props.magazineProfile){
+        if(this.props.musicProfile){
             this.props.closeProfile();
         }
     }
     backToRentals= ()=> {
         this.props.history.push(`/rentals`);
-        if(this.props.magazineProfile){
+        if(this.props.musicProfile){
             this.props.closeProfile();
         }
     }
@@ -376,10 +376,11 @@ class MusicProfile extends Component {
                                 <Form.Input
                                     fluid icon='sort numeric down'
                                     iconPosition='left'
-                                    placeholder='Ex: 1'
-                                    value={this.state.copy}
+                                    placeholder='Default: 0'
+                                    value={this.props.musicProfile ? this.state.copy : 1}
+                                    disabled={!this.props.musicProfile}
                                     onChange={this.changeCopy}
-                                    label={this.props.musicProfile ? 'Number of Copies would you like to Add:' : 'Number of Copies would you like to Add: (default: 1)' }
+                                    label={this.props.musicProfile ? 'Number of Copies would you like to Add:' : 'Number of Copies will be added as Default:' }
                                     type= "number"/>:''}
                             {this.props.userProfile.type ===1 && !this.props.rent?
                             <Button className='login-button' fluid size='large' onClick={this.props.musicProfile?(this.props.work? this.removeFromWork: this.editMusic) :this.addMusic}>

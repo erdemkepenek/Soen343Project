@@ -8,6 +8,10 @@ import {withRouter} from 'react-router-dom'
 import {Button, Dropdown, Form, Grid, Header, Icon, Image, Message, Segment} from 'semantic-ui-react'
 import {Redirect} from "react-router";
 import {notification,Modal,Tooltip} from "antd";
+import ApiCalls from '../class/apiCalls'
+
+
+let apicall = new ApiCalls;
 
 let options=[];
 
@@ -80,7 +84,7 @@ class BookProfile extends Component {
         this.setState({errorISBN10: false})
     }
     changeISBN13=(e)=>{
-        this.setState({ISBN10:e.target.value})
+        this.setState({ISBN13:e.target.value})
         this.setState({errorISBN13: false})
     }
     changeCopy=(e)=>{
@@ -126,10 +130,11 @@ class BookProfile extends Component {
                 Format: format,
                 Pages: pages,
                 Publisher: publisher,
-                ISBN10: ISBN10,
-                ISBN13: ISBN13,
                 Language: language,
             }
+            data.category='book';
+            data['ISBN-10']=ISBN10;
+            data['ISBN-13']=ISBN13;
             console.log(copy)
             console.log(data)
 
@@ -178,21 +183,29 @@ class BookProfile extends Component {
             }
             this.bookError();
         }else{
+            this.setState({loading:true})
             let data={
                 Title: Title,
                 Author: author,
                 Format: format,
                 Pages: pages,
                 Publisher: publisher,
-                ISBN10: ISBN10,
-                ISBN13: ISBN13,
                 Language: language,
+                category: 'book'
             }
+            data['ISBN-10']=ISBN10;
+            data['ISBN-13']=ISBN13;
+            let temp = this;
+            apicall.addBook(this.props.userProfile.UserId,data,function(dataRentals){
+                console.log(dataRentals)
+                temp.setState({loading:false})
+                temp.addConfirmation();
+                temp.props.history.push(`/ecatalog`);
+
+            });
             console.log(copy)
             console.log(data)
 
-            this.addConfirmation();
-            this.props.history.push(`/ecatalog`);
         }
     }
 
@@ -201,7 +214,7 @@ class BookProfile extends Component {
     addConfirmation = () => {
         notification.success({
             message: 'Sucess',
-            description: 'You have Editted a Book!',
+            description: 'Created Book has been added to Work Table!',
             duration:6,
         });
     };
@@ -225,13 +238,13 @@ class BookProfile extends Component {
     }
     backToCart= ()=> {
         this.props.history.push(`/cart`);
-        if(this.props.magazineProfile){
+        if(this.props.bookProfile){
             this.props.closeProfile();
         }
     }
     backToRentals= ()=> {
         this.props.history.push(`/rentals`);
-        if(this.props.magazineProfile){
+        if(this.props.bookProfile){
             this.props.closeProfile();
         }
     }
@@ -255,7 +268,7 @@ class BookProfile extends Component {
     }
     backToWork=()=>{
         this.props.history.push(`/workecatalog`);
-        if(this.props.musicProfile){
+        if(this.props.bookProfile){
             this.props.closeProfile();
         }
     }
@@ -412,10 +425,11 @@ class BookProfile extends Component {
                                 <Form.Input
                                     fluid icon='sort numeric down'
                                     iconPosition='left'
-                                    placeholder='Ex: 1'
-                                    value={this.state.copy}
+                                    placeholder='Default: 0'
+                                    value={this.props.bookProfile ? this.state.copy : 1}
+                                    disabled={!this.props.bookProfile}
                                     onChange={this.changeCopy}
-                                    label={this.props.bookProfile ? 'Number of Copies would you like to Add:' : 'Number of Copies would you like to Add: (default: 1)' }
+                                    label={this.props.bookProfile ? 'Number of Copies would you like to Add:' : 'Number of Copies will be added as Default:' }
                                     type= "number"/>:''}
                             {this.props.userProfile.type ===1 && !this.props.rent?
                             <Button className='login-button' fluid size='large' onClick={this.props.bookProfile? (this.props.work? this.removeFromWork:this.editBook) :this.addBook}>

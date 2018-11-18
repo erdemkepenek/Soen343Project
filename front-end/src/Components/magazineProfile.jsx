@@ -264,7 +264,7 @@ class MagazineProfile extends Component {
     }
     backToWork=()=>{
         this.props.history.push(`/workecatalog`);
-        if(this.props.musicProfile){
+        if(this.props.magazineProfile){
             this.props.closeProfile();
         }
     }
@@ -415,10 +415,11 @@ class MagazineProfile extends Component {
                     <Form.Input
                         fluid icon='sort numeric down'
                         iconPosition='left'
-                        placeholder='Ex: 1'
-                        value={this.state.copy}
+                        placeholder='Default: 0'
+                        value={this.props.magazineProfile ? this.state.copy : 1}
+                        disabled={!this.props.magazineProfile}
                         onChange={this.changeCopy}
-                        label={this.props.magazineProfile ? 'Number of Copies would you like to add:' : 'Number of Copies would you like to Add: (default: 1)' }
+                        label={this.props.magazineProfile ? 'Number of Copies would you like to add:' : 'Number of Copies will be added as Default:' }
                         type= "number"/>:''}
               {this.props.userProfile.type ===1 && !this.props.rent?
               <Button

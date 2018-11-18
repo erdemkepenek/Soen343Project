@@ -27,13 +27,13 @@ class RedirectItem extends Component {
 
     render() {
     if (this.props.profile.Type === "Book"){
-        return(<BookProfile cart={this.props.cart} rent={this.props.rent} bookProfile= {this.props.profile} closeProfile= {this.closeProfile}/>)
+        return(<BookProfile cart={this.props.cart} work={this.props.work} rent={this.props.rent} bookProfile= {this.props.profile} closeProfile= {this.closeProfile}/>)
     }
-    else if (this.props.profile.Type === "Music"){return(<MusicProfile cart={this.props.cart} rent={this.props.rent} musicProfile= {this.props.profile} closeProfile= {this.closeProfile}/>)}
+    else if (this.props.profile.Type === "Music"){return(<MusicProfile cart={this.props.cart} work={this.props.work} rent={this.props.rent} musicProfile= {this.props.profile} closeProfile= {this.closeProfile}/>)}
 
-    else if (this.props.profile.Type === "Magazine") {return(<MagazineProfile  cart={this.props.cart} rent={this.props.rent} magazineProfile= {this.props.profile} closeProfile= {this.closeProfile}/>)}
+    else if (this.props.profile.Type === "Magazine") {return(<MagazineProfile  cart={this.props.cart} work={this.props.work} rent={this.props.rent} magazineProfile= {this.props.profile} closeProfile= {this.closeProfile}/>)}
 
-    else  {return(<MovieProfile cart={this.props.cart} rent={this.props.rent} movieProfile= {this.props.profile} closeProfile= {this.closeProfile}/>)}
+    else  {return(<MovieProfile cart={this.props.cart} rent={this.props.rent} work={this.props.work} movieProfile= {this.props.profile} closeProfile= {this.closeProfile}/>)}
         }   
 }
 function mapStateToProps(state){

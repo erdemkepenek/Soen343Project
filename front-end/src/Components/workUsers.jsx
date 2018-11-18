@@ -160,7 +160,7 @@ class WorkUsers extends Component {
                         <div className="MainContainer-upper-container">
                             <div className="MainContainer-upper-container-text">
                                 <div className="MainContainer-upper-container-first-text">
-                                    Users
+                                    Work Users
                                 </div>
                                 <div className="MainContainer-upper-container-second-text">
                                     You can select one of the users to see their details!

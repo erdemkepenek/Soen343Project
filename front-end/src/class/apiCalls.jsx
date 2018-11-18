@@ -64,12 +64,35 @@ class ApiCalls extends Component {
             }.bind(this)
         );
     }
-    viewBook=(callback)=>{
-        axios.post('/book/view').then(
+    viewWorkBook=(userId,callback)=>{
+        axios.post('/book/save/view',{userId:userId}).then(
             function (response, err) {
                 console.log(response)
                 console.log(err)
                 if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
+    commitBook=(userId,callback)=> {
+        axios.post('/book/commit',{userId:userId}).then(
+            function (response, err) {
+                console.log(response)
+                if(response.data){
+                    callback(response.data);
+                }
+            }.bind(this)
+        );
+    }
+    viewBook=(callback)=> {
+        axios.post('/book/view').then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if (response.data) {
                     console.log(response.data.data)
                     callback(response.data.data)
                 }
@@ -77,8 +100,9 @@ class ApiCalls extends Component {
             }.bind(this)
         );
     }
-    addBook=(data,callback)=>{
-        axios.post('/book/add',data).then(
+    addBook=(userId,item,callback)=>{
+        console.log({userId:userId,item:item})
+        axios.post('/book/add',{userId:userId,item:item}).then(
             function (response, err) {
                 console.log(response)
                 console.log(err)

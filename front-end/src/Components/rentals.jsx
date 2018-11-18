@@ -44,19 +44,19 @@ class Rentals extends Component {
 
         apicall.viewRentalsAdmin(function(dataRentals){
             dataRentals.books.map((bookData)=>{
-                bookData.itemType='Book'
+                bookData.Type='Book'
                 tableArray.push(bookData)
             })
             dataRentals.magazines.map((magazineData)=>{
-                magazineData.itemType='Magazine'
+                magazineData.Type='Magazine'
                 tableArray.push(magazineData)
             })
             dataRentals.music.map((musicData)=>{
-                musicData.itemType='Music'
+                musicData.Type='Music'
                 tableArray.push(musicData)
             })
             dataRentals.movies.map((movieData)=>{
-                movieData.itemType='Movie'
+                movieData.Type='Movie'
                 tableArray.push(movieData)
             })
             this1.setState({loading:false})
@@ -72,19 +72,19 @@ class Rentals extends Component {
 
         apicall.viewRentalsClient(this.props.userProfile.UserId,function(dataRentals){
             dataRentals.books.map((bookData)=>{
-                bookData.itemType='Book'
+                bookData.Type='Book'
                 tableArray.push(bookData)
             })
             dataRentals.magazines.map((magazineData)=>{
-                magazineData.itemType='Magazine'
+                magazineData.Type='Magazine'
                 tableArray.push(magazineData)
             })
             dataRentals.music.map((musicData)=>{
-                musicData.itemType='Music'
+                musicData.Type='Music'
                 tableArray.push(musicData)
             })
             dataRentals.movies.map((movieData)=>{
-                movieData.itemType='Movie'
+                movieData.Type='Movie'
                 tableArray.push(movieData)
             })
             this1.setState({loading:false})
@@ -125,7 +125,7 @@ class Rentals extends Component {
                 let arrData=[
                     {value : itemData.id, render : itemData.id, type : 'number'},
                     {value : itemData.Title, render : itemData.Title, type : 'text'},
-                    {value : itemData.itemType, render : itemData.itemType, type : 'text'},
+                    {value : itemData.Type, render : itemData.Type, type : 'text'},
                     {value : itemData.UserId, render : itemData.UserId, type : 'number'},
                     {value : itemData.loanDate, render : itemData.loanDate, type : 'date'},
                     {value : itemData.returnDate, render : itemData.returnDate, type : 'date'},

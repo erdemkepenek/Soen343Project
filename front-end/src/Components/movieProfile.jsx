@@ -217,13 +217,13 @@ class MovieProfile extends Component {
     }
     backToCart= ()=> {
         this.props.history.push(`/cart`);
-        if(this.props.magazineProfile){
+        if(this.props.movieProfile){
             this.props.closeProfile();
         }
     }
     backToRentals= ()=> {
         this.props.history.push(`/rentals`);
-        if(this.props.magazineProfile){
+        if(this.props.movieProfile){
             this.props.closeProfile();
         }
     }
@@ -262,7 +262,7 @@ class MovieProfile extends Component {
     }
     backToWork=()=>{
         this.props.history.push(`/workecatalog`);
-        if(this.props.musicProfile){
+        if(this.props.movieProfile){
             this.props.closeProfile();
         }
     }
@@ -437,10 +437,11 @@ class MovieProfile extends Component {
                                 <Form.Input
                                     fluid icon='sort numeric down'
                                     iconPosition='left'
-                                    placeholder='Ex: 1'
-                                    value={this.state.copy}
+                                    placeholder='Default: 0'
+                                    value={this.props.movieProfile ? this.state.copy : 1}
+                                    disabled={!this.props.movieProfile}
                                     onChange={this.changeCopy}
-                                    label={this.props.movieProfile ? 'Number of Copies would you like to Add:' : 'Number of Copies would you like to Add: (default: 1)' }
+                                    label={this.props.movieProfile ? 'Number of Copies would you like to Add:' : 'Number of Copies will be added as Default:' }
                                     type= "number"/>:''}
                             {this.props.userProfile.type ===1 && !this.props.rent?
                             <Button className='login-button' fluid size='large' onClick={this.props.movieProfile?(this.props.work? this.removeFromWork: this.editmovie) :this.addmovie}>

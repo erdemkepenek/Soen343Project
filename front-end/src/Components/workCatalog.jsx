@@ -8,7 +8,7 @@ import {withRouter} from 'react-router-dom'
 import {Button, Form, Grid, Icon, Image, Menu, Message, Segment} from 'semantic-ui-react'
 import {Redirect} from "react-router";
 import DataTable from '../Components/Common/table/table';
-import UserProfile from "./userProfile";
+import RedirectItem from "./redirectItem"
 import ApiCalls from '../class/apiCalls'
 import {Modal, notification,Tooltip} from "antd";
 
@@ -29,48 +29,30 @@ class WorkUsers extends Component {
         this.loadUnitofWorkUsers();
     }
     loadUnitofWorkUsers=()=>{
-        /*this.setState({loading:true})*/
+        this.setState({loading:true})
         tableArray= [];
         let this1=this;
-        /*apicall.viewUncommitted(this.props.userProfile.UserId,function(dataWork){
+        apicall.viewWorkBook(this.props.userProfile.UserId,function(dataWork){
             console.log(dataWork)
             dataWork.registration.map((dataRegistration)=>{
-                dataRegistration.typeWork = 'Add User'
-                if(dataRegistration.type ===1){
-                    dataRegistration.userType='Administrator'
-                }else if(dataRegistration.type ===0){
-                    dataRegistration.userType='Client'
-                }else{
-                    dataRegistration.userType=''
-                }
+                dataRegistration.Type = 'Book'
+                dataRegistration.typeWork = 'Add Book'
                 tableArray.push(dataRegistration)
             })
             dataWork.erase.map((dataErase)=>{
-                if(dataErase.type ===1){
-                    dataErase.userType='Administrator'
-                }else if(dataErase.type ===0){
-                    dataErase.userType='Client'
-                }else{
-                    dataErase.userType=''
-                }
-                dataErase.typeWork = 'Delete User'
+                dataErase.Type = 'Book'
+                dataErase.typeWork = 'Delete Book'
                 tableArray.push(dataErase)
             })
             dataWork.updates.map((dataUpdates)=>{
-                if(dataUpdates.type ===1){
-                    dataUpdates.userType='Administrator'
-                }else if(dataUpdates.type ===0){
-                    dataUpdates.userType='Client'
-                }else{
-                    dataUpdates.userType=''
-                }
-                dataUpdates.typeWork = 'Modify User'
+                dataUpdates.Type = 'Book'
+                dataUpdates.typeWork = 'Modify Book'
                 tableArray.push(dataUpdates)
             })
             this1.setState({loading:false})
             this1.forceUpdate();
 
-        });*/
+        });
     }
 
     closeProfile=()=>{
@@ -87,11 +69,11 @@ class WorkUsers extends Component {
         let temp = this.props;
         let temp2 = this;
         this.setState({ modal1Visible:false });
-        /*apicall.commitUser(this.props.userProfile.UserId,function(data){
+        apicall.commitBook(this.props.userProfile.UserId,function(data){
             temp2.setState({loading:false})
             temp2.commitConfirmation();
-            temp.history.push(`/users`);
-        })*/
+            temp.history.push(`/ecatalog`);
+        })
     }
     commitConfirmation = () => {
         notification.success({
@@ -114,26 +96,22 @@ class WorkUsers extends Component {
         }else if(this.props.userProfile.type ===0){
             return (<Redirect to={'/404'}/>);
         }else if (this.state.profile){
-            return(<UserProfile
-                work
-                closeProfile={this.closeProfile}
-                profile= { this.state.profile}/>)
+            return(<RedirectItem work closeProfile={this.closeProfile}
+                                 profile= {this.state.profile}/>)
         }
         else {
             let columnItems =[
+                {value : 'typeWork', render : 'Action', type : 'number'},
                 {value : 'Title', render : 'Title', type : 'text'},
                 {value : 'Type', render : 'Type', type : 'text'},
-                {value : 'Quantity', render : 'Quantity', type : 'number'},
-                {value : 'Available', render : 'Available', type : 'number'},
 
             ];
             let tableItems = [];
             tableArray.map((itemData)=>{
                 let arrData=[
+                    {value : itemData.typeWork, render : itemData.typeWork, type : 'text'},
                     {value : itemData.Title, render : itemData.Title, type : 'text'},
                     {value : itemData.Type, render : itemData.Type, type : 'text'},
-                    {value : itemData.Quantity, render : itemData.Quantity, type : 'number'},
-                    {value : itemData.available, render : itemData.available, type : 'number'},
                     itemData
                 ]
                 tableItems.push(arrData);
@@ -154,7 +132,7 @@ class WorkUsers extends Component {
                         <div className="MainContainer-upper-container">
                             <div className="MainContainer-upper-container-text">
                                 <div className="MainContainer-upper-container-first-text">
-                                    Catalog
+                                   Work Catalog
                                 </div>
                                 <div className="MainContainer-upper-container-second-text">
                                     You can select one of the item to see their details!
