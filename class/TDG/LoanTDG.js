@@ -29,11 +29,7 @@ class LoanTDG {
     };
   }
 
-  /*
-		+ loanItem():
-    + returnItem():
-    + viewItems():
-	*/
+
   loanItem(userId, itemDesc, category, callback) {
     let loanDate = this.getCurrentDateWithAddition(0);
     var returnDate;
@@ -189,7 +185,7 @@ class LoanTDG {
 
   }
 
-  viewLoansForOneUser(userId, callback) {
+  viewUserLoans(userId, callback) {
     let msg = {}; //array that will keep all the loan data
 
     //get all the loaned books
