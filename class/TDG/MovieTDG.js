@@ -53,9 +53,9 @@ class MovieTDG {
 		let sql;
 		console.log(item.title);
 		if (item.idDesc == undefined) {
-			sql = '   INSERT INTO `MovieDesc` (`Title`, `Author`, `Format`, `Pages`, `Publisher`, `ISBN-10`, `ISBN-13`, `Language`)  ' +
+			sql = '   INSERT INTO `MovieDesc` (`Title`, `Director`, `Producers`, `Actors`, `Language`, `Subtitles`, `Dubbed`, `ReleaseDate`,`RunTime`)   ' +
 				'   VALUES  ' +
-				'       ("' + item.title + '", "' + item.author + '", "' + item.format + '", ' + item.pages + ', "' + item.publisher + '", ' + item.ISBN10 + ', ' + item.ISBN13 + ', "' + item.language + '");  ' +
+				'       ("'+item.title+'", "'+item.director+'", "'+item.producers+'", "'+item.actors+'", "'+item.language+'", "'+item.subtitles+'", "'+item.dubbed+'", date "'+item.releaseDate+'", "'+item.runTime+'");   ' +
 				'   SET @last_id_movie = LAST_INSERT_ID();  ' +
 				'   INSERT INTO `Items` (id)  ' +
 				'   VALUES  ' +

@@ -46,9 +46,9 @@ class MagazineTDG {
 		let sql;
 		console.log(item.title);
 		if (item.idDesc == undefined) {
-			sql = '   INSERT INTO `MagazineDesc` (`Title`, `Author`, `Format`, `Pages`, `Publisher`, `ISBN-10`, `ISBN-13`, `Language`)  ' +
+			sql = '   INSERT INTO `MagazineDesc` (`Title`,`Publisher`, `Language`, `ISBN-10`, `ISBN-13`)   ' +
 				'   VALUES  ' +
-				'       ("' + item.title + '", "' + item.author + '", "' + item.format + '", ' + item.pages + ', "' + item.publisher + '", ' + item.ISBN10 + ', ' + item.ISBN13 + ', "' + item.language + '");  ' +
+				'       ("'+item.title+'", "'+item.publisher+'", "'+item.language+'", "'+item.ISBN10+'", "'+item.ISBN13+'");  ' +
 				'   SET @last_id_magazine = LAST_INSERT_ID();  ' +
 				'   INSERT INTO `Items` (id)  ' +
 				'   VALUES  ' +

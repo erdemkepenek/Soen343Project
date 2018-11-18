@@ -28,7 +28,7 @@ class MovieMapper {
   }
   removeNewItem(id, index_){
 	console.log("[MovieMapper] removeNewItem()"); 
-    this.BookUnitOfWork.removeNew(id, index_);
+    this.MovieUnitOfWork.removeNew(id, index_);
   }
   modifyItem(id, item, callback) {
 	console.log("[MovieMapper] modifyItem()");
@@ -36,7 +36,7 @@ class MovieMapper {
   }
   removeModifyItem(id, index_){
 	console.log("[MovieMapper] removeModifyItem()"); 
-    this.BookUnitOfWork.removeDirty(id, index_);
+    this.MovieUnitOfWork.removeDirty(id, index_);
   }
   deleteItem(id, itemId, callback) {
 	console.log("[MovieMapper] deleteItem()");
@@ -44,7 +44,7 @@ class MovieMapper {
   }
   removeDeleteItem(id, index_){
 	console.log("[MovieMapper] removeDeleteItem()"); 
-    this.BookUnitOfWork.removeClean(id, index_);
+    this.MovieUnitOfWork.removeClean(id, index_);
   }
   viewUncommittedWork(id,callback){
 	console.log("[MovieMapper] viewUncommittedWork()");

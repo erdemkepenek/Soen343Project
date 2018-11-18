@@ -52,9 +52,9 @@ class MusicTDG {
 		let sql;
 		console.log(item.title);
 		if (item.idDesc == undefined) {
-			sql = '   INSERT INTO `MusicDesc` (`Title`, `Author`, `Format`, `Pages`, `Publisher`, `ISBN-10`, `ISBN-13`, `Language`)  ' +
+			sql = '   INSERT INTO `MusicDesc` (`Title`, `Artist`, `Label`, `Type`, `ReleaseDate`, `ASIN`)   ' +
 				'   VALUES  ' +
-				'       ("' + item.title + '", "' + item.author + '", "' + item.format + '", ' + item.pages + ', "' + item.publisher + '", ' + item.ISBN10 + ', ' + item.ISBN13 + ', "' + item.language + '");  ' +
+				'       ("'+item.title+'", "'+item.artist+'", "'+item.label+'", "'+item.type+'", date "'+item.releaseDate+'", '+item.ASIN+');  ' +
 				'   SET @last_id_Music = LAST_INSERT_ID();  ' +
 				'   INSERT INTO `Items` (id)  ' +
 				'   VALUES  ' +

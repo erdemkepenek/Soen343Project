@@ -28,7 +28,7 @@ class MusicMapper {
   }
   removeNewItem(id, index_){
 	console.log("[MusicMapper] removeNewItem()"); 
-    this.BookUnitOfWork.removeNew(id, index_);
+    this.MusicUnitOfWork.removeNew(id, index_);
   }
   modifyItem(id, item, callback) {
 	console.log("[MusicMapper] modifyItem()");
@@ -36,7 +36,7 @@ class MusicMapper {
   }
   removeModifyItem(id, index_){
 	console.log("[MusicMapper] removeModifyItem()"); 
-    this.BookUnitOfWork.removeDirty(id, index_);
+    this.MusicUnitOfWork.removeDirty(id, index_);
   }
   deleteItem(id, itemId, callback) {
 	console.log("[MusicMapper] deleteItem()");
@@ -44,7 +44,7 @@ class MusicMapper {
   }
   removeDeleteItem(id, index_){
 	console.log("[MusicMapper] removeDeleteItem()"); 
-    this.BookUnitOfWork.removeClean(id, index_);
+    this.MusicUnitOfWork.removeClean(id, index_);
   }
   viewUncommittedWork(id,callback){
 	console.log("[MusicMapper] viewUncommittedWork()");
