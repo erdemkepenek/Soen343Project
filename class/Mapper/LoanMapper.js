@@ -10,12 +10,12 @@ class LoanMapper {
   }
 
   viewAllLoans(callback) {
-	console.log("[LoanMapper] viewLoans()");
+    console.log("[LoanMapper] viewLoans()");
     let IDM = this.LoanIdentitymap;
     var result = IDM.getData();
     //console.log(result);
     if (result.length == 0) {
-      this.LoanTDG.viewAllLoans(function(msg) {
+      this.LoanTDG.viewAllLoans(function (msg) {
         IDM.putData(msg);
         callback(msg.data);
       });
@@ -25,13 +25,13 @@ class LoanMapper {
   }
 
   //The below method helps to view loans of one specific user
-  viewUserLoans(userId,callback) {
+  viewUserLoans(userId, callback) {
     console.log("[LoanMapper] viewLoans()");
     let IDM = this.LoanIdentitymap;
     var result = IDM.getData();
     //console.log(result);
     if (result.length == 0) {
-      this.LoanTDG.viewUserLoans(userId,function (msg) {
+      this.LoanTDG.viewUserLoans(userId, function (msg) {
         IDM.putData(msg);
         callback(msg.data);
       });
@@ -39,50 +39,63 @@ class LoanMapper {
       callback(result[0]);
     }
   }
-  
+
 
   addLoanItem(userId, item, callback) {
-	console.log("[LoanMapper] addLoantItem()");
+    console.log("[LoanMapper] addLoantItem()");
     this.LoanUnitOfWork.addNew(userId, item);
+  }
+  removeLoanItem(id, index_) {
+    console.log("[UserMapper] removeReturnItem()");
+    this.LoanUnitOfWork.removeNew(id, index_);
   }
 
   addReturnItem(userId, item, callback) {
-	console.log("[LoanMapper] addReturnItem()");
+    console.log("[LoanMapper] addReturnItem()");
     this.LoanUnitOfWork.addDirty(userId, item);
   }
-  removeReturnItem(id, index_){
-	console.log("[UserMapper] removeReturnItem()"); 
+  removeReturnItem(id, index_) {
+    console.log("[UserMapper] removeReturnItem()");
     this.BookUnitOfWork.removeDirty(id, index_);
   }
-  viewUncommittedWork(id,callback){
-	console.log("[LoanMapper] viewUncommittedWork()");
-	let view = this.LoanUnitOfWork.viewUncommittedWork(id);
-	callback(view);
+  viewUncommittedWork(id, callback) {
+    console.log("[LoanMapper] viewUncommittedWork()");
+    let view = this.LoanUnitOfWork.viewUncommittedWork(id);
+    callback(view);
   }
 
 
   commit(userId, callback) {
-	console.log("[LoanMapper] commit()");
+    console.log("[LoanMapper] commit()");
     let items = this.LoanUnitOfWork.commit(userId);
     console.log("commitss");
     console.log(items);
-  
+    let g_msg = {};
+    g_msg.loaned = [];
+    g_msg.returned = [];
     let add = items.registration;
     for (var i = 0; i < add.length; i++) {
       this.LoanTDG.loanItem(userId, add[i].idDesc, add[i].category, function (msg) {
-        console.log(msg);
+        g_msg.loaned.push(msg);
       });
     }
     let updates = items.updates;
     for (var i = 0; i < updates.length; i++) {
       this.LoanTDG.returnItem(userId, updates[i].itemId, function (msg) {
-        console.log(msg);
+        g_msg.returned.push(msg);
       });
     }
 
     //empty IdentityMap
     let IDM = this.LoanIdentitymap;
     IDM.empty(userId);
+
+    //NodeJS Side Effect of asynchronous, wait for request to database is sent 
+    this.wait = function (a) {
+      callback(g_msg);
+    }
+    setTimeout(this.wait, 2000);
+
   }
 }
 
