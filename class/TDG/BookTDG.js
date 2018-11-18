@@ -43,17 +43,31 @@ class BookTDG {
 		})
 	}
 	addItem(item, callback){
-		let sql=	 '   INSERT INTO `BookDesc` (`Title`, `Author`, `Format`, `Pages`, `Publisher`, `ISBN-10`, `ISBN-13`, `Language`)  '  + 
-					 '   VALUES  '  + 
-					 '       ("'+item.title+'", "'+item.author+'", "'+item.format+'", '+item.pages+', "'+item.publisher+'", '+item.ISBN10+', '+item.ISBN13+', "'+item.language+'");  '  + 
-					 '   SET @last_id_book = LAST_INSERT_ID();  '  + 
-					 '   INSERT INTO `Items` (id)  '  + 
-					 '   VALUES  '  + 
-					 '       (null);  '  + 
-					 '   SET @last_id_item = LAST_INSERT_ID();  '  + 
-					 '   INSERT INTO `BookPh` (idDesc, available, id)  '  + 
-					 '   VALUES  '  + 
-					 '      (@last_id_book, 1, @last_id_item);  ' ; 
+		let sql;
+		console.log(item.title);
+		if (item.idDesc == undefined){
+			sql = '   INSERT INTO `BookDesc` (`Title`, `Author`, `Format`, `Pages`, `Publisher`, `ISBN-10`, `ISBN-13`, `Language`)  ' +
+				'   VALUES  ' +
+				'       ("' + item.title + '", "' + item.author + '", "' + item.format + '", ' + item.pages + ', "' + item.publisher + '", ' + item.ISBN10 + ', ' + item.ISBN13 + ', "' + item.language + '");  ' +
+				'   SET @last_id_book = LAST_INSERT_ID();  ' +
+				'   INSERT INTO `Items` (id)  ' +
+				'   VALUES  ' +
+				'       (null);  ' +
+				'   SET @last_id_item = LAST_INSERT_ID();  ' +
+				'   INSERT INTO `BookPh` (idDesc, available, id)  ' +
+				'   VALUES  ' +
+				'      (@last_id_book, 1, @last_id_item);  '; 
+		}
+		else {
+			sql = '   INSERT INTO `Items` (id)  ' +
+				'   VALUES  ' +
+				'       (null);  ' +
+				'   SET @last_id_item = LAST_INSERT_ID();  ' +
+				'   INSERT INTO `BookPh` (idDesc, available, id)  ' +
+				'   VALUES  ' +
+				'      ('+item.idDesc+', 1, @last_id_item);   ';
+		}
+		console.log(sql);
 		this.runQuery(function(conn,completedQuery){
 			conn.query(sql, (err, rows, fields) => {
 				if (!err){
@@ -74,8 +88,23 @@ class BookTDG {
 			})
 		})
 	}
-	deleteItem(id,callback){
-		let sql=  '  DELETE FROM `Items` where id = '+id+';  ' ;
+
+	deleteItem(item,callback){
+		let sql;
+		if (item.idDesc == undefined) {
+		sql=  '  DELETE FROM `Items` where id = '+item.itemId+';  ' ;
+		}
+		else 
+		{
+			sql = 'DELETE '+ 
+			'FROM Items '+
+			'where Items.id '+
+				'in '+
+				'(SELECT id FROM BookPh '+
+				'WHERE idDesc = ' + item.idDesc +'); '+
+			'Delete from BookDesc where idDesc = '+item.idDesc+';'
+		}
+
 		this.runQuery(function(conn,completedQuery){
 			conn.query(sql, (err, rows, fields) => {
 				if (!err){

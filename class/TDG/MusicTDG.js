@@ -48,54 +48,82 @@ class MusicTDG {
 			})
 		})
 	}
-	addItem(item, callback){
-		let sql=	 '   INSERT INTO `MusicDesc` (`Title`, `Artist`, `Label`, `Type`, `ReleaseDate`, `ASIN`)  '  + 
-					 '   VALUES  '  + 
-					 '       ("'+item.title+'", "'+item.artist+'", "'+item.label+'", "'+item.type+'", date "'+item.releaseDate+'", '+item.ASIN+');  '  + 
-					 '   SET @last_id_music = LAST_INSERT_ID();  '  + 
-					 '   INSERT INTO `Items` (id)  '  + 
-					 '   VALUES  '  + 
-					 '       (null);  '  + 
-					 '   SET @last_id_item = LAST_INSERT_ID();  '  + 
-					 '   INSERT INTO `MusicPh` (idDesc, available, id)  '  + 
-					 '   VALUES  '  + 
-					 '      (@last_id_music, 1, @last_id_item);  ' ; 
-		this.runQuery(function(conn,completedQuery){
+	addItem(item, callback) {
+		let sql;
+		console.log(item.title);
+		if (item.idDesc == undefined) {
+			sql = '   INSERT INTO `MusicDesc` (`Title`, `Author`, `Format`, `Pages`, `Publisher`, `ISBN-10`, `ISBN-13`, `Language`)  ' +
+				'   VALUES  ' +
+				'       ("' + item.title + '", "' + item.author + '", "' + item.format + '", ' + item.pages + ', "' + item.publisher + '", ' + item.ISBN10 + ', ' + item.ISBN13 + ', "' + item.language + '");  ' +
+				'   SET @last_id_Music = LAST_INSERT_ID();  ' +
+				'   INSERT INTO `Items` (id)  ' +
+				'   VALUES  ' +
+				'       (null);  ' +
+				'   SET @last_id_item = LAST_INSERT_ID();  ' +
+				'   INSERT INTO `MusicPh` (idDesc, available, id)  ' +
+				'   VALUES  ' +
+				'      (@last_id_music, 1, @last_id_item);  ';
+		}
+		else {
+			sql = '   INSERT INTO `Items` (id)  ' +
+				'   VALUES  ' +
+				'       (null);  ' +
+				'   SET @last_id_item = LAST_INSERT_ID();  ' +
+				'   INSERT INTO `MusicPh` (idDesc, available, id)  ' +
+				'   VALUES  ' +
+				'      (' + item.idDesc + ', 1, @last_id_item);   ';
+		}
+		console.log(sql);
+		this.runQuery(function (conn, completedQuery) {
 			conn.query(sql, (err, rows, fields) => {
-				if (!err){
+				if (!err) {
 					let msg = {};
-					msg.success="true";
-					msg.message="no message";
-					msg.data=rows;
-					callback(msg);
-				}	 
-				else{
-					console.log(err);
-					let msg = {};
-					msg.success="false";
-					msg.message=err.sqlMessage;;
+					msg.success = "true";
+					msg.message = "no message";
+					msg.data = rows;
 					callback(msg);
 				}
-				completedQuery("[MovieTDG] addItem()");
+				else {
+					console.log(err);
+					let msg = {};
+					msg.success = "false";
+					msg.message = err.sqlMessage;;
+					callback(msg);
+				}
+				completedQuery("[MusicTDG] addItem()");
 			})
 		})
 	}
-	deleteItem(id,callback){
-		let sql=  '  DELETE FROM `Items` where id = '+id+';  ' ;
-		this.runQuery(function(conn,completedQuery){
+
+	deleteItem(item, callback) {
+		let sql;
+		if (item.idDesc == undefined) {
+			sql = '  DELETE FROM `Items` where id = ' + item.itemId + ';  ';
+		}
+		else {
+			sql = 'DELETE ' +
+				'FROM Items ' +
+				'where Items.id ' +
+				'in ' +
+				'(SELECT id FROM MusicPh ' +
+				'WHERE idDesc = ' + item.idDesc + '); ' +
+				'Delete from MusicDesc where idDesc = ' + item.idDesc + ';'
+		}
+
+		this.runQuery(function (conn, completedQuery) {
 			conn.query(sql, (err, rows, fields) => {
-				if (!err){
+				if (!err) {
 					let msg = {};
-					msg.success="true";
-					msg.message="no message";
-					msg.data=rows;
+					msg.success = "true";
+					msg.message = "no message";
+					msg.data = rows;
 					callback(msg);
-				}	 
-				else{
+				}
+				else {
 					console.log(err);
 					let msg = {};
-					msg.success="false";
-					msg.message=err.sqlMessage;;
+					msg.success = "false";
+					msg.message = err.sqlMessage;;
 					callback(msg);
 				}
 				completedQuery("[MusicTDG] deleteItem()");
