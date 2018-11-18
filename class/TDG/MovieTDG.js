@@ -26,14 +26,38 @@ class MovieTDG {
         let sql = 'SELECT MovieDesc.idDesc, Title,Director,Producers ,Actors, Language, Subtitles,'+
          'Dubbed,ReleaseDate,RunTime ,COUNT(CASE WHEN available THEN 1 END)as available, COUNT(id) as Quantity FROM MovieDesc '+
          'LEFT JOIN MoviePh ON MoviePh.idDesc = MovieDesc.idDesc GROUP BY (MovieDesc.idDesc)' ; 
-		this.runQuery(function(conn,completedQuery){
+		
+		 let sqlCopies = 'select idDesc,id from MoviePh';
+		
+		 this.runQuery(function(conn,completedQuery){
 			conn.query(sql, (err, rows, fields) => {
 				if (!err){
 					let msg = {};
 					msg.success="true";
 					msg.message="no message";
 					msg.data=rows;
-					callback(msg);
+					//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+					conn.query(sqlCopies, (err, rows, fields) => {
+						if (!err) {
+							let temp = {}
+							temp.copies = rows
+							for (var j = 0; j < msg.data.length; j++) {
+								msg.data[j].copies = new Array();
+								for (var i = 0; i < temp.copies.length; i++) {
+									if (temp.copies[i].idDesc == msg.data[j].idDesc) {
+										msg.data[j].copies.push(temp.copies[i].id);
+									}
+								}
+							}
+							callback(msg);
+						} else {
+							console.log(err);
+							msg.success = "false";
+							msg.message = err.sqlMessage;
+							callback(msg);
+						}
+					});
+					//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 				}	 
 				else{
 					console.log(err);
