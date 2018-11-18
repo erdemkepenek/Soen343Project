@@ -56,13 +56,15 @@ class LoanTDG {
     let sql =
       "set @item_id = getIDPh(" + itemDesc + ",'" + category + "');" +
       "update `Items` set available = 0 where id = @item_id;" +
-      "INSERT INTO `Loan` (`UserId`, `itemId`, `loanDate`, `returnDate`) VALUES (" + userId + ", @item_id, '" + loanDate + "', '" + returnDate + "');"
+      "INSERT INTO `Loan` (`UserId`, `itemId`, `loanDate`, `returnDate`) VALUES (" + userId + ", @item_id, '" + loanDate + "', '" + returnDate + "');"+
+	  "select @item_id;"
     console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
     console.log(sql);
     console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
     this.runQuery(function (conn, completedQuery) {
       conn.query(sql, (err, rows, fields) => {
         if (!err) {
+			console.log(rows);
           let msg = {};
           msg.success = "true";
           msg.message = "no message";

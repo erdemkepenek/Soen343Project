@@ -50,11 +50,11 @@ class MusicTDG {
 	}
 	addItem(item, callback) {
 		let sql;
-		console.log(item.title);
+		console.log(item.Title);
 		if (item.idDesc == undefined) {
 			sql = '   INSERT INTO `MusicDesc` (`Title`, `Artist`, `Label`, `Type`, `ReleaseDate`, `ASIN`)   ' +
 				'   VALUES  ' +
-				'       ("'+item.title+'", "'+item.artist+'", "'+item.label+'", "'+item.type+'", date "'+item.releaseDate+'", '+item.ASIN+');  ' +
+				'       ("'+item.Title+'", "'+item.Artist+'", "'+item.Label+'", "'+item.Type+'", date "'+item.ReleaseDate+'", '+item.ASIN+');  ' +
 				'   SET @last_id_Music = LAST_INSERT_ID();  ' +
 				'   INSERT INTO `Items` (id)  ' +
 				'   VALUES  ' +
@@ -132,7 +132,7 @@ class MusicTDG {
 	}
 	modifyItem(item,callback){
 		let sql='   UPDATE `MusicDesc`  '  + 
-				'   SET Title="'+item.title+'", Artist="'+item.artist+'", Label="'+item.label+'", Type="'+item.type+'", ReleaseDate= date "'+item.releaseDate+'", `ASIN`='+item.ASIN+''+ 
+				'   SET Title="'+item.Title+'", Artist="'+item.Artist+'", Label="'+item.Label+'", Type="'+item.Type+'", ReleaseDate= date "'+item.ReleaseDate+'", `ASIN`='+item.ASIN+''+ 
 				'  WHERE idDesc='+item.idDesc+';  ';
 				console.log(sql);
 		this.runQuery(function(conn,completedQuery){

@@ -373,8 +373,20 @@ class Controller {
 	  })
   }
   loanCommit(userId,confirmation){
+	let temp = this.TransactionHistory;
 	console.log("[Controller] loanCommit()");
-	this.LoanMapper.commit(userId, function(msg){
+	this.LoanMapper.commit(userId, function(msg, items){
+		console.log(items);
+		console.log(msg);
+		let loanedItems = items.registration; 
+		for(var i = 0;i<loanedItems.length;i++){
+			console.log("OKOK");
+			if(msg.loaned[i].success=="true"){
+				temp.addActivity(items.id,"loan",msg.loaned[i].data[3][0]["@item_id"],function(msg){
+					//if confirmation for transaction needed;
+				});
+			}
+		}
 		confirmation(msg);
 	})
   }

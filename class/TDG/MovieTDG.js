@@ -51,11 +51,11 @@ class MovieTDG {
 
 	addItem(item, callback) {
 		let sql;
-		console.log(item.title);
+		console.log(item.Title);
 		if (item.idDesc == undefined) {
 			sql = '   INSERT INTO `MovieDesc` (`Title`, `Director`, `Producers`, `Actors`, `Language`, `Subtitles`, `Dubbed`, `ReleaseDate`,`RunTime`)   ' +
 				'   VALUES  ' +
-				'       ("'+item.title+'", "'+item.director+'", "'+item.producers+'", "'+item.actors+'", "'+item.language+'", "'+item.subtitles+'", "'+item.dubbed+'", date "'+item.releaseDate+'", "'+item.runTime+'");   ' +
+				'       ("'+item.Title+'", "'+item.Director+'", "'+item.Producers+'", "'+item.Actors+'", "'+item.Language+'", "'+item.Subtitles+'", "'+item.Dubbed+'", date "'+item.ReleaseDate+'", "'+item.RunTime+'");   ' +
 				'   SET @last_id_movie = LAST_INSERT_ID();  ' +
 				'   INSERT INTO `Items` (id)  ' +
 				'   VALUES  ' +
@@ -134,7 +134,7 @@ class MovieTDG {
     
     modifyItem(item,callback){
 		let sql='   UPDATE `MovieDesc`  '  + 
-				'   SET Title="'+item.title+'", Director="'+item.director+'", Producers="'+item.producers+'", Actors="'+item.actors+'", Language="'+item.language+'", Subtitles = "'+item.subtitles+'", Dubbed = "'+item.dubbed+'", ReleaseDate = date "'+ item.releaseDate+'", RunTime = "'+item.runTime+'"'  + 
+				'   SET Title="'+item.Title+'", Director="'+item.Director+'", Producers="'+item.Producers+'", Actors="'+item.Actors+'", Language="'+item.Language+'", Subtitles = "'+item.Subtitles+'", Dubbed = "'+item.Dubbed+'", ReleaseDate = date "'+ item.ReleaseDate+'", RunTime = "'+item.RunTime+'"'  + 
 				'  WHERE idDesc='+item.idDesc+';  ';
 				console.log(sql);
 		this.runQuery(function(conn,completedQuery){
