@@ -28,7 +28,6 @@ router.post("/logout", function (req, res) {
     })
 });
 
-
 router.post("/add", function (req, res) {
     let user = req.body;
     res.setHeader('Content-Type', 'application/json');
@@ -52,6 +51,32 @@ router.post("/delete", function (req, res) {
     myController.userDelete(user.userId,user.data.UserId,function(msg){	
 		res.send(JSON.stringify(msg));
 	})
+});
+router.post("/remove/add", function (req, res) {
+    let data = req.body;
+    console.log(req.body);
+    res.setHeader('Content-Type', 'application/json');
+    myController.userRemoveAdd(data.userId, data.index, function (msg) {
+        res.send(JSON.stringify(msg));
+    });
+});
+
+router.post("/remove/modify", function (req, res) {
+    let data = req.body;
+    console.log(req.body);
+    res.setHeader('Content-Type', 'application/json');
+    myController.userRemoveModify(data.userId, data.index, function (msg) {
+        res.send(JSON.stringify(msg));
+    });
+});
+
+router.post("/remove/delete", function (req, res) {
+    let data = req.body;
+    console.log(req.body);
+    res.setHeader('Content-Type', 'application/json');
+    myController.userRemoveDelete(data.userId, data.index, function (msg) {
+        res.send(JSON.stringify(msg));
+    });
 });
 router.post("/view", function (req, res) {
     let user = req.body;
