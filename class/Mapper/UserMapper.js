@@ -35,7 +35,7 @@ class UserMapper {
   }
   removeNewUser(id, index_){
 	console.log("[UserMapper] removeNewUser()"); 
-    this.BookUnitOfWork.removeNew(id, index_);
+    this.UserUnitOfWork.removeNew(id, index_);
   }
   modifyUser(id, user, callback) {
 	console.log("[UserMapper] modifyUser()");
@@ -43,7 +43,7 @@ class UserMapper {
   }
   removeModifyUser(id, index_){
 	console.log("[UserMapper] removeModifyUser()"); 
-    this.BookUnitOfWork.removeDirty(id, index_);
+    this.UserUnitOfWork.removeDirty(id, index_);
   }
   deleteUser(id, userId, callback) {
 	console.log("[UserMapper] deleteUser()");
@@ -51,7 +51,7 @@ class UserMapper {
   }
   removeDeleteUser(id, index_){
 	console.log("[UserMapper] removeDeleteUser()"); 
-    this.BookUnitOfWork.removeClean(id, index_);
+    this.UserUnitOfWork.removeClean(id, index_);
   }
   viewUncommittedWork(id,callback){
 	console.log("[UserMapper] viewUncommittedWork()");
