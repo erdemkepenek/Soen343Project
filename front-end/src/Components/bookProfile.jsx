@@ -46,13 +46,15 @@ class BookProfile extends Component {
     }
     componentDidMount(){
         if(this.props.bookProfile && this.props.userProfile.type ===1 && !this.props.rent && !this.props.cart){
-            options=[
-                {text:"Copy ID 1", value:1,key:1},
-                {text:"Copy ID 2", value:2,key:2},
-                {text:"Copy ID 3", value:3,key:3},
-                {text:"Copy ID 4", value:4,key:4},
-                {text:"All Copies", value:null,key:null},
-                ]
+            options=[];
+            if(this.props.bookProfile.copies) {
+                this.props.bookProfile.copies.map((copyData, key) => {
+                    let arrData = {text: "Item ID" + copyData.toString(), value: copyData, key: key}
+                    options.push(arrData)
+                })
+                options.push({text: "All Items", value: 'All', key: 9999})
+                console.log(options)
+            }
         }
     }
     changeTitle=(e)=>{
@@ -124,6 +126,7 @@ class BookProfile extends Component {
             }
             this.bookError();
         }else{
+            this.setState({loading:true})
             let data={
                 Title: Title,
                 Author: author,
@@ -131,16 +134,25 @@ class BookProfile extends Component {
                 Pages: pages,
                 Publisher: publisher,
                 Language: language,
+                category:'book',
+                idDesc:this.props.bookProfile.idDesc,
             }
-            data.category='book';
+            let numberOfCopies = 0;
+            if(copy){
+                numberOfCopies = copy
+            }
             data['ISBN-10']=ISBN10;
             data['ISBN-13']=ISBN13;
-            console.log(copy)
-            console.log(data)
+            let temp = this;
+            apicall.editBook(this.props.userProfile.UserId,data,function(callbackData){
+                apicall.addBookCopy(temp.props.userProfile.UserId,numberOfCopies,data,function(callbackData2){
+                    temp.setState({loading:false})
+                    temp.editConfirmation();
+                    temp.closeProfile();
+                    temp.props.history.push(`/ecatalog`);
 
-            this.editConfirmation();
-            this.props.history.push(`/ecatalog`);
-            this.closeProfile();
+                })
+            });
         }
     }
 
@@ -149,7 +161,21 @@ class BookProfile extends Component {
     editConfirmation = () => {
         notification.success({
             message: 'Sucess',
-            description: 'You have Editted a Book!',
+            description: 'Editted Book has been added to Work Table',
+            duration:6,
+        });
+    }
+    deleteConfirmation = () => {
+        notification.success({
+            message: 'Sucess',
+            description: 'Deleted Book has been added to Work Table',
+            duration:6,
+        });
+    };
+    removeWorkConfirmation = () => {
+        notification.success({
+            message: 'Sucess',
+            description: 'Book has been removed from Work Table',
             duration:6,
         });
     };
@@ -203,8 +229,6 @@ class BookProfile extends Component {
                 temp.props.history.push(`/ecatalog`);
 
             });
-            console.log(copy)
-            console.log(data)
 
         }
     }
@@ -249,9 +273,36 @@ class BookProfile extends Component {
         }
     }
 
-    deleteBook = ()=>
-    {
-        this.props.closeProfile();
+    deleteBook = ()=> {
+        this.setState({loading:true})
+        let data={
+            Title: this.props.bookProfile.Title,
+            Author:this.props.bookProfile.Author,
+            Format: this.props.bookProfile.Format,
+            Pages: this.props.bookProfile.Pages,
+            Publisher:this.props.bookProfile.Publisher,
+            Language: this.props.bookProfile.Language,
+            Quantity: this.props.bookProfile.Quantity,
+            available: this.props.bookProfile.available,
+            copies: this.props.bookProfile.copies,
+        }
+        data['ISBN-10']=this.props.bookProfile['ISBN-10'];
+        data['ISBN-13']=this.props.bookProfile['ISBN-13'];
+        if(this.state.deleteID === 'All'){
+            data.idDesc=this.props.bookProfile.idDesc
+        }else{
+            data.itemId=this.state.deleteID
+        }
+        console.log(data)
+        let temp = this;
+        apicall.deleteBook(this.props.userProfile.UserId,data,function(dataCallback){
+            console.log(dataCallback)
+            temp.setState({loading:false})
+            temp.deleteConfirmation();
+            temp.props.closeProfile();
+            temp.props.history.push(`/ecatalog`);
+
+        });
     }
     return=()=>{
 
@@ -273,6 +324,34 @@ class BookProfile extends Component {
         }
     }
     removeFromWork=()=>{
+        this.setState({loading:true})
+        let temp = this;
+        if(this.props.bookProfile.typeWork=== "Delete Book"){
+            apicall.removeWorkBookDelete(this.props.userProfile.UserId,this.props.bookProfile.index,function(dataCallback){
+                temp.setState({loading:false})
+                temp.removeWorkConfirmation();
+                temp.props.closeProfile();
+                temp.props.history.push(`/workecatalog`);
+
+            });
+        }else if(this.props.bookProfile.typeWork === 'Add Book'){
+            apicall.removeWorkBookAdd(this.props.userProfile.UserId,this.props.bookProfile.index,function(dataCallback){
+                temp.setState({loading:false})
+                temp.removeWorkConfirmation();
+                temp.props.closeProfile();
+                temp.props.history.push(`/workecatalog`);
+
+            });
+        }else{
+            apicall.removeWorkBookModify(this.props.userProfile.UserId,this.props.bookProfile.index,function(dataCallback){
+                temp.setState({loading:false})
+                temp.removeWorkConfirmation();
+                temp.props.closeProfile();
+                temp.props.history.push(`/workecatalog`);
+
+            });
+        }
+        console.log(this.props.bookProfile.index)
 
     }
 
@@ -473,7 +552,7 @@ class BookProfile extends Component {
 }
 function mapStateToProps(state){
     return {
-        userProfile: state.AdminReducer.userProfile
+        userProfile: state.AdminReducer.userProfile,
     };
 
 }

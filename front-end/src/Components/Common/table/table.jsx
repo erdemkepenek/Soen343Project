@@ -337,6 +337,7 @@ class DataTable extends Component {
                                     let dropDownValue = optionsValue[filterColumnIndex - 1]
                                     return (
                                         <Dropdown inline
+                                                  scrolling
                                                   className='table-filter-list-item'
                                                   placeholder={columnData.value}
                                                   options={options[filterColumnIndex - 1]}

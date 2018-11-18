@@ -114,6 +114,90 @@ class ApiCalls extends Component {
             }.bind(this)
         );
     }
+    editBook=(userId,item,callback)=>{
+        console.log({userId:userId,item:item})
+        axios.post('/book/modify',{userId:userId,item:item}).then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
+    deleteBook=(userId,item,callback)=>{
+        console.log({userId:userId,item:item})
+        axios.post('/book/delete',{userId:userId,item:item}).then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
+    removeWorkBookDelete=(userId,index,callback)=>{
+        console.log({userId:userId,index:index})
+        axios.post('/book/remove/delete',{userId:userId,index:index}).then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
+    removeWorkBookAdd=(userId,index,callback)=>{
+        console.log({userId:userId,index:index})
+        axios.post('/book/remove/add',{userId:userId,index:index}).then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
+    removeWorkBookModify=(userId,index,callback)=>{
+        console.log({userId:userId,index:index})
+        axios.post('/book/remove/modify',{userId:userId,index:index}).then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
+    addBookCopy=(userId,quantity,item,callback)=>{
+        console.log({userId:userId,quantity:quantity,item:item})
+        axios.post('/book/add/copy',{userId:userId,quantity:quantity,item:item}).then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
     viewMovie=(callback)=>{
         axios.post('/movie/view').then(
             function (response, err) {

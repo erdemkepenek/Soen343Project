@@ -34,19 +34,23 @@ class WorkUsers extends Component {
         let this1=this;
         apicall.viewWorkBook(this.props.userProfile.UserId,function(dataWork){
             console.log(dataWork)
-            dataWork.registration.map((dataRegistration)=>{
+            dataWork.registration.map((dataRegistration,key)=>{
                 dataRegistration.Type = 'Book'
                 dataRegistration.typeWork = 'Add Book'
+                dataRegistration.index=key;
                 tableArray.push(dataRegistration)
             })
-            dataWork.erase.map((dataErase)=>{
+            dataWork.erase.map((dataErase,key)=>{
                 dataErase.Type = 'Book'
                 dataErase.typeWork = 'Delete Book'
+                dataErase.index=key;
                 tableArray.push(dataErase)
+
             })
-            dataWork.updates.map((dataUpdates)=>{
+            dataWork.updates.map((dataUpdates,key)=>{
                 dataUpdates.Type = 'Book'
                 dataUpdates.typeWork = 'Modify Book'
+                dataUpdates.index=key;
                 tableArray.push(dataUpdates)
             })
             this1.setState({loading:false})
@@ -57,6 +61,7 @@ class WorkUsers extends Component {
 
     closeProfile=()=>{
         this.setState({profile: ""})
+        this.loadUnitofWorkUsers();
     }
 
     openProfile=(data)=>{
