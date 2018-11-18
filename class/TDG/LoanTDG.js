@@ -35,9 +35,10 @@ class LoanTDG {
     var returnDate;
 
     if (category == 'magazine') {
-      let msg = "Magazine can not be loaned";
-      callback(msg);
-      return msg;
+      let msg = {success: "false",
+        message: "Magazine can not be loaned"};
+        callback(msg);
+      return;
     }
     else {
       switch (category) {

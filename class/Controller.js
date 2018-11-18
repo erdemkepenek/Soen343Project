@@ -197,6 +197,7 @@ class Controller {
       confirmation(g_msg);
     });
   }
+
   // for TransactionHistoryMapper
   transactionHistoryAdd(userId, action, itemId, confirmation) {
     this.TransactionHistory.addActivity(userId, action, itemId, function(msg) {
@@ -272,13 +273,25 @@ class Controller {
     });
   }
   //for LoanMapper
+  loanViewAll(confirmation) {
+    this.LoanMapper.viewAllLoans(function(msg){
+      confirmation(msg)
+    });
+  }
+
+  loanViewUser(userId,confirmation) {
+    this.LoanMapper.viewUserLoans(userId,function (msg) {
+      confirmation(msg)
+    });
+  }
+
   loanAddItem(userId, itemId, confirmation){
 	this.LoanMapper.addLoanItem(userId,itemId); 
 	confirmation({ status: "true", message: "no message" });
   }
   loanRemoveAdd(userId, index_, confirmation) {
 	console.log("[Controller] bookRemoveAdd()");
-    this.BookMapper.removeLoanItem(userId, index_);
+    this.LoanMapper.removeLoanItem(userId, index_);
     confirmation({ status: "true", message: "no message" });
   }
   loanAddReturn(userId, itemId, confirmation){
