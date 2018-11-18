@@ -8,7 +8,11 @@ import {withRouter} from 'react-router-dom'
 import {Button, Form, Grid, Header, Icon, Image, Message, Segment} from 'semantic-ui-react'
 import {Redirect} from "react-router";
 import DataTable from '../Components/Common/table/table'
-import {notification,Popconfirm} from "antd";
+import {notification,Modal} from "antd";
+import ApiCalls from '../class/apiCalls'
+
+
+let apicall = new ApiCalls;
 
 const optionsType = [
     {key: 'Client', value: 'Client', text: 'Client'},
@@ -88,24 +92,32 @@ class AddUser extends Component {
             }
             this.signupError();
         }else{
+            this.setState({loading:true})
             let data={
-                firstName: firstName,
-                lastName: lastName,
+                userId: this.props.userProfile.UserId,
+                data:{
+                FirstName: firstName,
+                LastName: lastName,
                 phone: phone,
-                address: address,
+                Address: address,
                 email: email,
                 password: password,
-                type: ','
+                type: ''
+                },
             }
-            if(this.state.type = 'Client'){
-                data.type=false;
+            if(type === 'Client'){
+                data.data.type=0;
             }else{
-                data.type=true;
+                data.data.type=1;
             }
+            let temp = this.props;
+            let temp2 = this;
             console.log(data)
-
-            this.signupConfirmation();
-            this.props.history.push(`/users`);
+            apicall.addUser(data,function(data){
+                temp2.signupConfirmation();
+                temp.history.push(`/users`);
+                temp2.setState({loading:false})
+            });
         }
     }
     editUser=()=>{
@@ -134,32 +146,43 @@ class AddUser extends Component {
             }
             this.signupError();
         }else{
+            this.setState({loading:true})
             let data={
-                firstName: firstName,
-                lastName: lastName,
-                phone: phone,
-                address: address,
-                email: email,
-                password: password,
-                type: ','
+                userId: this.props.userProfile.UserId,
+                data:{
+                    UserId:this.props.profile.UserId,
+                    FirstName: firstName,
+                    LastName: lastName,
+                    phone: phone,
+                    Address: address,
+                    email: email,
+                    password: password,
+                    type: ''
+                },
             }
-            if(this.state.type = 'Client'){
-                data.type=false;
+            if(type === 'Client'){
+                data.data.type=0;
             }else{
-                data.type=true;
+                data.data.type=1;
             }
+            let temp = this.props;
+            let temp2 = this;
+            console.log(data)
+            apicall.modifyUser(data,function(data){
+                temp2.editConfirmation();
+                temp.closeProfile();
+                temp.history.push(`/users`);
+                temp2.setState({loading:false})
+            });
             console.log(data)
 
-            this.editConfirmation();
-            this.props.closeProfile();
-            this.props.history.push(`/users`);
         }
     }
 
     signupConfirmation = () => {
         notification.success({
             message: 'Sucess',
-            description: 'You have Created an Account!',
+            description: 'Created Account has been added to Work Table!',
             duration:6,
         });
     };
@@ -167,7 +190,14 @@ class AddUser extends Component {
     editConfirmation = () => {
         notification.success({
             message: 'Sucess',
-            description: 'You have Editted a User!',
+            description: 'Editted Account has been added to Work Table',
+            duration:6,
+        });
+    }
+    deleteConfirmation = () => {
+        notification.success({
+            message: 'Sucess',
+            description: 'Deleted Account has been added to Work Table',
             duration:6,
         });
     };
@@ -179,7 +209,20 @@ class AddUser extends Component {
         });
     };
     deleteUser=()=>{
-        this.props.closeProfile();
+        this.setState({loading:true})
+        let temp = this.props;
+        let temp2 = this;
+        let data={
+            userId: this.props.userProfile.UserId,
+            data:this.props.profile,
+        }
+        console.log(data)
+        apicall.deleteUser(data,function(data){
+            temp2.deleteConfirmation();
+            temp.closeProfile();
+            temp.history.push(`/users`);
+            temp2.setState({loading:false})
+        });
     }
     backToUsers=()=>{
         this.props.history.push(`/users`);
@@ -187,6 +230,21 @@ class AddUser extends Component {
             this.props.closeProfile();
         }
     }
+    backToWork=()=>{
+        this.props.history.push(`/workusers`);
+        if(this.props.profile){
+            this.props.closeProfile();
+        }
+    }
+    handleModal=(e,modal1Visible)=> {
+        e.preventDefault()
+        this.setState({ modal1Visible });
+    }
+    removeFromWork=()=>{
+
+    }
+
+
     render() {
         if(!this.props.userProfile) {
             return (<Redirect to={'/'}/>);
@@ -195,30 +253,39 @@ class AddUser extends Component {
         }else {
             return (
                 <div className='main-container'>
+                    <Modal
+                        centered
+                        closable
+                        title="Are you sure to Delete this User?"
+                        visible={this.state.modal1Visible}
+                        onOk={this.deleteUser}
+                        okText="Delete"
+                        onCancel={(e)=>this.handleModal(e,false)}
+                    />
                     <HeaderComponent/>
                     <div className='MainContainer'>
                         <div className="MainContainer-upper-container">
                             <div className="MainContainer-upper-container-text">
                                 <div className="MainContainer-upper-container-first-text">
-                                   {this.props.profile? "Edit User" : "Add User"}
+                                   {this.props.profile? (this.props.work? "Profile" :"Edit User") : "Add User"}
                                 </div>
                                 <div className="MainContainer-upper-container-second-text">
-                                {this.props.profile? "You can edit a user" : "You can register new user to the system!"}
+                                {this.props.profile? (this.props.work? "You can see the details of user" : "You can edit a user") : "You can register new user to the system!"}
                                     
                                 </div>
                             </div>
                             <div className='MainContainer-upper-container-button'>
-                                <Button icon='user' content='Back to Users' onClick={this.backToUsers}/>
-                                {this.props.profile?
-                                <Popconfirm title="Are you sure to delete this User?" onConfirm={this.deleteUser} placement="bottomRight" okText="Yes" cancelText="No">
-                                    <Button icon='user' content='Delete User'/>
-                                </Popconfirm>
+                                {this.props.work?
+                                <Button  content='Back to Work' onClick={this.backToWork}/>:
+                                <Button icon='user' content='Back to Users' onClick={this.backToUsers}/>}
+                                {this.props.profile && !this.props.work?
+                                    <Button icon='user' content='Delete User' onClick={(e)=>this.handleModal(e,true)}/>
                                     : ''}
                             </div>
                         </div>
-                        <Form size='large' className='SettingsForm'>
+                        <Form size='large' className='SettingsForm' loading={this.state.loading}>
                             <Header as='h2' className='login-Header' style={{marginTop:'3%'}}textAlign='center'> {
-                                this.props.profile? "Edit an Account" : "Create an Account"}
+                                this.props.profile? (this.props.work? "User Profile" : "Edit an Account" ) : "Create an Account"}
                             </Header>
                             <Form.Group width='equal'>
                                 <Form.Input
@@ -227,6 +294,7 @@ class AddUser extends Component {
                                     placeholder='John'
                                     label='First Name:'
                                     value={this.state.firstName}
+                                    disabled={this.props.work}
                                     error={this.state.errorFirstName}
                                     onChange={this.changeFirstName}
                                     width={8}/>
@@ -235,6 +303,7 @@ class AddUser extends Component {
                                     iconPosition='left'
                                     placeholder='Dylon'
                                     label='Last Name:'
+                                    disabled={this.props.work}
                                     value={this.state.lastName}
                                     error={this.state.errorLastName}
                                     onChange={this.changeLastName}
@@ -246,6 +315,7 @@ class AddUser extends Component {
                                 placeholder='Ex:514 888 111 32'
                                 type='number'
                                 value={this.state.phone}
+                                disabled={this.props.work}
                                 error={this.state.errorPhone}
                                 onChange={this.changePhone}
                                 label='Phone:'/>
@@ -254,6 +324,7 @@ class AddUser extends Component {
                                 iconPosition='left'
                                 placeholder='Ex: 1445 Rue Guy Montreal QC, Canada'
                                 value={this.state.address}
+                                disabled={this.props.work}
                                 error={this.state.errorAddress}
                                 onChange={this.changeAddress}
                                 label='Address:'/>
@@ -264,6 +335,7 @@ class AddUser extends Component {
                                 placeholder='Select one of the options...'
                                 value={this.state.type}
                                 error={this.state.errorType}
+                                disabled={this.props.work}
                                 onChange={this.changeType}
                                 options={optionsType}
                             />
@@ -272,6 +344,7 @@ class AddUser extends Component {
                                 iconPosition='left'
                                 placeholder='john@concordia.ca'
                                 value={this.state.email}
+                                disabled={this.props.work}
                                 error={this.state.errorEmail}
                                 onChange={this.changeEmail}
                                 label='Email:'/>
@@ -280,14 +353,15 @@ class AddUser extends Component {
                                 icon='lock'
                                 iconPosition='left'
                                 label='Password'
+                                disabled={this.props.work}
                                 placeholder='Password'
                                 value={this.state.password}
                                 error={this.state.errorPassword}
                                 onChange={this.changePassword}
                                 type='password'
                             />
-                            <Button className='login-button' fluid size='large' onClick={this.props.profile? this.editUser :this.signUp}>
-                            {this.props.profile? "Save" : "Sign Up"}
+                            <Button className='login-button' fluid size='large' onClick={this.props.profile? (this.props.work? this.removeFromWork : this.editUser ) :this.signUp}>
+                            {this.props.profile? (this.props.work? "Remove From Work" : "Save" ): "Sign Up"}
                             </Button>
                         </Form>
                     </div>

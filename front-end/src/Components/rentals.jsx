@@ -9,6 +9,10 @@ import {Button, Dropdown, Form, Grid, Icon, Image, Message, Segment} from 'seman
 import {Redirect} from "react-router";
 import DataTable from '../Components/Common/table/table'
 import RedirectItem from "./redirectItem"
+import ApiCalls from '../class/apiCalls'
+
+
+let apicall = new ApiCalls;
 let tableArray= []
 const options = [
     { key: 1, text: 'Book', value: "Book" },
@@ -26,62 +30,68 @@ class Rentals extends Component {
     componentDidMount() {
         this.props.history.push(`/rentals`);
         tableArray= [];
-        let book={
-            Title: "Marc's book",
-            Author: "marc noon",
-            Format: "marc format",
-            Pages: 567,
-            Publisher: "marc again",
-            Language: "marc's language",
-            ISBN10: 1234567890,
-            ISBN13: "7927927892",
-            Quantity: 67,
-            Type: "Book",
+        if(this.props.userProfile.type ===1) {
+            this.loadRentalsAdmin();
+        }else{
+            this.loadRentalsClient();
         }
-        tableArray.push(book);
-        this.forceUpdate();
 
-        let music={
-            Title: "marc' music",
-            Artist: "marc noon",
-            MusicType: "marc type",
-            Label: "label marc",
-            ReleaseDate: "marc again",
-            ASIN: "TY157373",
-            Quantity: 67,
-            Type: "Music",
-        }
-        tableArray.push(music);
-        this.forceUpdate();
+    }
+    loadRentalsAdmin=()=>{
+        this.setState({loading:true})
+        tableArray= [];
+        let this1= this;
 
-        let magazine={
-            Title: "marc' magazine",
-            Publisher: "marc again",
-            Language: "marc's language",
-            Label: "label marc",
-            ISBN10: 1234567890,
-            ISBN13: "7927927892",
-            Quantity: 67,
-            Type: "Magazine",
-        }
-        tableArray.push(magazine);
-        this.forceUpdate();
+        apicall.viewRentalsAdmin(function(dataRentals){
+            dataRentals.books.map((bookData)=>{
+                bookData.Type='Book'
+                tableArray.push(bookData)
+            })
+            dataRentals.magazines.map((magazineData)=>{
+                magazineData.Type='Magazine'
+                tableArray.push(magazineData)
+            })
+            dataRentals.music.map((musicData)=>{
+                musicData.Type='Music'
+                tableArray.push(musicData)
+            })
+            dataRentals.movies.map((movieData)=>{
+                movieData.Type='Movie'
+                tableArray.push(movieData)
+            })
+            this1.setState({loading:false})
+            this1.forceUpdate();
 
-        let movie={
-            Title: "marc' movie",
-            Director: "marc noon",
-            Producers: "marc type",
-            Actors: "label marc",
-            Language: "marc's language",
-            Subtitles: "marc's language",
-            Dubbed: "marc's language",
-            ReleaseDate: "marc again",
-            RunTime: "TY157373",
-            Quantity: 67,
-            Type: "Movie",
-        }
-        tableArray.push(movie);
-        this.forceUpdate();
+        });
+
+    }
+    loadRentalsClient=()=>{
+        this.setState({loading:true})
+        tableArray= [];
+        let this1= this;
+
+        apicall.viewRentalsClient(this.props.userProfile.UserId,function(dataRentals){
+            dataRentals.books.map((bookData)=>{
+                bookData.Type='Book'
+                tableArray.push(bookData)
+            })
+            dataRentals.magazines.map((magazineData)=>{
+                magazineData.Type='Magazine'
+                tableArray.push(magazineData)
+            })
+            dataRentals.music.map((musicData)=>{
+                musicData.Type='Music'
+                tableArray.push(musicData)
+            })
+            dataRentals.movies.map((movieData)=>{
+                movieData.Type='Movie'
+                tableArray.push(movieData)
+            })
+            this1.setState({loading:false})
+            this1.forceUpdate();
+
+        });
+
     }
 
     closeProfile=()=>{
@@ -102,17 +112,23 @@ class Rentals extends Component {
 
         }else{
             let columnItems =[
+                {value : 'Id Item', render : 'Id Item', type : 'number'},
                 {value : 'Title', render : 'Title', type : 'text'},
                 {value : 'Type', render : 'Type', type : 'text'},
-                {value : 'Quantity', render : 'Quantity', type : 'number'},
+                {value : 'Id User', render : 'Id User', type : 'number'},
+                {value : 'Loan Date', render : 'Loan Date', type : 'date'},
+                {value : 'Return Date', render : 'Return Date', type : 'date'},
 
             ];
             let tableItems = [];
             tableArray.map((itemData)=>{
                 let arrData=[
+                    {value : itemData.id, render : itemData.id, type : 'number'},
                     {value : itemData.Title, render : itemData.Title, type : 'text'},
                     {value : itemData.Type, render : itemData.Type, type : 'text'},
-                    {value : itemData.Quantity, render : itemData.Quantity, type : 'number'},
+                    {value : itemData.UserId, render : itemData.UserId, type : 'number'},
+                    {value : itemData.loanDate, render : itemData.loanDate, type : 'date'},
+                    {value : itemData.returnDate, render : itemData.returnDate, type : 'date'},
                     itemData
                 ]
                 tableItems.push(arrData);
@@ -137,6 +153,7 @@ class Rentals extends Component {
                             columnItems={columnItems}
                             data={tableItems}
                             itemsPerPage={10}
+                            loading={this.state.loading}
                             clickRow={this.openProfile}/>
                     </div>
 

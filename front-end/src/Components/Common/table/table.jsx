@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Icon, Table, Input, Pagination, Dropdown, Button} from 'semantic-ui-react'
+import {Icon, Table, Input, Pagination, Dropdown, Button, Loader} from 'semantic-ui-react'
 import './table.css';
 import moment from "moment";
 import _ from 'lodash';
@@ -66,6 +66,7 @@ class DataTable extends Component {
             arrayItems = [];
             this.forceUpdate()
         }
+
     }
 
 
@@ -228,10 +229,10 @@ class DataTable extends Component {
             this.handleUserInput();
         } else {
             manupulate = false;
-            indexOfLastTodo = this.state.currentPage * this.props.itemsPerPage;
+            indexOfLastTodo = 1 * this.props.itemsPerPage;
             indexOfFirstTodo = indexOfLastTodo - this.props.itemsPerPage;
             currentTodos = dataItems.slice(indexOfFirstTodo, indexOfLastTodo);
-            this.setState({column: '', direction: null})
+            this.setState({column: '', direction: null, currentPage: 1})
         }
     }
 
@@ -299,7 +300,18 @@ class DataTable extends Component {
 
     render() {
         const {column, direction} = this.state;
-        if(this.props.data && this.props.columnItems) {
+        if(this.props.loading){
+            return(
+                <div className="table-Container">
+                    <div className='table-Search-Container'>
+                        <div className='table-Search-Bar'>
+                            <Input type="text" placeholder="Type to Search..."/>
+                        </div>
+                    </div>
+                    <Loader inverted active>Loading</Loader>
+                </div>
+            )
+        }else if(this.props.data && this.props.columnItems && !this.props.errorMessage) {
             if (dataItems.length === 0 && !this.state.filterText && !this.state.reset) {
                 dataItems = this.props.data;
                 this.handleOptions();

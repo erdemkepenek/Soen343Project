@@ -18,6 +18,32 @@ class ApiCalls extends Component {
             }.bind(this)
         );
     }
+    viewRentalsAdmin=(callback)=>{
+        axios.post('/loan/view/all').then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
+    viewRentalsClient=(userId,callback)=>{
+        axios.post('/loan/view/user',{userId:userId}).then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
     viewTransactionHistory=(callback)=> {
         axios.post('/history/transaction/view').then(
             function (response, err) {
@@ -38,14 +64,51 @@ class ApiCalls extends Component {
             }.bind(this)
         );
     }
-    viewBook=(callback)=>{
-        axios.post('/book/view').then(
+    viewWorkBook=(userId,callback)=>{
+        axios.post('/book/save/view',{userId:userId}).then(
             function (response, err) {
                 console.log(response)
                 console.log(err)
                 if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
+    commitBook=(userId,callback)=> {
+        axios.post('/book/commit',{userId:userId}).then(
+            function (response, err) {
+                console.log(response)
+                if(response.data){
+                    callback(response.data);
+                }
+            }.bind(this)
+        );
+    }
+    viewBook=(callback)=> {
+        axios.post('/book/view').then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if (response.data) {
                     console.log(response.data.data)
                     callback(response.data.data)
+                }
+
+            }.bind(this)
+        );
+    }
+    addBook=(userId,item,callback)=>{
+        console.log({userId:userId,item:item})
+        axios.post('/book/add',{userId:userId,item:item}).then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
                 }
 
             }.bind(this)
@@ -117,7 +180,7 @@ class ApiCalls extends Component {
             }.bind(this)
         );
     }
-    signUp=(data,callback)=> {
+    addUser=(data,callback)=> {
         axios.post('/user/add',data).then(
             function (response, err) {
                 console.log(response)
@@ -127,8 +190,50 @@ class ApiCalls extends Component {
             }.bind(this)
         );
     }
-    commit=(callback)=> {
+    modifyUser=(data,callback)=> {
+        axios.post('/user/modify',data).then(
+            function (response, err) {
+                console.log(response)
+                if(response.data){
+                    callback(response.data);
+                }
+            }.bind(this)
+        );
+    }
+    deleteUser=(data,callback)=> {
+        axios.post('/user/delete',data).then(
+            function (response, err) {
+                console.log(response)
+                if(response.data){
+                    callback(response.data);
+                }
+            }.bind(this)
+        );
+    }
+    viewUncommittedUser=(userId,callback)=> {
+        axios.post('/user/save/view',{userId:userId}).then(
+            function (response, err) {
+                console.log(response)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+            }.bind(this)
+        );
+    }
+
+    commitSignup=(callback)=> {
         axios.post('/user/commit',{userId:9999}).then(
+            function (response, err) {
+                console.log(response)
+                if(response.data){
+                    callback(response.data);
+                }
+            }.bind(this)
+        );
+    }
+    commitUser=(userId,callback)=> {
+        axios.post('/user/commit',{userId:userId}).then(
             function (response, err) {
                 console.log(response)
                 if(response.data){

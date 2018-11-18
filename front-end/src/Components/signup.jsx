@@ -100,8 +100,8 @@ class Signup extends Component {
             let temp = this.props;
             let temp2 = this;
             console.log(data)
-            apicall.signUp(data,function(data){
-                apicall.commit(function(data){
+            apicall.addUser(data,function(data){
+                apicall.commitSignup(function(data){
                     temp2.setState({loading:false})
                     if(data.creation[0].success === 'true'){
                         temp2.signupConfirmation();

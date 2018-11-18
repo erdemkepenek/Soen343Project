@@ -68,11 +68,11 @@ class BookTDG {
 	}
 	addItem(item, callback) {
 		let sql;
-		console.log(item.title);
-		if (item.idDesc == undefined) {
+		console.log(item.Title);
+		if (item.idDesc == undefined){
 			sql = '   INSERT INTO `BookDesc` (`Title`, `Author`, `Format`, `Pages`, `Publisher`, `ISBN-10`, `ISBN-13`, `Language`)  ' +
 				'   VALUES  ' +
-				'       ("' + item.title + '", "' + item.author + '", "' + item.format + '", ' + item.pages + ', "' + item.publisher + '", ' + item.ISBN10 + ', ' + item.ISBN13 + ', "' + item.language + '");  ' +
+				'       ("' + item.Title + '", "' + item.Author + '", "' + item.Format + '", ' + item.Pages + ', "' + item.Publisher + '", ' + item["ISBN-10"] + ', ' + item["ISBN-13"] + ', "' + item.Language + '");  ' +
 				'   SET @last_id_book = LAST_INSERT_ID();  ' +
 				'   INSERT INTO `Items` (id)  ' +
 				'   VALUES  ' +
@@ -148,11 +148,11 @@ class BookTDG {
 			})
 		})
 	}
-	modifyItem(item, callback) {
-		let sql = '   UPDATE `BookDesc`  ' +
-			'   SET Title="' + item.title + '", Author="' + item.author + '", Format="' + item.format + '", Pages=' + item.pages + ', Publisher="' + item.publisher + '", `ISBN-10`=' + item.ISBN10 + ', `ISBN-13`=' + item.ISBN13 + ', Language="' + item.language + '"  ' +
-			'  WHERE idDesc=' + item.idDesc + ';  ';
-		this.runQuery(function (conn, completedQuery) {
+	modifyItem(item,callback){
+		let sql='   UPDATE `BookDesc`  '  + 
+				'   SET Title="'+item.Title+'", Author="'+item.Author+'", Format="'+item.Format+'", Pages='+item.Pages+', Publisher="'+item.Publisher+'", `ISBN-10`='+item["ISBN-10"]+', `ISBN-13`='+item["ISBN-13"]+', Language="'+item.Language+'"  '  +
+				'  WHERE idDesc='+item.idDesc+';  ';
+		this.runQuery(function(conn,completedQuery){
 			conn.query(sql, (err, rows, fields) => {
 				if (!err) {
 					let msg = {};

@@ -12,7 +12,14 @@ router.post("/add", function (req, res) {
         res.send(JSON.stringify(msg));
     });
 });
-
+router.post("/add/copy", function (req, res) {
+    let data = req.body;
+    console.log(req.body);
+    res.setHeader('Content-Type', 'application/json');
+    myController.musicAddCopy(data.userId,data.item,data.quantity, function (msg) {
+        res.send(JSON.stringify(msg));
+    });
+});
 router.post("/modify", function (req, res) {
     let data = req.body;
     res.setHeader('Content-Type', 'application/json');

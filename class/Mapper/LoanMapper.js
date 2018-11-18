@@ -20,7 +20,7 @@ class LoanMapper {
         callback(msg.data);
       });
     } else {
-      callback(result[0]);
+      callback(result[0].data);
     }
   }
 
@@ -36,11 +36,9 @@ class LoanMapper {
         callback(msg.data);
       });
     } else {
-      callback(result[0]);
+      callback(result[0].data);
     }
   }
-
-
   addLoanItem(userId, item, callback) {
     console.log("[LoanMapper] addLoantItem()");
     this.LoanUnitOfWork.addNew(userId, item);
@@ -92,7 +90,7 @@ class LoanMapper {
 
     //NodeJS Side Effect of asynchronous, wait for request to database is sent 
     this.wait = function (a) {
-      callback(g_msg);
+      callback(g_msg, items);
     }
     setTimeout(this.wait, 2000);
 

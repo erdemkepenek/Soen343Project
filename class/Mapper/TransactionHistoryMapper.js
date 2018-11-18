@@ -8,7 +8,7 @@ class TransactionHistoryMapper {
   }
 
   addActivity(id, action, itemId, callback) {
-    console.log("[LogActivityMapper] addActivity()");
+    console.log("[TransactionHistoryTDG] addActivity()");
     let IDM = this.TransactionHistoryIdentityMap;
     this.TransactionHistoryTDG.addActivity(id, action, itemId, function(msg) {
       callback(msg);
@@ -17,7 +17,7 @@ class TransactionHistoryMapper {
   }
 
   viewActivity(callback) {
-    console.log("[LogActivityMapper] viewActivity()");
+    console.log("[TransactionHistoryTDG] viewActivity()");
     let IDM = this.TransactionHistoryIdentityMap;
     var result = IDM.getData();
     if (result.length == 0) {

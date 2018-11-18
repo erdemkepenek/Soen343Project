@@ -5,10 +5,15 @@ import {connect} from 'react-redux'
 import HeaderComponent from './Common/header/header'
 import FooterComponent from './Common/footer/footer'
 import {withRouter} from 'react-router-dom'
-import {Button, Form, Grid, Header, Icon, Image, Message, Segment} from 'semantic-ui-react'
+import {Button, Dropdown, Form, Grid, Header, Icon, Image, Message, Segment} from 'semantic-ui-react'
 import {Redirect} from "react-router";
-import {notification,Popconfirm} from "antd";
+import {notification,Modal,Tooltip} from "antd";
+import ApiCalls from '../class/apiCalls'
 
+
+let apicall = new ApiCalls;
+
+let options=[];
 
 class BookProfile extends Component {
     constructor(props) {
@@ -24,6 +29,8 @@ class BookProfile extends Component {
             ISBN10: this.props.bookProfile? this.props.bookProfile['ISBN-10'] : "",
             ISBN13: this.props.bookProfile? this.props.bookProfile['ISBN-13'] : "",
             quantity: this.props.bookProfile? this.props.bookProfile.Quantity : "",
+            available: this.props.bookProfile? this.props.bookProfile.available: '',
+            copy: '',
             errorTitle: false,
             errorAuthor: false,
             errorFormat: false,
@@ -32,10 +39,22 @@ class BookProfile extends Component {
             errorLanguage: false,
             errorISBN10: false,
             errorISBN13: false,
-            errorQuantity: false,
+            modal1Visible:false,
+            deleteID: '',
+            loading:false,
         }
     }
-    
+    componentDidMount(){
+        if(this.props.bookProfile && this.props.userProfile.type ===1 && !this.props.rent && !this.props.cart){
+            options=[
+                {text:"Copy ID 1", value:1,key:1},
+                {text:"Copy ID 2", value:2,key:2},
+                {text:"Copy ID 3", value:3,key:3},
+                {text:"Copy ID 4", value:4,key:4},
+                {text:"All Copies", value:null,key:null},
+                ]
+        }
+    }
     changeTitle=(e)=>{
         this.setState({Title:e.target.value})
         this.setState({errorTitle: false})
@@ -65,17 +84,20 @@ class BookProfile extends Component {
         this.setState({errorISBN10: false})
     }
     changeISBN13=(e)=>{
-        this.setState({ISBN10:e.target.value})
+        this.setState({ISBN13:e.target.value})
         this.setState({errorISBN13: false})
     }
-    changeQuantity=(e)=>{
-        this.setState({quantity:e.target.value})
-        this.setState({errorQuantity: false})
+    changeCopy=(e)=>{
+        if(e.target.value > 0 || !e.target.value){
+            this.setState({copy:e.target.value})
+        }else{
+            this.setState({copy:0})
+        }
     }
 
    editBook=()=>{
-        let {Title,author,format,pages, publisher, language, ISBN10, ISBN13, quantity } = this.state;
-        if(!Title || !author || !format || !pages || !publisher || !language || !ISBN10 || !ISBN13 || !quantity){
+        let {Title,author,format,pages, publisher, language, ISBN10, ISBN13,copy } = this.state;
+        if(!Title || !author || !format || !pages || !publisher || !language || !ISBN10 || !ISBN13){
             if(!Title){
                 this.setState({errorTitle: true})
             }
@@ -100,9 +122,6 @@ class BookProfile extends Component {
             if(!ISBN13){
                 this.setState({errorISBN13: true})
             }
-            if(!quantity){
-                this.setState({errorQuantity: true})
-            }
             this.bookError();
         }else{
             let data={
@@ -111,11 +130,12 @@ class BookProfile extends Component {
                 Format: format,
                 Pages: pages,
                 Publisher: publisher,
-                ISBN10: ISBN10,
-                ISBN13: ISBN13,
                 Language: language,
-                Quantity: quantity,
             }
+            data.category='book';
+            data['ISBN-10']=ISBN10;
+            data['ISBN-13']=ISBN13;
+            console.log(copy)
             console.log(data)
 
             this.editConfirmation();
@@ -135,8 +155,8 @@ class BookProfile extends Component {
     };
 
     addBook=()=>{
-        let {Title,author,format,pages, publisher, language, ISBN10, ISBN13, quantity } = this.state;
-        if(!Title || !author || !format || !pages || !publisher || !language || !ISBN10 || !ISBN13 || !quantity){
+        let {Title,author,format,pages, publisher, language, ISBN10, ISBN13,copy } = this.state;
+        if(!Title || !author || !format || !pages || !publisher || !language || !ISBN10 || !ISBN13){
             if(!Title){
                 this.setState({errorTitle: true})
             }
@@ -161,26 +181,31 @@ class BookProfile extends Component {
             if(!ISBN13){
                 this.setState({errorISBN13: true})
             }
-            if(!quantity){
-                this.setState({errorQuantity: true})
-            }
             this.bookError();
         }else{
+            this.setState({loading:true})
             let data={
                 Title: Title,
                 Author: author,
                 Format: format,
                 Pages: pages,
                 Publisher: publisher,
-                ISBN10: ISBN10,
-                ISBN13: ISBN13,
                 Language: language,
-                Quantity: quantity,
+                category: 'book'
             }
+            data['ISBN-10']=ISBN10;
+            data['ISBN-13']=ISBN13;
+            let temp = this;
+            apicall.addBook(this.props.userProfile.UserId,data,function(dataRentals){
+                console.log(dataRentals)
+                temp.setState({loading:false})
+                temp.addConfirmation();
+                temp.props.history.push(`/ecatalog`);
+
+            });
+            console.log(copy)
             console.log(data)
 
-            this.addConfirmation();
-            this.props.history.push(`/ecatalog`);
         }
     }
 
@@ -189,7 +214,7 @@ class BookProfile extends Component {
     addConfirmation = () => {
         notification.success({
             message: 'Sucess',
-            description: 'You have Editted a Book!',
+            description: 'Created Book has been added to Work Table!',
             duration:6,
         });
     };
@@ -213,13 +238,13 @@ class BookProfile extends Component {
     }
     backToCart= ()=> {
         this.props.history.push(`/cart`);
-        if(this.props.magazineProfile){
+        if(this.props.bookProfile){
             this.props.closeProfile();
         }
     }
     backToRentals= ()=> {
         this.props.history.push(`/rentals`);
-        if(this.props.magazineProfile){
+        if(this.props.bookProfile){
             this.props.closeProfile();
         }
     }
@@ -234,7 +259,22 @@ class BookProfile extends Component {
     addToCart=()=>{
 
     }
+    handleModal=(e,modal1Visible)=> {
+        e.preventDefault()
+        this.setState({ modal1Visible, deleteID:''});
+    }
+    deleteCopy=(data)=>{
+        this.setState({deleteID:data.value})
+    }
+    backToWork=()=>{
+        this.props.history.push(`/workecatalog`);
+        if(this.props.bookProfile){
+            this.props.closeProfile();
+        }
+    }
+    removeFromWork=()=>{
 
+    }
 
     render() {
         console.log(this.props.bookProfile);
@@ -245,18 +285,35 @@ class BookProfile extends Component {
         }else {
             return (
                 <div className='main-container'>
+                    <Modal
+                        centered
+                        closable
+                        title="Are you sure to Delete copy of this Book?"
+                        visible={this.state.modal1Visible}
+                        onOk={this.deleteBook}
+                        okText="Delete"
+                        okButtonProps={{disabled: !this.state.deleteID}}
+                        onCancel={(e)=>this.handleModal(e,false)}
+                    >
+                        <p>Note: Deleting all copies of the book will result deleting this record.</p>
+                        <div className='MainContainer-upper-container-button' style={{textAlign:'center'}}>
+                            <Dropdown placeholder="Choose Copy to Delete" value={this.state.deleteID}
+                                      onChange={(e, value) => this.deleteCopy(value)} options={options}
+                                      selection/>
+                        </div>
+                    </Modal>
                     <HeaderComponent closeProfileItem={this.props.bookProfile ? this.closeProfile : ''} />
                     <div className='MainContainer'>
                         <div className="MainContainer-upper-container">
                             <div className="MainContainer-upper-container-text">
                                 <div className="MainContainer-upper-container-first-text">
                                    {this.props.bookProfile?
-                                       (this.props.userProfile.type ===0 || this.props.rent ?
+                                       (this.props.userProfile.type ===0 || this.props.rent || this.props.work ?
                                            "Book Details":"Edit Book") : "Add Book"}
                                 </div>
                                 <div className="MainContainer-upper-container-second-text">
                                 {this.props.bookProfile?
-                                    (this.props.userProfile.type ===0 || this.props.rent ?
+                                    (this.props.userProfile.type ===0 || this.props.rent || this.props.work ?
                                         "You can see the details of Music":
                                     "You can edit a book")
                                     : "You can add a new book to the system!"}
@@ -264,30 +321,32 @@ class BookProfile extends Component {
                                 </div>
                             </div>
                             <div className='MainContainer-upper-container-button'>
+                                {this.props.work?<Button content='Back to Work' onClick={this.backToWork}/>:
                                 <Button icon='user' content={this.props.rent?'Back to Rentals' : (this.props.cart? 'Back to Cart' : 'Back to Catalog')}
-                                        onClick={this.props.rent? this.backToRentals : (this.props.cart? this.backToCart : this.backToCatalog)}/>
-                                <Button icon='user' content='Back to Catalog' onClick={this.backToCatalog}/>
-                                {this.props.bookProfile && this.props.userProfile.type ===1 && !this.props.rent && !this.props.cart?
-                                <Popconfirm title="Are you sure to delete this User?" onConfirm={this.deleteBook} placement="bottomRight" okText="Yes" cancelText="No">
-                                    <Button icon='user' content='Delete Book'/>
-                                </Popconfirm>
+                                        onClick={this.props.rent? this.backToRentals : (this.props.cart? this.backToCart : this.backToCatalog)}/>}
+                                {this.props.bookProfile && this.props.userProfile.type ===1 && !this.props.rent && !this.props.cart && !this.props.work?
+                                    <Button icon='user' content='Delete Book' onClick={(e)=>this.handleModal(e,true)}/>
                                     : ''}
                             </div>
                         </div>
-                        <Form size='large' className='SettingsForm'>
+                        <Form size='large' className='SettingsForm' loading={this.state.loading}>
                             <Header as='h2' className='login-Header' style={{marginTop:'3%'}}textAlign='center'> {
                                 this.props.bookProfile?
-                                    (this.props.userProfile.type ===0 || this.props.rent  ?
+                                    (this.props.userProfile.type ===0 || this.props.rent || this.props.work ?
                                         "Book Profile":
                                     "Edit a Book") : "Create a Book"}
                             </Header>
+                            {this.props.bookProfile && this.props.userProfile.type ===1 && !this.props.work && !this.props.rent && !this.props.cart?
+                            <Header as='h3' className='quantityHeader'>Quantity: ({this.state.quantity})</Header>: ''}
+                            {this.props.bookProfile && !this.props.work && !this.props.rent && !this.props.cart?
+                            <Header as='h3' className='quantityHeader'>Available: ({this.state.available})</Header>: ''}
                             <Form.Group width='equal'>
                                 <Form.Input
                                     icon='book'
                                     iconPosition='left'
                                     placeholder='Bel Ami'
                                     label='Title:'
-                                    disabled={this.props.userProfile.type ===0 || this.props.rent}
+                                    disabled={this.props.userProfile.type ===0 || this.props.rent || this.props.work}
                                     value={this.state.Title}
                                     error={this.state.errorTitle}
                                     onChange={this.changeTitle}
@@ -297,7 +356,7 @@ class BookProfile extends Component {
                                     iconPosition='left'
                                     placeholder='Dylon'
                                     label='Author:'
-                                    disabled={this.props.userProfile.type ===0 || this.props.rent}
+                                    disabled={this.props.userProfile.type ===0 || this.props.rent || this.props.work}
                                     value={this.state.author}
                                     error={this.state.errorAuthor}
                                     onChange={this.changeAuthor}
@@ -307,7 +366,7 @@ class BookProfile extends Component {
                                 fluid icon='file outline'
                                 iconPosition='left'
                                 placeholder='Ex: Digital'
-                                disabled={this.props.userProfile.type ===0 || this.props.rent}
+                                disabled={this.props.userProfile.type ===0 || this.props.rent || this.props.work}
                                 value={this.state.format}
                                 error={this.state.errorFormat}
                                 onChange={this.changeFormat}
@@ -316,7 +375,7 @@ class BookProfile extends Component {
                                 fluid icon='sort numeric down'
                                 iconPosition='left'
                                 placeholder='Ex: 500'
-                                disabled={this.props.userProfile.type ===0 || this.props.rent}
+                                disabled={this.props.userProfile.type ===0 || this.props.rent|| this.props.work}
                                 value={this.state.pages}
                                 error={this.state.errorPages}
                                 onChange={this.changePages}
@@ -328,7 +387,7 @@ class BookProfile extends Component {
                                 fluid icon='user'
                                 iconPosition='left'
                                 placeholder='John'
-                                disabled={this.props.userProfile.type ===0 || this.props.rent}
+                                disabled={this.props.userProfile.type ===0 || this.props.rent || this.props.work}
                                 value={this.state.publisher}
                                 error={this.state.errorPublisher}
                                 onChange={this.changePublisher}
@@ -337,7 +396,7 @@ class BookProfile extends Component {
                                 fluid icon='language'
                                 iconPosition='left'
                                 label='Language: '
-                                disabled={this.props.userProfile.type ===0 || this.props.rent}
+                                disabled={this.props.userProfile.type ===0 || this.props.rent || this.props.work}
                                 placeholder='Ex: English'
                                 value={this.state.language}
                                 error={this.state.errorLanguage}
@@ -348,36 +407,45 @@ class BookProfile extends Component {
                                 iconPosition='left'
                                 placeholder='Ex: 1524796972'
                                 value={this.state.ISBN10}
-                                disabled={this.props.userProfile.type ===0 || this.props.rent}
+                                disabled={this.props.userProfile.type ===0 || this.props.rent || this.props.work}
                                 error={this.state.errorISBN10}
                                 onChange={this.changeISBN10}
                                 label='ISBN-10: '
-                                type= "number"/>
-                            <Form.Input
-                                fluid icon='sort numeric down'
-                                iconPosition='left'
-                                placeholder='Ex: 3'
-                                disabled={this.props.userProfile.type ===0 || this.props.rent}
-                                value={this.state.quantity}
-                                error={this.state.errorQuantity}
-                                onChange={this.changeQuantity}
-                                label='Quantity: '
                                 type= "number"/>
                             <Form.Input
                                 fluid icon='id card'
                                 iconPosition='left'
                                 label='ISBN-13: '
                                 placeholder='Ex: 978-1524796976'
-                                disabled={this.props.userProfile.type ===0 || this.props.rent}
+                                disabled={this.props.userProfile.type ===0 || this.props.rent || this.props.work}
                                 value={this.state.ISBN13}
                                 error={this.state.errorISBN13}
                                 onChange={this.changeISBN13}    />
+                            {this.props.userProfile.type ===1 && !this.props.rent && !this.props.cart && !this.props.work?
+                                <Form.Input
+                                    fluid icon='sort numeric down'
+                                    iconPosition='left'
+                                    placeholder='Default: 0'
+                                    value={this.props.bookProfile ? this.state.copy : 1}
+                                    disabled={!this.props.bookProfile}
+                                    onChange={this.changeCopy}
+                                    label={this.props.bookProfile ? 'Number of Copies would you like to Add:' : 'Number of Copies will be added as Default:' }
+                                    type= "number"/>:''}
                             {this.props.userProfile.type ===1 && !this.props.rent?
-                            <Button className='login-button' fluid size='large' onClick={this.props.bookProfile? this.editBook :this.addBook}>
-                            {this.props.bookProfile? "Edit Book" : "Add Book"}
-                            </Button>:(!this.props.cart?
+                            <Button className='login-button' fluid size='large' onClick={this.props.bookProfile? (this.props.work? this.removeFromWork:this.editBook) :this.addBook}>
+                            {this.props.bookProfile? (this.props.work? "Remove From Work":"Edit Book") : "Add Book"}
+                            </Button>:(!this.props.cart && this.props.userProfile.type=== 0?
+                                    (!this.props.rent && this.state.available===0 ?
+                                        <Tooltip placement="top" title="There is no copy available" arrowPointAtCenter>
+                                        <Button
+                                            className={"login-button2"}
+                                            fluid
+                                            size="large"
+                                            onClick={this.addToCart}>
+                                            Add Book to Cart
+                                        </Button></Tooltip>:
                                     <Button
-                                        className="login-button"
+                                        className={"login-button"}
                                         fluid
                                         size="large"
                                         onClick={
@@ -387,9 +455,9 @@ class BookProfile extends Component {
                                         }
                                     >
                                         {this.props.rent ? "Return Book" : "Add Book to Cart"}
-                                    </Button>: '')}
+                                    </Button>): '')}
                         </Form>
-                        {this.props.rent || this.props.cart || !this.props.bookProfile ?
+                        {this.props.rent || this.props.cart || !this.props.bookProfile || this.props.work?
                             '':
                             <div className='nextprevButton-container'>
                                 <Button icon='long arrow alternate left' content='Previus Item' onClick={this.backToCatalog}/>
