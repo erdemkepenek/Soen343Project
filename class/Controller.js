@@ -17,6 +17,9 @@ class Controller {
     this.LogActivity = new LogActivityMapper();
     this.UserMapper = new UserMapper();
 	this.LoanMapper = new LoanMapper();
+	//Special Usage of LoanMapper to directly return item by adding auto commit
+	this.DirectLoanReturnMapper = new LoanMapper();
+
   }
 
   // for BookMapper
@@ -372,6 +375,15 @@ class Controller {
 		  confirmation(msg);
 	  })
   }
+  loanReturnDirect(userId, item,confirmation){
+	  console.log("[Controller] loanReturnDirect()");
+	  this.DirectLoanReturnMapper.addReturnItem(userId,item);
+	  //Direct commit
+	  this.DirectLoanReturnMapper.commit(userId, function(msg){
+		  confirmation(msg);
+	  });
+  }
+  
   loanCommit(userId,confirmation){
 	let temp = this.TransactionHistory;
 	console.log("[Controller] loanCommit()");

@@ -25,12 +25,13 @@ router.post("/return/remove", function (req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify("hello"));
 });
+//Direct access commit (auto commit) for returnin an Item ONLY
 router.post("/return", function (req, res) {
     let data = req.body;
     res.setHeader('Content-Type', 'application/json');
-    myController.loanAddReturn(data.userId, data.item, function (msg) {
-        res.send(JSON.stringify(msg));
-    })
+	myController.loanReturnDirect(data.userId,data.item,function(msg){
+		res.send(JSON.stringify(msg));
+	})
 });
 router.post("/view/all", function (req, res) {
     let data = req.body;
@@ -60,4 +61,5 @@ router.post("/commit", function (req, res) {
         res.send(JSON.stringify(msg));
     })
 });
+
 module.exports = router;
