@@ -600,7 +600,7 @@ class MusicProfile extends Component {
                                                 className={"login-button2"}
                                                 fluid
                                                 size="large"
-                                                onClick={this.addToCart}>
+                                                onClick={this.state.available===0 ? '' : this.addToCart}>
                                                 Add Music to Cart
                                             </Button></Tooltip>:
                                         <Button

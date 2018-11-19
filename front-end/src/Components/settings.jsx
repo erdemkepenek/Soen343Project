@@ -120,6 +120,13 @@ class Settings extends Component {
 
         }
     }
+    signupError = () => {
+        notification.error({
+            message: 'Error',
+            description: 'You information is Missing!',
+            duration:6,
+        });
+    };
     editConfirmation = () => {
         notification.success({
             message: 'Sucess',
