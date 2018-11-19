@@ -19,33 +19,20 @@ router.post("/cart/remove", function (req, res) {
         res.send(JSON.stringify(msg));
     });
 });
-
-router.post("/cart/remove", function (req, res) {
-    let data = req.body;
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify("hello"));
-});
-
-
-router.post("/return/add", function (req, res) {
-    let data = req.body;
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify("hello"));
-});
-
+//Use this API call if needed
 router.post("/return/remove", function (req, res) {
     let data = req.body;
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify("hello"));
 });
+//Direct access commit (auto commit) for returnin an Item ONLY
 router.post("/return", function (req, res) {
     let data = req.body;
     res.setHeader('Content-Type', 'application/json');
-    myController.loanAddReturn(data.userId, data.item, function (msg) {
-        res.send(JSON.stringify(msg));
-    })
+	myController.loanReturnDirect(data.userId,data.item,function(msg){
+		res.send(JSON.stringify(msg));
+	})
 });
-
 router.post("/view/all", function (req, res) {
     let data = req.body;
     res.setHeader('Content-Type', 'application/json');
@@ -53,7 +40,6 @@ router.post("/view/all", function (req, res) {
         res.send(JSON.stringify(msg));
     })
 });
-
 router.post("/view/user", function (req, res) {
     let data = req.body;
     res.setHeader('Content-Type', 'application/json');
@@ -61,16 +47,13 @@ router.post("/view/user", function (req, res) {
         res.send(JSON.stringify(msg));
     })
 });
-
 router.post("/save/view", function (req, res) {
     let data = req.body;
     res.setHeader('Content-Type', 'application/json');
 	myController.loanUncommitedWork(data.userId,function(msg){
 		res.send(JSON.stringify(msg));
-	})
-    
+	}) 
 });
-
 router.post("/commit", function (req, res) {
     let data = req.body;
     res.setHeader('Content-Type', 'application/json');
@@ -78,6 +61,5 @@ router.post("/commit", function (req, res) {
         res.send(JSON.stringify(msg));
     })
 });
-
 
 module.exports = router;

@@ -5,7 +5,7 @@ import {connect} from 'react-redux'
 import HeaderComponent from './Common/header/header'
 import FooterComponent from './Common/footer/footer'
 import {withRouter} from 'react-router-dom'
-import {Button, Form, Grid, Icon, Image, Message, Segment} from 'semantic-ui-react'
+import {Button, Form, Grid, Icon, Image, Menu, Message, Segment} from 'semantic-ui-react'
 import {Redirect} from "react-router";
 import DataTable from '../Components/Common/table/table';
 import UserProfile from "./userProfile";
@@ -15,18 +15,34 @@ import ApiCalls from '../class/apiCalls'
 let apicall = new ApiCalls;
 
 let tableArray = [];
-
 class Users extends Component {
     constructor(props) {
         super(props);
         this.state = {profile:'',
+            loading:false,
         }
     }
     componentDidMount() {
+        this.props.history.push(`/users`);
+        this.loadUsers();
+    }
+    loadUsers=()=>{
+        this.setState({loading:true})
         tableArray= [];
         let this1=this;
         apicall.viewUsers(function(data){
+            console.log(data);
+            data.map((userData)=>{
+                if(userData.type ===1){
+                    userData.userType='Administrator'
+                }else if(userData.type ===0){
+                    userData.userType='Client'
+                }else{
+                    userData.userType=''
+                }
+            })
             tableArray=data
+            this1.setState({loading:false})
             this1.forceUpdate();
         });
     }
@@ -38,9 +54,13 @@ class Users extends Component {
     openProfile=(data)=>{
         console.log(data);
         this.setState({profile: data})
+        this.props.history.push(`/users/${data.email}`);
     }
     addUSer=()=>{
         this.props.history.push(`/adduser`);
+    }
+    work=()=>{
+        this.props.history.push(`/workusers`);
     }
     render() {
         if(!this.props.userProfile) {
@@ -72,38 +92,40 @@ class Users extends Component {
                     {value : userData.email, render : userData.email, type : 'text'},
                     {value : userData.phone, render : userData.phone, type : 'number'},
                     {value : userData.Address, render : userData.Address, type : 'text'},
-                    {value : userData.type, render : userData.type, type : 'number'},
+                    {value : userData.userType, render : userData.userType, type : 'text'},
                     userData
                 ]
                 tableItems.push(arrData);
             })
-            return (
-                <div className='main-container'>
-                    <HeaderComponent/>
-                    <div className='MainContainer'>
-                        <div className="MainContainer-upper-container">
-                            <div className="MainContainer-upper-container-text">
-                                <div className="MainContainer-upper-container-first-text">
-                                    Users
+                return (
+                    <div className='main-container'>
+                        <HeaderComponent/>
+                        <div className='MainContainer'>
+                            <div className="MainContainer-upper-container">
+                                <div className="MainContainer-upper-container-text">
+                                    <div className="MainContainer-upper-container-first-text">
+                                        Users
+                                    </div>
+                                    <div className="MainContainer-upper-container-second-text">
+                                        You can select one of the users to see their details!
+                                    </div>
                                 </div>
-                                <div className="MainContainer-upper-container-second-text">
-                                    You can select one of the users to see their details!
+                                <div className='MainContainer-upper-container-button'>
+                                    <Button content='Work Users' onClick={this.work}/>
+                                    <Button icon='user' content='Add User' onClick={this.addUSer}/>
                                 </div>
                             </div>
-                            <div className='MainContainer-upper-container-button'>
-                                <Button icon='user' content='Add User' onClick={this.addUSer}/>
-                            </div>
+                            <DataTable
+                                columnItems={columnItems}
+                                data={tableItems}
+                                itemsPerPage={10}
+                                loading={this.state.loading}
+                                clickRow={this.openProfile}/>
                         </div>
-                        <DataTable
-                            columnItems={columnItems}
-                            data={tableItems}
-                            itemsPerPage={10}
-                            clickRow={this.openProfile}/>
-                    </div>
 
-                    <FooterComponent/>
-                </div>
-            )
+                        <FooterComponent/>
+                    </div>
+                )
         }
     }
 }

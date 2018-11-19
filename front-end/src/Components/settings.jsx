@@ -8,6 +8,11 @@ import {withRouter} from 'react-router-dom'
 import {Button, Form, Grid, Header, Icon, Image, Message, Segment} from 'semantic-ui-react'
 import {Redirect} from "react-router";
 import DataTable from '../Components/Common/table/table'
+import {notification} from "antd";
+import ApiCalls from '../class/apiCalls'
+
+
+let apicall = new ApiCalls;
 
 const optionsType = [
     {key: 'Client', value: 'Client', text: 'Client'},
@@ -87,26 +92,40 @@ class Settings extends Component {
             }
             this.signupError();
         }else{
+            this.setState({loading:true})
             let data={
-                firstName: firstName,
-                lastName: lastName,
+                userId: this.props.userProfile.UserId,
+                data:{UserId:this.props.userProfile.UserId,
+                FirstName: firstName,
+                LastName: lastName,
                 phone: phone,
-                address: address,
+                Address: address,
                 email: email,
                 password: password,
-                type: ','
+                type: ''}
             }
-            if(this.state.type = 'Client'){
-                data.type=false;
+            if(type === 'Client'){
+                data.type=0;
             }else{
-                data.type=true;
+                data.type=1;
             }
+            let temp = this.props;
+            let temp2 = this;
             console.log(data)
+            apicall.modifyUser(data,function(data){
+                temp2.editConfirmation();
+                temp.history.push(`/users`);
+                temp2.setState({loading:false})
+            });
 
-            this.editConfirmation();
-            this.props.closeProfile();
-            this.props.history.push(`/users`);
         }
+    }
+    editConfirmation = () => {
+        notification.success({
+            message: 'Sucess',
+            description: 'Editted Account has been added to Work Table',
+            duration:6,
+        });
     }
     render() {
         if(!this.props.userProfile) {

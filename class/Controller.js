@@ -17,6 +17,9 @@ class Controller {
     this.LogActivity = new LogActivityMapper();
     this.UserMapper = new UserMapper();
 	this.LoanMapper = new LoanMapper();
+	//Special Usage of LoanMapper to directly return item by adding auto commit
+	this.DirectLoanReturnMapper = new LoanMapper();
+
   }
 
   // for BookMapper
@@ -372,9 +375,61 @@ class Controller {
 		  confirmation(msg);
 	  })
   }
+  loanReturnDirect(userId, item,confirmation){
+	  console.log("[Controller] loanReturnDirect()");
+      let temp_BookMapper =this.BookMapper
+      let temp_MagazineMapper= this.MagazineMapper;
+      let temp_MovieMapper= this.MovieMapper
+      let temp_MusicMapper = this.MusicMapper
+	  this.DirectLoanReturnMapper.addReturnItem(userId,item);
+	  //Direct commit
+	  let temp = this.TransactionHistory;
+	  this.DirectLoanReturnMapper.commit(userId, function(msg, items){
+		  for(var i = 0;i<msg.returned.length;i++){
+			if(msg.returned[i].success=="true"){
+				temp.addActivity(items.id,"return",msg.returned[i].itemId,function(msg){
+					//if confirmation for transaction needed;
+				});
+			}
+			temp_BookMapper.emptyIdentityMap();
+			temp_MusicMapper.emptyIdentityMap();
+			temp_MagazineMapper.emptyIdentityMap();
+			temp_MovieMapper.emptyIdentityMap();
+		   confirmation(msg);
+		}
+	  });
+  }
+  
   loanCommit(userId,confirmation){
-	console.log("[Controller] loanCommit()");
-	this.LoanMapper.commit(userId, function(msg){
+	let temp = this.TransactionHistory;
+	let temp_BookMapper =this.BookMapper
+    let temp_MagazineMapper= this.MagazineMapper;
+    let temp_MovieMapper= this.MovieMapper
+    let temp_MusicMapper = this.MusicMapper
+      console.log("[Controller] loanCommit()");
+	this.LoanMapper.commit(userId, function(msg, items){
+		//console.log(items);
+		//console.log(msg);
+		let loanedItems = items.registration; 
+		for(var i = 0;i<loanedItems.length;i++){
+			if(msg.loaned[i].success=="true"){
+				temp.addActivity(items.id,"loan",msg.loaned[i].data[3][0]["@item_id"],function(msg){
+					//if confirmation for transaction needed;
+				});
+			}
+		}
+		for(var i = 0;i<msg.returned.length;i++){
+			console.log("OKOK");
+			if(msg.returned[i].success=="true"){
+				temp.addActivity(items.id,"return",msg.returned[i].itemId,function(msg){
+					//if confirmation for transaction needed;
+				});
+			}
+		}
+		temp_BookMapper.emptyIdentityMap();
+		temp_MusicMapper.emptyIdentityMap();
+		temp_MagazineMapper.emptyIdentityMap();
+		temp_MovieMapper.emptyIdentityMap();
 		confirmation(msg);
 	})
   }

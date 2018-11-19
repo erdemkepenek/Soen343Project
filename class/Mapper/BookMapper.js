@@ -23,6 +23,9 @@ class BookMapper {
       callback(result[0]);
     }
   }
+  emptyIdentityMap(){
+	this.BookIdentityMap.empty();
+  }
   addItem(id, item, callback) {
 	console.log("[BookMapper] addItem()"); 
     this.BookUnitOfWork.addNew(id, item);
@@ -56,6 +59,7 @@ class BookMapper {
   commit(id, callback) {
 	console.log("[BookMapper] commit()");
     let items = this.BookUnitOfWork.commit(id);
+    console.log(items)
 	let g_msg = {};
 	g_msg.creation = [];
 	g_msg.modification = [];

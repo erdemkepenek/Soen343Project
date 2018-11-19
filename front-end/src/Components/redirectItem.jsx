@@ -24,16 +24,22 @@ class RedirectItem extends Component {
     closeProfile=()=>{
         this.props.closeProfile();
 }
+componentDidMount(){
+        this.forceUpdate();
+}
 
     render() {
-    if (this.props.profile.Type === "Book"){
-        return(<BookProfile cart={this.props.cart} rent={this.props.rent} bookProfile= {this.props.profile} closeProfile= {this.closeProfile}/>)
+    if (this.props.profile.typecategory === "Book"){
+        return(<BookProfile changeProfile={this.props.changeProfile} cart={this.props.cart} work={this.props.work} rent={this.props.rent} bookProfile= {this.props.profile} closeProfile= {this.closeProfile}/>)
     }
-    else if (this.props.profile.Type === "Music"){return(<MusicProfile cart={this.props.cart} rent={this.props.rent} musicProfile= {this.props.profile} closeProfile= {this.closeProfile}/>)}
+    else if (this.props.profile.typecategory === "Music"){return(<MusicProfile changeProfile={this.props.changeProfile} cart={this.props.cart} work={this.props.work} rent={this.props.rent}
+                                                                               musicProfile= {this.props.profile} closeProfile= {this.closeProfile}/>)}
 
-    else if (this.props.profile.Type === "Magazine") {return(<MagazineProfile  cart={this.props.cart} rent={this.props.rent} magazineProfile= {this.props.profile} closeProfile= {this.closeProfile}/>)}
+    else if (this.props.profile.typecategory === "Magazine") {return(<MagazineProfile  changeProfile={this.props.changeProfile} cart={this.props.cart} work={this.props.work} rent={this.props.rent}
+                                                                                       magazineProfile= {this.props.profile} closeProfile= {this.closeProfile}/>)}
 
-    else  {return(<MovieProfile cart={this.props.cart} rent={this.props.rent} movieProfile= {this.props.profile} closeProfile= {this.closeProfile}/>)}
+    else  {return(<MovieProfile changeProfile={this.props.changeProfile} cart={this.props.cart} rent={this.props.rent} work={this.props.work} movieProfile= {this.props.profile}
+                                closeProfile= {this.closeProfile}/>)}
         }   
 }
 function mapStateToProps(state){

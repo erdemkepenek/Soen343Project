@@ -10,7 +10,7 @@ import {Timeline, Card} from 'antd';
 import moment from "moment";
 import _ from 'lodash'
 import {Redirect} from "react-router";
-import {Pagination, Icon, Input, Dropdown, Button} from "semantic-ui-react";
+import {Pagination, Icon, Input, Dropdown, Button, Loader} from "semantic-ui-react";
 import ApiCalls from '../class/apiCalls'
 
 
@@ -30,62 +30,12 @@ class TransactionHistory extends Component {
       fullHistory: [],
       history: [],
       currentPage:1,
-      itemsPerPage: 3,
-        typeOfTransaction: 'All'
+      itemsPerPage: 1,
+        loading:false
     }
   }
     componentDidMount(){
-        /*historyDatashow=[];
-        historyDatashowAll=[];
-        let arrayTest = [];
-        let arrayObject1 = {
-            key: 0,
-            action: 'Loan',
-            actionTakenBy: 'Line',
-            color: 'green',
-            time: moment(new Date).subtract(1, 'days').subtract(5, 'minutes').subtract(20, 'seconds').format()
-        };
-        let arrayObject = {
-            key: 0,
-            action: 'Return',
-            actionTakenBy: 'Manpreet',
-            color: 'blue',
-            time: moment(new Date).format()
-        };
-        let arrayObject2 = {
-            key: 0,
-            action: 'Loan',
-            actionTakenBy: 'Eglen',
-            color: 'yellow',
-            time: moment(new Date).subtract(2, 'days').format()
-        };
-        let arrayObject3 = {
-            key: 0,
-            action: 'Return',
-            actionTakenBy: 'Mikee',
-            color: 'gray',
-            time: moment(new Date).subtract(5, 'minutes').format()
-        };
-        let arrayObject4 = {
-            key: 0,
-            action: 'Loan',
-            actionTakenBy: 'Marc',
-            color: 'orange',
-            time: moment(new Date).subtract(7, 'days').format()
-        };
-        let arrayObject5 = {
-            key: 0,
-            action: 'Return',
-            actionTakenBy: 'Anthony',
-            color: 'red',
-            time: moment(new Date).subtract(2, 'hour').subtract(10, 'seconds').format()
-        };
-        arrayTest.push(arrayObject5)
-        arrayTest.push(arrayObject1);
-        arrayTest.push(arrayObject);
-        arrayTest.push(arrayObject2);
-        arrayTest.push(arrayObject3);
-        arrayTest.push(arrayObject4);*/
+        this.setState({loading:true})
         let years = [];
         let this1=this;
         let state=this.state;
@@ -141,6 +91,7 @@ class TransactionHistory extends Component {
             let indexOfFirstTodo = indexOfLastTodo - state.itemsPerPage;
             let currentTodos = historyDatashow.slice(indexOfFirstTodo, indexOfLastTodo);
             this1.setState({history: currentTodos})
+            setTimeout(function(){ this1.setState({loading:false}) }, 1000)
             this1.forceUpdate();
         });
     }
@@ -156,7 +107,8 @@ class TransactionHistory extends Component {
       return (<Redirect to={'/'}/>);
     } else if(this.props.userProfile.type ===0){
         return (<Redirect to={'/404'}/>);
-    }else {
+    }
+    else {
 
       return (<div className='main-container'>
         <HeaderComponent/>
@@ -171,20 +123,23 @@ class TransactionHistory extends Component {
                 You can see all the transaction history!
               </div>
             </div>
-              <div className='MainContainer-upper-container-button'>
-              <Dropdown selection
-                        placeholder={'Type of Transaction'}
-                        options={optionsType}
-                        value={this.state.typeOfTransaction}/>
-              </div>
           </div>
+              {this.state.loading ?
+                  <div className="table-Container">
+                  <div className='table-Search-Container'>
+                  <div className='table-Search-Bar'>
+                  </div>
+                  </div>
+                  <Loader inverted active>Loading</Loader>
+                  </div>
+                  :
+                  this.state.history.map((data,key) => {
+                  return data;
+              })
+              }
 
-          {
-            this.state.history.map((data,key) => {
-              return data;
-          })
-          }
           </div>
+            {this.state.loading ? '' :
             <Pagination totalPages={Math.ceil(this.state.fullHistory.length / this.state.itemsPerPage)}
                         onPageChange={(e, data) => this.pageChange(e, data)}
                         ellipsisItem={{content: <Icon name='ellipsis horizontal'/>, icon: true}}
@@ -195,7 +150,7 @@ class TransactionHistory extends Component {
                         activePage={this.state.currentPage}
                         className="common-Pagination"
                         style={{borderLeft: 'none', borderRight: 'none', borderBottom: 'none'}}
-            />
+            />}
         </div>
 
         <FooterComponent/>

@@ -24,6 +24,8 @@ import Music from './Components/musicProfile'
 import Magazine from './Components/magazineProfile'
 import Book from './Components/bookProfile'
 import Page404 from './Components/404page'
+import WorkUser from './Components/workUsers'
+import WorkCatalog from './Components/workCatalog'
 class App extends Component {
     componentDidMount(){
         /*this.props.dispatch({type: 'addUserProfile', data: 'hello' });*/
@@ -47,11 +49,16 @@ class App extends Component {
       <Route exact path="/addMusic" component={Music} />
       <Route exact path="/addMovie" component={Movie} />
         <Route exact path="/users" component={Users} />
+      <Route exact path="/workusers" component={WorkUser} />
+      <Route exact path="/workusers/:email" component={WorkUser} />
+      <Route exact path="/users/:email" component={Users} />
       <Route exact path="/adminpanel" component={Adminpanel} />
       <Route exact path="/logactivity" component={LogActivity} />
       <Route exact path="/transactionhistory" component={TransactionHistory} />
      <Route exact path="/ecatalog" component={Catalog} />
     <Route exact path="/ecatalog/:title" component={Catalog} />
+      <Route exact path="/workecatalog" component={WorkCatalog} />
+      <Route exact path="/workecatalog/:email" component={WorkCatalog} />
       <Route exact path="/404" component={Page404}/>
       <Redirect from="*" to="/404" />
           </Switch>

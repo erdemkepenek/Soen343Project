@@ -8,9 +8,8 @@ class LoanMapper {
     this.LoanUnitOfWork = new UnitOfWork();
     this.LoanIdentitymap = new IdentityMap();
   }
-
   viewAllLoans(callback) {
-    console.log("[LoanMapper] viewLoans()");
+    console.log("[LoanMapper] viewAllLoans()");
     let IDM = this.LoanIdentitymap;
     var result = IDM.getData();
     //console.log(result);
@@ -20,27 +19,21 @@ class LoanMapper {
         callback(msg.data);
       });
     } else {
-      callback(result[0]);
+      callback(result[0].data);
     }
   }
-
+  emptyIdentityMap(){
+	this.LoanIdentitymap.empty();
+  }
   //The below method helps to view loans of one specific user
   viewUserLoans(userId, callback) {
-    console.log("[LoanMapper] viewLoans()");
+    console.log("[LoanMapper] viewUserLoans");
     let IDM = this.LoanIdentitymap;
-    var result = IDM.getData();
-    //console.log(result);
-    if (result.length == 0) {
-      this.LoanTDG.viewUserLoans(userId, function (msg) {
+    this.LoanTDG.viewUserLoans(userId, function (msg) {
         IDM.putData(msg);
         callback(msg.data);
-      });
-    } else {
-      callback(result[0]);
-    }
+    });
   }
-
-
   addLoanItem(userId, item, callback) {
     console.log("[LoanMapper] addLoantItem()");
     this.LoanUnitOfWork.addNew(userId, item);
@@ -81,7 +74,9 @@ class LoanMapper {
     }
     let updates = items.updates;
     for (var i = 0; i < updates.length; i++) {
+	  let item_id = updates[i].itemId;
       this.LoanTDG.returnItem(userId, updates[i].itemId, function (msg) {
+		msg.itemId=item_id;
         g_msg.returned.push(msg);
       });
     }
@@ -92,7 +87,7 @@ class LoanMapper {
 
     //NodeJS Side Effect of asynchronous, wait for request to database is sent 
     this.wait = function (a) {
-      callback(g_msg);
+      callback(g_msg, items);
     }
     setTimeout(this.wait, 2000);
 

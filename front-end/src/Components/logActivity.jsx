@@ -10,7 +10,7 @@ import {Timeline, Card} from 'antd';
 import moment from "moment";
 import _ from 'lodash'
 import {Redirect} from "react-router";
-import {Pagination, Icon} from "semantic-ui-react";
+import {Pagination, Icon, Loader} from "semantic-ui-react";
 import ApiCalls from '../class/apiCalls'
 
 
@@ -24,14 +24,18 @@ class LogActivity extends Component {
       fullHistory: [],
       history: [],
       currentPage:1,
-      itemsPerPage: 3,
+      itemsPerPage: 1,
+    loading:false,
+        historyAll:[]
     }
   }
     componentDidMount(){
+        this.setState({loading:true})
         let years = [];
         let this1=this;
         let state=this.state;
         apicall.viewLogActivity(function(data) {
+            this1.setState({historyAll: data})
             HistoryBuilder.historyBuilder(data, function (historyData) {
                 years = historyData
             })
@@ -44,8 +48,8 @@ class LogActivity extends Component {
                                 let historySubDataShow = [];
                                 let arraySorted = value3;
                                 arraySorted.sort(function compare(a, b) {
-                                    var dateA = moment(a.time || "YYYY-MM-DD HH:mm");
-                                    var dateB = moment(b.time || "YYYY-MM-DD HH:mm");
+                                    var dateA = moment(a.timeStamp || "YYYY-MM-DD HH:mm");
+                                    var dateB = moment(b.timeStamp || "YYYY-MM-DD HH:mm");
                                     return dateB - dateA;
                                 });
                                 arraySorted.map((historyData) => {
@@ -84,6 +88,8 @@ class LogActivity extends Component {
             let indexOfFirstTodo = indexOfLastTodo - state.itemsPerPage;
             let currentTodos = historyDatashow.slice(indexOfFirstTodo, indexOfLastTodo);
             this1.setState({history: currentTodos})
+            setTimeout(function(){ this1.setState({loading:false}) }, 1000)
+            this1.forceUpdate();
         })
     }
     pageChange(event, data) {
@@ -114,12 +120,21 @@ class LogActivity extends Component {
               </div>
             </div>
           </div>
-          {
-            this.state.history.map((data,key) => {
-              return data;
-          })
-          }
+              {this.state.loading ?
+                  <div className="table-Container">
+                      <div className='table-Search-Container'>
+                          <div className='table-Search-Bar'>
+                          </div>
+                      </div>
+                      <Loader inverted active>Loading</Loader>
+                  </div>
+                  :
+                  this.state.history.map((data,key) => {
+                      return data;
+                  })
+              }
           </div>
+            {this.state.loading ? '' :
             <Pagination totalPages={Math.ceil(this.state.fullHistory.length / this.state.itemsPerPage)}
                         onPageChange={(e, data) => this.pageChange(e, data)}
                         ellipsisItem={{content: <Icon name='ellipsis horizontal'/>, icon: true}}
@@ -130,7 +145,7 @@ class LogActivity extends Component {
                         activePage={this.state.currentPage}
                         className="common-Pagination"
                         style={{borderLeft: 'none', borderRight: 'none', borderBottom: 'none'}}
-            />
+            />}
         </div>
 
         <FooterComponent/>

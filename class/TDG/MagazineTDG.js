@@ -22,6 +22,7 @@ class MagazineTDG {
 	}
 	viewItems(callback){
 		let sql = 'SELECT MagazineDesc.idDesc, Title, Publisher, Language, `ISBN-10`,`ISBN-13`,COUNT(CASE WHEN available THEN 1 END)as available, COUNT(id) as Quantity FROM MagazineDesc LEFT JOIN MagazinePh ON MagazinePh.idDesc = MagazineDesc.idDesc GROUP BY (MagazineDesc.idDesc)' ;
+		let sqlCopies = 'select idDesc,id from MagazinePh';
 		this.runQuery(function(conn,completedQuery){
 			conn.query(sql, (err, rows, fields) => {
 				if (!err){
@@ -29,7 +30,28 @@ class MagazineTDG {
 					msg.success="true";
 					msg.message="no message";
 					msg.data=rows;
-					callback(msg);
+					//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+					conn.query(sqlCopies, (err, rows, fields) => {
+						if (!err) {
+							let temp = {}
+							temp.copies = rows
+							for (var j = 0; j < msg.data.length; j++) {
+								msg.data[j].copies = new Array();
+								for (var i = 0; i < temp.copies.length; i++) {
+									if (temp.copies[i].idDesc == msg.data[j].idDesc) {
+										msg.data[j].copies.push(temp.copies[i].id);
+									}
+								}
+							}
+							callback(msg);
+						} else {
+							console.log(err);
+							msg.success = "false";
+							msg.message = err.sqlMessage;
+							callback(msg);
+						}
+					});
+					//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 				}
 				else{
 					console.log(err);
@@ -44,11 +66,11 @@ class MagazineTDG {
 	}
 	addItem(item, callback) {
 		let sql;
-		console.log(item.title);
+		console.log(item.Title);
 		if (item.idDesc == undefined) {
 			sql = '   INSERT INTO `MagazineDesc` (`Title`,`Publisher`, `Language`, `ISBN-10`, `ISBN-13`)   ' +
 				'   VALUES  ' +
-				'       ("'+item.title+'", "'+item.publisher+'", "'+item.language+'", "'+item.ISBN10+'", "'+item.ISBN13+'");  ' +
+				'       ("'+item.Title+'", "'+item.Publisher+'", "'+item.Language+'", "'+item["ISBN-10"]+'", "'+item["ISBN-13"]+'");  ' +
 				'   SET @last_id_magazine = LAST_INSERT_ID();  ' +
 				'   INSERT INTO `Items` (id)  ' +
 				'   VALUES  ' +
@@ -126,7 +148,7 @@ class MagazineTDG {
 	}
 	modifyItem(item,callback){
 		let sql='   UPDATE `MagazineDesc`  '  +
-				'   SET Title="'+item.title+'", Publisher="'+item.publisher+'", Language="'+item.language+'", `ISBN-10`="'+item.ISBN10+'", `ISBN-13`="'+item.ISBN13+'"  '  +
+				'   SET Title="'+item.Title+'", Publisher="'+item.Publisher+'", Language="'+item.Language+'", `ISBN-10`="'+item["ISBN-10"]+'", `ISBN-13`="'+item["ISBN-13"]+'"  '  +
 				'  WHERE idDesc='+item.idDesc+';  ';
 		this.runQuery(function(conn,completedQuery){
 			conn.query(sql, (err, rows, fields) => {

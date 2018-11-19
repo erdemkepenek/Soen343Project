@@ -9,79 +9,41 @@ import {Button, Dropdown, Form, Grid, Icon, Image, Message, Segment} from 'seman
 import {Redirect} from "react-router";
 import DataTable from '../Components/Common/table/table'
 import RedirectItem from "./redirectItem"
+import ApiCalls from '../class/apiCalls'
+import {Modal, notification} from "antd";
+let apicall = new ApiCalls;
+
 let tableArray= []
-const options = [
-    { key: 1, text: 'Book', value: "Book" },
-    { key: 2, text: 'Magazine', value: "Magazine" },
-    { key: 3, text: 'Music', value: "Music" },
-    { key: 4, text: 'Movie', value: "Movie" },
-]
 
 class Cart extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            loading:false,
+            modal1Visible:false,
         }
     }
     componentDidMount() {
         this.props.history.push(`/cart`);
+        this.loadCart();
+    }
+    loadCart=()=>{
+        this.setState({loading:true})
         tableArray= [];
-        let book={
-            Title: "Marc's book",
-            Author: "marc noon",
-            Format: "marc format",
-            Pages: 567,
-            Publisher: "marc again",
-            Language: "marc's language",
-            ISBN10: 1234567890,
-            ISBN13: "7927927892",
-            Quantity: 67,
-            Type: "Book",
-        }
-        tableArray.push(book);
-        this.forceUpdate();
-
-        let music={
-            Title: "marc' music",
-            Artist: "marc noon",
-            MusicType: "marc type",
-            Label: "label marc",
-            ReleaseDate: "marc again",
-            ASIN: "TY157373",
-            Quantity: 67,
-            Type: "Music",
-        }
-        tableArray.push(music);
-        this.forceUpdate();
-
-        let magazine={
-            Title: "marc' magazine",
-            Publisher: "marc again",
-            Language: "marc's language",
-            Label: "label marc",
-            ISBN10: 1234567890,
-            ISBN13: "7927927892",
-            Quantity: 67,
-            Type: "Magazine",
-        }
-        tableArray.push(magazine);
-        this.forceUpdate();
-
-        let movie={
-            Title: "marc' movie",
-            Director: "marc noon",
-            Producers: "marc type",
-            Actors: "label marc",
-            Language: "marc's language",
-            Subtitles: "marc's language",
-            Dubbed: "marc's language",
-            ReleaseDate: "marc again",
-            RunTime: "TY157373",
-            Quantity: 67,
-            Type: "Movie",
-        }
-        tableArray.push(movie);
-        this.forceUpdate();
+        let this1=this;
+        apicall.viewCart(this.props.userProfile.UserId,function(data){
+            data.registration.map((registrationData,key)=>{
+                if(registrationData.typecategory === 'Book'){
+                    registrationData.due="7 Days"
+                }else{
+                    registrationData.due="2 Days"
+                }
+                registrationData.index=key
+                tableArray.push(registrationData)
+            })
+            this1.setState({loading:false})
+            this1.forceUpdate();
+        });
     }
 
     closeProfile=()=>{
@@ -91,6 +53,28 @@ class Cart extends Component {
         console.log(data);
         this.props.history.push(`/cart/`+data.Title);
         this.setState({profile: data})
+    }
+    commit=()=>{
+        this.setState({loading: true})
+        let temp = this.props;
+        let temp2 = this;
+        this.setState({ modal1Visible:false });
+        apicall.commitCart(temp.userProfile.UserId,function(data){
+            temp2.setState({loading:false})
+            temp2.commitConfirmation();
+            temp.history.push(`/rentals`);
+        })
+    }
+    commitConfirmation = () => {
+        notification.success({
+            message: 'Sucess',
+            description: 'Items in Cart has been Rented Successfully!',
+            duration:6,
+        });
+    };
+    handleModal=(e,modal1Visible)=> {
+        e.preventDefault()
+        this.setState({ modal1Visible });
     }
 
     render() {
@@ -105,22 +89,31 @@ class Cart extends Component {
         }else{
             let columnItems =[
                 {value : 'Title', render : 'Title', type : 'text'},
-                {value : 'Type', render : 'Type', type : 'text'},
-                {value : 'Quantity', render : 'Quantity', type : 'number'},
+                {value : 'typecategory', render : 'Type', type : 'text'},
+                {value : 'due', render : 'Due', type : 'text'},
 
             ];
             let tableItems = [];
             tableArray.map((itemData)=>{
                 let arrData=[
                     {value : itemData.Title, render : itemData.Title, type : 'text'},
-                    {value : itemData.Type, render : itemData.Type, type : 'text'},
-                    {value : itemData.Quantity, render : itemData.Quantity, type : 'number'},
+                    {value : itemData.typecategory, render : itemData.typecategory, type : 'text'},
+                    {value : itemData.due, render : itemData.due, type : 'number'},
                     itemData
                 ]
                 tableItems.push(arrData);
             })
             return (
                 <div className='main-container'>
+                    <Modal
+                        centered
+                        closable
+                        title="Are you sure to Rent Items in the Cart?"
+                        visible={this.state.modal1Visible}
+                        onOk={this.commit}
+                        okText="Commit"
+                        onCancel={(e)=>this.handleModal(e,false)}
+                    />
                     <HeaderComponent/>
                     <div className='MainContainer'>
                         <div className="MainContainer-upper-container">
@@ -132,13 +125,17 @@ class Cart extends Component {
                                     You can select one of the item to see their details!
                                 </div>
                             </div>
-
+                            <div className='MainContainer-upper-container-button'>
+                                <Button content='Commit All' onClick={(e)=>this.handleModal(e,true)} disabled={tableItems.length===0}/>
+                            </div>
 
                         </div>
                         <DataTable
+                            errorMessage={tableItems.length===0? "The Cart is empty" : false}
                             columnItems={columnItems}
                             data={tableItems}
                             itemsPerPage={10}
+                            loading={this.state.loading}
                             clickRow={this.openProfile}/>
                     </div>
 
