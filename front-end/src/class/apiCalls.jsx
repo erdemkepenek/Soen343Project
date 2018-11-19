@@ -614,7 +614,8 @@ class ApiCalls extends Component {
         );
     }
 /* ===============================================================================================================================*/
-
+/*                       User                                            */
+/*====================================================================================================================================*/
     login=(email, password,callback)=> {
         axios.post('/user/login',{
             email:email,
@@ -696,6 +697,62 @@ class ApiCalls extends Component {
     }
     commitUser=(userId,callback)=> {
         axios.post('/user/commit',{userId:userId}).then(
+            function (response, err) {
+                console.log(response)
+                if(response.data){
+                    callback(response.data);
+                }
+            }.bind(this)
+        );
+    }
+
+/* ===============================================================================================================================*/
+/*                       Loan                                            */
+/*====================================================================================================================================*/
+    addCart=(userId,item,callback)=> {
+        axios.post('/loan/cart/add',{userId:userId,item:item}).then(
+            function (response, err) {
+                console.log(response)
+                if(response.data){
+                    callback(response.data);
+                }
+            }.bind(this)
+        );
+    }
+    viewCart=(userId,callback)=> {
+        axios.post('/loan/save/view',{userId:userId}).then(
+            function (response, err) {
+                console.log(response)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data);
+                }
+            }.bind(this)
+        );
+    }
+    removeCart=(userId,index,callback)=> {
+        axios.post('/loan/cart/remove',{userId:userId,index:index}).then(
+            function (response, err) {
+                console.log(response)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data);
+                }
+            }.bind(this)
+        );
+    }
+    commitCart=(userId,callback)=> {
+        axios.post('/loan/commit',{userId:userId}).then(
+            function (response, err) {
+                console.log(response)
+                if(response.data){
+                    callback(response.data);
+                }
+            }.bind(this)
+        );
+    }
+    rentalReturn=(userId,item,callback)=> {
+        axios.post('/loan/return',{userId:userId,item:item}).then(
             function (response, err) {
                 console.log(response)
                 if(response.data){

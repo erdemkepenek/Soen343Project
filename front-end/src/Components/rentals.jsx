@@ -44,19 +44,19 @@ class Rentals extends Component {
 
         apicall.viewRentalsAdmin(function(dataRentals){
             dataRentals.books.map((bookData)=>{
-                bookData.Type='Book'
+                bookData.typecategory='Book'
                 tableArray.push(bookData)
             })
             dataRentals.magazines.map((magazineData)=>{
-                magazineData.Type='Magazine'
+                magazineData.typecategory='Magazine'
                 tableArray.push(magazineData)
             })
             dataRentals.music.map((musicData)=>{
-                musicData.Type='Music'
+                musicData.typecategory='Music'
                 tableArray.push(musicData)
             })
             dataRentals.movies.map((movieData)=>{
-                movieData.Type='Movie'
+                movieData.typecategory='Movie'
                 tableArray.push(movieData)
             })
             this1.setState({loading:false})
@@ -72,19 +72,19 @@ class Rentals extends Component {
 
         apicall.viewRentalsClient(this.props.userProfile.UserId,function(dataRentals){
             dataRentals.books.map((bookData)=>{
-                bookData.Type='Book'
+                bookData.typecategory='Book'
                 tableArray.push(bookData)
             })
             dataRentals.magazines.map((magazineData)=>{
-                magazineData.Type='Magazine'
+                magazineData.typecategory='Magazine'
                 tableArray.push(magazineData)
             })
             dataRentals.music.map((musicData)=>{
-                musicData.Type='Music'
+                musicData.typecategory='Music'
                 tableArray.push(musicData)
             })
             dataRentals.movies.map((movieData)=>{
-                movieData.Type='Movie'
+                movieData.typecategory='Movie'
                 tableArray.push(movieData)
             })
             this1.setState({loading:false})
@@ -111,28 +111,48 @@ class Rentals extends Component {
                                   profile= { this.state.profile}/>)
 
         }else{
-            let columnItems =[
-                {value : 'Id Item', render : 'Id Item', type : 'number'},
-                {value : 'Title', render : 'Title', type : 'text'},
-                {value : 'Type', render : 'Type', type : 'text'},
-                {value : 'Id User', render : 'Id User', type : 'number'},
-                {value : 'Loan Date', render : 'Loan Date', type : 'date'},
-                {value : 'Return Date', render : 'Return Date', type : 'date'},
-
-            ];
+            let columnItems =[];
             let tableItems = [];
-            tableArray.map((itemData)=>{
-                let arrData=[
-                    {value : itemData.id, render : itemData.id, type : 'number'},
-                    {value : itemData.Title, render : itemData.Title, type : 'text'},
-                    {value : itemData.Type, render : itemData.Type, type : 'text'},
-                    {value : itemData.UserId, render : itemData.UserId, type : 'number'},
-                    {value : itemData.loanDate, render : itemData.loanDate, type : 'date'},
-                    {value : itemData.returnDate, render : itemData.returnDate, type : 'date'},
-                    itemData
-                ]
-                tableItems.push(arrData);
-            })
+            if(this.props.userProfile.type===1) {
+                columnItems = [
+                    {value: 'Id Item', render: 'Id Item', type: 'number'},
+                    {value: 'Title', render: 'Title', type: 'text'},
+                    {value: 'typecategory', render: 'Type', type: 'text'},
+                    {value: 'Id User', render: 'Id User', type: 'number'},
+                    {value: 'Loan Date', render: 'Loan Date', type: 'date'},
+                    {value: 'Return Date', render: 'Return Date', type: 'date'},
+
+                ];
+                tableArray.map((itemData) => {
+                    let arrData = [
+                        {value: itemData.id, render: itemData.id, type: 'number'},
+                        {value: itemData.Title, render: itemData.Title, type: 'text'},
+                        {value: itemData.typecategory, render: itemData.typecategory, type: 'text'},
+                        {value: itemData.UserId, render: itemData.UserId, type: 'number'},
+                        {value: itemData.loanDate, render: itemData.loanDate, type: 'date'},
+                        {value: itemData.returnDate, render: itemData.returnDate, type: 'date'},
+                        itemData
+                    ]
+                    tableItems.push(arrData);
+                })
+            }else{
+                columnItems = [
+                    {value: 'Title', render: 'Title', type: 'text'},
+                    {value: 'typecategory', render: 'Type', type: 'text'},
+                    {value: 'Loan Date', render: 'Loan Date', type: 'date'},
+                    {value: 'Return Date', render: 'Return Date', type: 'date'},
+                ];
+                tableArray.map((itemData) => {
+                    let arrData = [
+                        {value: itemData.Title, render: itemData.Title, type: 'text'},
+                        {value: itemData.typecategory, render: itemData.typecategory, type: 'text'},
+                        {value: itemData.loanDate, render: itemData.loanDate, type: 'date'},
+                        {value: itemData.returnDate, render: itemData.returnDate, type: 'date'},
+                        itemData
+                    ]
+                    tableItems.push(arrData);
+                })
+            }
             return (
                 <div className='main-container'>
                     <HeaderComponent/>
@@ -150,6 +170,7 @@ class Rentals extends Component {
 
                         </div>
                         <DataTable
+                            errorMessage={tableItems.length===0? "The Rentals is empty" : false}
                             columnItems={columnItems}
                             data={tableItems}
                             itemsPerPage={10}

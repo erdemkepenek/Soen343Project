@@ -196,6 +196,20 @@ class MovieProfile extends Component {
             duration: 6,
         });
     };
+    removeCartConfirmation = () => {
+        notification.success({
+            message: 'Sucess',
+            description: 'Movie has been removed from Cart',
+            duration: 6,
+        });
+    };
+    returnConfirmation = () => {
+        notification.success({
+            message: 'Sucess',
+            description: 'Movie has been returned successfully!',
+            duration: 6,
+        });
+    };
 
     addmovie=()=>{
         let {Title,director,actors,producers, subtitles, language, dubbed, releaseDate, runTime,copy} = this.state;
@@ -295,8 +309,8 @@ class MovieProfile extends Component {
         } else {
             data.itemId = this.state.deleteID
         }
-        console.log(data)
         let temp = this;
+        console.log(data)
         apicall.deleteMovie(this.props.userProfile.UserId, data, function (dataCallback) {
             console.log(dataCallback)
             temp.setState({ loading: false })
@@ -308,12 +322,43 @@ class MovieProfile extends Component {
     }
 
     return=()=>{
+        this.setState({ loading: true })
+        let data=this.props.movieProfile;
+        data.category='movie';
+        let temp = this;
+        console.log(data)
+        apicall.rentalReturn(this.props.userProfile.UserId, data, function (dataCallback) {
+            console.log(dataCallback)
+            temp.setState({ loading: false })
+            temp.returnConfirmation();
+            temp.props.closeProfile();
+            temp.props.history.push(`/ecatalog`);
+
+        });
 
     }
     addToCart=()=>{
+        this.setState({ loading: true })
+        let data=this.props.movieProfile;
+        data.category='movie';
+        let temp = this;
+        console.log(data)
+        apicall.addCart(this.props.userProfile.UserId, data, function (dataCallback) {
+            console.log(dataCallback)
+            temp.setState({ loading: false })
+            temp.addCartConfirmation();
+            temp.props.closeProfile();
+            temp.props.history.push(`/ecatalog`);
 
+        });
     }
-
+    addCartConfirmation = () => {
+        notification.success({
+            message: 'Sucess',
+            description: 'Movie has been added to Cart!',
+            duration: 6,
+        });
+    };
     addConfirmation = () => {
         notification.success({
             message: 'Sucess',
@@ -345,7 +390,7 @@ class MovieProfile extends Component {
         this.setState({ loading: true })
         let temp = this;
         if (this.props.movieProfile.typeWork === "Delete Movie") {
-            apicall.removeWorkBookDelete(this.props.userProfile.UserId, this.props.movieProfile.index, function (dataCallback) {
+            apicall.removeWorkMovieDelete(this.props.userProfile.UserId, this.props.movieProfile.index, function (dataCallback) {
                 temp.setState({ loading: false })
                 temp.removeWorkConfirmation();
                 temp.props.closeProfile();
@@ -353,7 +398,7 @@ class MovieProfile extends Component {
 
             });
         } else if (this.props.movieProfile.typeWork === 'Add Movie') {
-            apicall.removeWorkBookAdd(this.props.userProfile.UserId, this.props.movieProfile.index, function (dataCallback) {
+            apicall.removeWorkMovieAdd(this.props.userProfile.UserId, this.props.movieProfile.index, function (dataCallback) {
                 temp.setState({ loading: false })
                 temp.removeWorkConfirmation();
                 temp.props.closeProfile();
@@ -361,7 +406,7 @@ class MovieProfile extends Component {
 
             });
         } else {
-            apicall.removeWorkBookModify(this.props.userProfile.UserId, this.props.movieProfile.index, function (dataCallback) {
+            apicall.removeWorkMovieModify(this.props.userProfile.UserId, this.props.movieProfile.index, function (dataCallback) {
                 temp.setState({ loading: false })
                 temp.removeWorkConfirmation();
                 temp.props.closeProfile();
@@ -440,6 +485,18 @@ class MovieProfile extends Component {
             this.props.history.push(`/ecatalog/${this.props.catalog[0].Title}`);
             this.forceUpdate();
         }
+    }
+    removeFromCart=()=>{
+        this.setState({ loading: true })
+        let temp = this;
+            apicall.removeCart(this.props.userProfile.UserId, this.props.movieProfile.index, function (dataCallback) {
+                temp.setState({ loading: false })
+                temp.removeCartConfirmation();
+                temp.props.closeProfile();
+                temp.props.history.push(`/ecatalog`);
+                temp.forceUpdate();
+
+            });
     }
 
     render() {
@@ -641,6 +698,13 @@ class MovieProfile extends Component {
                                         >
                                             {this.props.rent ? "Return Movie" : "Add Movie to Cart"}
                                         </Button>): '')}
+                            {this.props.cart ?<Button
+                                className={"login-button"}
+                                fluid
+                                size="large"
+                                onClick={this.removeFromCart}>
+                                Remove Movie from Cart
+                            </Button>: '' }
                         </Form>
                         {this.props.rent || this.props.cart || !this.props.movieProfile || this.props.work ?
                             '':
