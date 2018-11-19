@@ -65,11 +65,15 @@ class MagazineProfile extends Component {
     this.setState({ errorLanguage: false })
   }
   changeISBN10 = (e) => {
-    this.setState({ ISBN10: e.target.value })
+      if(e.target.value< 10000000000) {
+          this.setState({ISBN10: e.target.value})
+      }
     this.setState({ errorISBN10: false })
   }
   changeISBN13 = (e) => {
-    this.setState({ ISBN13: e.target.value })
+      if(e.target.value< 10000000000000) {
+          this.setState({ISBN13: e.target.value})
+      }
     this.setState({ errorISBN13: false })
   }
   changeCopy = (e) => {
@@ -384,7 +388,7 @@ class MagazineProfile extends Component {
                 <Header as='h3' className='quantityHeader'>Available: ({this.state.available})</Header> : ''}
               <Form.Group width='equal'>
                 <Form.Input
-                  icon='magazine'
+                  icon='images outline'
                   iconPosition='left'
                   placeholder='Bel Ami'
                   label='Title:'

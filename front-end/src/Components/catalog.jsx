@@ -36,33 +36,46 @@ class Catalog extends Component {
     closeProfile=()=>{
             this.setState({profile: ""})
     }
+    changeProfile=(data)=>{
+        console.log(data);
+        this.setState({profile:data})
+    }
     loadCatalog=()=>{
         this.setState({loading:true})
         tableArray= [];
         let this1= this;
-
+        let i =0;
         apicall.viewBook(function(dataBook){
             dataBook.map((bookData)=>{
-                bookData.Type='Book'
+                bookData.index=i
+                bookData.typecategory='Book'
                 tableArray.push(bookData)
+                i=i+1;
             })
             apicall.viewMagazine(function(dataMagazine){
                 dataMagazine.map((magazineData)=>{
-                    magazineData.Type='Magazine'
+                    magazineData.index=i
+                    magazineData.typecategory='Magazine'
                     tableArray.push(magazineData)
+                    i=i+1;
                 })
                 apicall.viewMovie(function(dataMovie){
                     dataMovie.map((movieData)=>{
-                        movieData.Type='Movie'
+                        movieData.index=i
+                        movieData.typecategory='Movie'
                         tableArray.push(movieData)
+                        i=i+1;
                     })
                     apicall.viewMusic(function(dataMusic){
                         dataMusic.map((musicData)=>{
-                            musicData.Type='Music'
+                            musicData.index=i
+                            musicData.typecategory='Music'
                             tableArray.push(musicData)
-                            this1.setState({loading:false})
-                            this1.forceUpdate();
+                            i=i+1;
                         })
+                        this1.props.dispatch({type: 'catalog', data: tableArray });
+                        this1.setState({loading:false})
+                        this1.forceUpdate();
                     });
                 });
             });
@@ -102,8 +115,8 @@ class Catalog extends Component {
     render() {
         if(!this.props.userProfile) {
             return (<Redirect to={'/'}/>);
-        }else if(this.state.profile) { 
-            return (<RedirectItem closeProfile={this.closeProfile}
+        }else if(this.state.profile) {
+            return (<RedirectItem closeProfile={this.closeProfile} changeProfile={this.changeProfile}
                 profile= { this.state.profile}/>)
 
         }else{
@@ -118,7 +131,7 @@ class Catalog extends Component {
         tableArray.map((itemData)=>{
                 let arrData=[
                     {value : itemData.Title, render : itemData.Title, type : 'text'},
-                    {value : itemData.Type, render : itemData.Type, type : 'text'},
+                    {value : itemData.typecategory, render : itemData.typecategory, type : 'text'},
                     {value : itemData.Quantity, render : itemData.Quantity, type : 'number'},
                     {value : itemData.available, render : itemData.available, type : 'number'},
                     itemData

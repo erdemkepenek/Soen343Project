@@ -219,6 +219,127 @@ class ApiCalls extends Component {
             }.bind(this)
         );
     }
+    viewWorkMovie=(userId,callback)=>{
+        axios.post('/movie/save/view',{userId:userId}).then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
+    commitMovie=(userId,callback)=> {
+        axios.post('/movie/commit',{userId:userId}).then(
+            function (response, err) {
+                console.log(response)
+                if(response.data){
+                    callback(response.data);
+                }
+            }.bind(this)
+        );
+    }
+    addMovie=(userId,item,callback)=>{
+        console.log({userId:userId,item:item})
+        axios.post('/movie/add',{userId:userId,item:item}).then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
+    editMovie=(userId,item,callback)=>{
+        console.log({userId:userId,item:item})
+        axios.post('/movie/modify',{userId:userId,item:item}).then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
+    deleteMovie=(userId,item,callback)=>{
+        console.log({userId:userId,item:item})
+        axios.post('/movie/delete',{userId:userId,item:item}).then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
+    removeWorkMovieDelete=(userId,index,callback)=>{
+        console.log({userId:userId,index:index})
+        axios.post('/movie/remove/delete',{userId:userId,index:index}).then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
+    removeWorkMovieAdd=(userId,index,callback)=>{
+        console.log({userId:userId,index:index})
+        axios.post('/movie/remove/add',{userId:userId,index:index}).then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
+    removeWorkMovieModify=(userId,index,callback)=>{
+        console.log({userId:userId,index:index})
+        axios.post('/movie/remove/modify',{userId:userId,index:index}).then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
+    addMovieCopy=(userId,quantity,item,callback)=>{
+        console.log({userId:userId,quantity:quantity,item:item})
+        axios.post('/movie/add/copy',{userId:userId,quantity:quantity,item:item}).then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
 /* ===============================================================================================================================*/
 /*                     MAGAZINE                                             */
 /*==================================================================================================================================*/
@@ -366,6 +487,127 @@ class ApiCalls extends Component {
                 console.log(err)
                 if(response.data){
                     callback(response.data.data)
+                }
+
+            }.bind(this)
+        );
+    }
+    viewWorkMusic=(userId,callback)=>{
+        axios.post('/music/save/view',{userId:userId}).then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
+    commitMusic=(userId,callback)=> {
+        axios.post('/music/commit',{userId:userId}).then(
+            function (response, err) {
+                console.log(response)
+                if(response.data){
+                    callback(response.data);
+                }
+            }.bind(this)
+        );
+    }
+    addMusic=(userId,item,callback)=>{
+        console.log({userId:userId,item:item})
+        axios.post('/music/add',{userId:userId,item:item}).then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
+    editMusic=(userId,item,callback)=>{
+        console.log({userId:userId,item:item})
+        axios.post('/music/modify',{userId:userId,item:item}).then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
+    deleteMusic=(userId,item,callback)=>{
+        console.log({userId:userId,item:item})
+        axios.post('/music/delete',{userId:userId,item:item}).then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
+    removeWorkMusicDelete=(userId,index,callback)=>{
+        console.log({userId:userId,index:index})
+        axios.post('/music/remove/delete',{userId:userId,index:index}).then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
+    removeWorkMusicAdd=(userId,index,callback)=>{
+        console.log({userId:userId,index:index})
+        axios.post('/music/remove/add',{userId:userId,index:index}).then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
+    removeWorkMusicModify=(userId,index,callback)=>{
+        console.log({userId:userId,index:index})
+        axios.post('/music/remove/modify',{userId:userId,index:index}).then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
+                }
+
+            }.bind(this)
+        );
+    }
+    addMusicCopy=(userId,quantity,item,callback)=>{
+        console.log({userId:userId,quantity:quantity,item:item})
+        axios.post('/music/add/copy',{userId:userId,quantity:quantity,item:item}).then(
+            function (response, err) {
+                console.log(response)
+                console.log(err)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data)
                 }
 
             }.bind(this)

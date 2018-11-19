@@ -81,13 +81,18 @@ class BookProfile extends Component {
         this.setState({ language: e.target.value })
         this.setState({ errorLanguage: false })
     }
-    changeISBN10 = (e) => {
-        this.setState({ ISBN10: e.target.value })
-        this.setState({ errorISBN10: false })
+    changeISBN10=(e)=>{
+        if(e.target.value< 10000000000)
+        {
+            this.setState({ISBN10: e.target.value})
+        }
+        this.setState({errorISBN10: false})
     }
-    changeISBN13 = (e) => {
-        this.setState({ ISBN13: e.target.value })
-        this.setState({ errorISBN13: false })
+    changeISBN13=(e)=>{
+        if(e.target.value< 10000000000000) {
+            this.setState({ISBN13: e.target.value})
+        }
+        this.setState({errorISBN13: false})
     }
     changeCopy = (e) => {
         if (e.target.value > 0 || !e.target.value) {
@@ -310,6 +315,72 @@ class BookProfile extends Component {
 
         });
     }
+    previous = ()=>{
+        if(this.props.bookProfile.index !== 0){
+            this.props.changeProfile(this.props.catalog[this.props.bookProfile.index-1])
+            this.setState({
+            Title: this.props.catalog[this.props.bookProfile.index-1].Title,
+            author: this.props.catalog[this.props.bookProfile.index-1].Author,
+            format: this.props.catalog[this.props.bookProfile.index-1].Format,
+            pages: this.props.catalog[this.props.bookProfile.index-1].Pages,
+            publisher: this.props.catalog[this.props.bookProfile.index-1].Publisher,
+            language: this.props.catalog[this.props.bookProfile.index-1].Language,
+            ISBN10: this.props.catalog[this.props.bookProfile.index-1]['ISBN-10'],
+            ISBN13: this.props.catalog[this.props.bookProfile.index-1]['ISBN-13'],
+            quantity: this.props.catalog[this.props.bookProfile.index-1].Quantity,
+            available: this.props.catalog[this.props.bookProfile.index-1].available,});
+            this.props.history.push(`/ecatalog/${this.props.catalog[this.props.bookProfile.index-1].Title}`);
+            this.forceUpdate();
+        }else{
+            this.props.changeProfile(this.props.catalog[this.props.catalog.length-1])
+            this.setState({
+                Title: this.props.catalog[this.props.catalog.length-1].Title,
+                author: this.props.catalog[this.props.catalog.length-1].Author,
+                format: this.props.catalog[this.props.catalog.length-1].Format,
+                pages: this.props.catalog[this.props.catalog.length-1].Pages,
+                publisher: this.props.catalog[this.props.catalog.length-1].Publisher,
+                language: this.props.catalog[this.props.catalog.length-1].Language,
+                ISBN10: this.props.catalog[this.props.catalog.length-1]['ISBN-10'],
+                ISBN13: this.props.catalog[this.props.bookProfile.index-1]['ISBN-13'],
+                quantity: this.props.catalog[this.props.catalog.length-1].Quantity,
+                available: this.props.catalog[this.props.catalog.length-1].available,});
+            this.props.history.push(`/ecatalog/${this.props.catalog[this.props.catalog.length-1].Title}`);
+            this.forceUpdate();
+        }
+    }
+    next = ()=>{
+        if(this.props.bookProfile.index !== this.props.catalog.length-1){
+            this.props.changeProfile(this.props.catalog[this.props.bookProfile.index+1]);
+            this.setState({
+                Title: this.props.catalog[this.props.bookProfile.index+1].Title,
+                author: this.props.catalog[this.props.bookProfile.index+1].Author,
+                format: this.props.catalog[this.props.bookProfile.index+1].Format,
+                pages: this.props.catalog[this.props.bookProfile.index+1].Pages,
+                publisher: this.props.catalog[this.props.bookProfile.index+1].Publisher,
+                language: this.props.catalog[this.props.bookProfile.index+1].Language,
+                ISBN10: this.props.catalog[this.props.bookProfile.index+1]['ISBN-10'],
+                ISBN13: this.props.catalog[this.props.bookProfile.index+1]['ISBN-13'],
+                quantity: this.props.catalog[this.props.bookProfile.index+1].Quantity,
+                available: this.props.catalog[this.props.bookProfile.index+1].available,});
+            this.props.history.push(`/ecatalog/${this.props.catalog[this.props.bookProfile.index+1].Title}`);
+            this.forceUpdate();
+        }else{
+            this.props.changeProfile(this.props.catalog[0]);
+            this.setState({
+                Title: this.props.catalog[0].Title,
+                author: this.props.catalog[0].Author,
+                format: this.props.catalog[0].Format,
+                pages: this.props.catalog[0].Pages,
+                publisher: this.props.catalog[0].Publisher,
+                language: this.props.catalog[0].Language,
+                ISBN10: this.props.catalog[0]['ISBN-10'],
+                ISBN13: this.props.catalog[0]['ISBN-13'],
+                quantity: this.props.catalog[0].Quantity,
+                available: this.props.catalog[0].available,});
+            this.props.history.push(`/ecatalog/${this.props.catalog[0].Title}`);
+            this.forceUpdate();
+        }
+    }
     return = () => {
 
     }
@@ -357,7 +428,6 @@ class BookProfile extends Component {
 
             });
         }
-        console.log(this.props.bookProfile.index)
 
     }
 
@@ -545,8 +615,8 @@ class BookProfile extends Component {
                         {this.props.rent || this.props.cart || !this.props.bookProfile || this.props.work ?
                             '' :
                             <div className='nextprevButton-container'>
-                                <Button icon='long arrow alternate left' content='Previus Item' onClick={this.backToCatalog} />
-                                <Button icon='long arrow alternate right' labelPosition='right' content='Next Item' onClick={this.backToCatalog} />
+                                <Button icon='long arrow alternate left' content='Previus Item' onClick={this.previous} />
+                                <Button icon='long arrow alternate right' labelPosition='right' content='Next Item' onClick={this.next} />
                             </div>}
                     </div>
 
@@ -559,6 +629,7 @@ class BookProfile extends Component {
 function mapStateToProps(state) {
     return {
         userProfile: state.AdminReducer.userProfile,
+        catalog: state.AdminReducer.catalog,
     };
 
 }

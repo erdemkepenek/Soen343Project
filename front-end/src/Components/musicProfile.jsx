@@ -9,6 +9,10 @@ import {Button, Dropdown, Form, Grid, Header, Icon, Image, Message, Segment} fro
 import {Redirect} from "react-router";
 import {Modal, notification, Tooltip} from "antd";
 import moment from 'moment'
+import ApiCalls from '../class/apiCalls'
+
+
+let apicall = new ApiCalls;
 
 let options=[];
 class MusicProfile extends Component {
@@ -18,7 +22,7 @@ class MusicProfile extends Component {
             Title: this.props.musicProfile? this.props.musicProfile.Title : "",
             artist: this.props.musicProfile? this.props.musicProfile.Artist : "",
             label: this.props.musicProfile? this.props.musicProfile.Label : "",
-            musicType: this.props.musicProfile? this.props.musicProfile.MusicType : "",
+            musicType: this.props.musicProfile? this.props.musicProfile.Type : "",
             releaseDate: this.props.musicProfile? moment(this.props.musicProfile.ReleaseDate).format("YYYY-MM-DD") : "",
             ASIN: this.props.musicProfile? this.props.musicProfile.ASIN : "",
             quantity: this.props.musicProfile? this.props.musicProfile.Quantity : "",
@@ -37,13 +41,15 @@ class MusicProfile extends Component {
     }
     componentDidMount(){
         if(this.props.musicProfile && this.props.userProfile.type ===1 && !this.props.rent && !this.props.cart){
-            options=[
-                {text:"Copy ID 1", value:1,key:1},
-                {text:"Copy ID 2", value:2,key:2},
-                {text:"Copy ID 3", value:3,key:3},
-                {text:"Copy ID 4", value:4,key:4},
-                {text:"All Copies", value:null,key:null},
-            ]
+            options=[];
+            if(this.props.musicProfile.copies) {
+                this.props.musicProfile.copies.map((copyData, key) => {
+                    let arrData = {text: "Item ID" + copyData.toString(), value: copyData, key: key}
+                    options.push(arrData)
+                })
+                options.push({text: "All Items", value: 'All', key: 9999})
+                console.log(options)
+            }
         }
     }
     changeTitle=(e)=>{
@@ -106,21 +112,38 @@ class MusicProfile extends Component {
             }
             this.musicError();
         }else{
+            this.setState({loading:true})
             let data={
                 Title: Title,
                 Artist: artist,
                 Label: label,
-
-                MusicType: musicType,
-
+                Type: musicType,
                 ReleaseDate: releaseDate,
                 ASIN: ASIN,
+                category: 'music',
+                idDesc:this.props.musicProfile.idDesc,
             }
-            console.log(copy)
-            console.log(data)
+            let numberOfCopies = 0;
+            if(copy){
+                numberOfCopies = copy
+            }
+            let temp = this;
+            apicall.editMusic(this.props.userProfile.UserId,data,function(callbackData){
+                if(numberOfCopies >0){
+                    apicall.addMusicCopy(temp.props.userProfile.UserId,numberOfCopies,data,function(callbackData2){
+                        temp.setState({loading:false})
+                        temp.editConfirmation();
+                        temp.closeProfile();
+                        temp.props.history.push(`/ecatalog`);
 
-            this.editConfirmation();
-            this.props.history.push(`/ecatalog`);
+                    })
+                }else{
+                    temp.setState({loading:false})
+                    temp.editConfirmation();
+                    temp.closeProfile();
+                    temp.props.history.push(`/ecatalog`);
+                }
+            });
         }
     }
 
@@ -128,15 +151,29 @@ class MusicProfile extends Component {
 
     editConfirmation = () => {
         notification.success({
-            message: 'Success',
-            description: 'You have Edited Music!',
+            message: 'Sucess',
+            description: 'Editted Music has been added to Work Table',
+            duration:6,
+        });
+    }
+    deleteConfirmation = () => {
+        notification.success({
+            message: 'Sucess',
+            description: 'Deleted Music has been added to Work Table',
+            duration:6,
+        });
+    };
+    removeWorkConfirmation = () => {
+        notification.success({
+            message: 'Sucess',
+            description: 'Music has been removed from Work Table',
             duration:6,
         });
     };
 
     addMusic=()=>{
 
-        let {Title, artist, label, musicType, releaseDate, ASIN,copy} = this.state;
+        let {Title, artist, label, musicType, releaseDate, ASIN} = this.state;
         if(!Title || !artist || !label || !musicType || !releaseDate || !ASIN){
 
             if(!Title){
@@ -161,21 +198,24 @@ class MusicProfile extends Component {
             }
             this.musicError();
         }else{
+            this.setState({loading:true})
             let data={
                 Title: Title,
                 Artist: artist,
                 Label: label,
-
-                MusicType: musicType,
-
+                Type: musicType,
                 ReleaseDate: releaseDate,
                 ASIN: ASIN,
+                category: 'music',
             }
-            console.log(copy)
-            console.log(data)
+            let temp = this;
+            apicall.addMusic(this.props.userProfile.UserId,data,function(dataRentals){
+                console.log(dataRentals)
+                temp.setState({loading:false})
+                temp.addConfirmation();
+                temp.props.history.push(`/ecatalog`);
 
-            this.addConfirmation();
-            this.props.history.push(`/ecatalog`);
+            });
         }
     }
 
@@ -183,8 +223,8 @@ class MusicProfile extends Component {
 
     addConfirmation = () => {
         notification.success({
-            message: 'Success',
-            description: 'You have Added Music!',
+            message: 'Sucess',
+            description: 'Created Music has been added to Work Table!',
             duration:6,
         });
     };
@@ -217,9 +257,34 @@ class MusicProfile extends Component {
             this.props.closeProfile();
         }
     }
-    deleteMusic = ()=>
-    {
-        this.props.closeProfile();
+    deleteMusic= ()=> {
+        this.setState({loading:true})
+        let data={
+            Title: this.props.musicProfile.Title,
+            Artist: this.props.musicProfile.Artist,
+            Label: this.props.musicProfile.Label,
+            Type: this.props.musicProfile.Type,
+            ReleaseDate: this.props.musicProfile.ReleaseDate,
+            ASIN: this.props.musicProfile.ASIN,
+            Quantity: this.props.musicProfile.Quantity,
+            available: this.props.musicProfile.available,
+            copies: this.props.musicProfile.copies,
+        }
+        if(this.state.deleteID === 'All'){
+            data.idDesc=this.props.musicProfile.idDesc
+        }else{
+            data.itemId=this.state.deleteID
+        }
+        console.log(data)
+        let temp = this;
+        apicall.deleteMusic(this.props.userProfile.UserId,data,function(dataCallback){
+            console.log(dataCallback)
+            temp.setState({loading:false})
+            temp.deleteConfirmation();
+            temp.props.closeProfile();
+            temp.props.history.push(`/ecatalog`);
+
+        });
     }
     return=()=>{
 
@@ -241,6 +306,33 @@ class MusicProfile extends Component {
         }
     }
     removeFromWork=()=>{
+        this.setState({loading:true})
+        let temp = this;
+        if(this.props.musicProfile.typeWork=== "Delete Music"){
+            apicall.removeWorkMusicDelete(this.props.userProfile.UserId,this.props.musicProfile.index,function(dataCallback){
+                temp.setState({loading:false})
+                temp.removeWorkConfirmation();
+                temp.props.closeProfile();
+                temp.props.history.push(`/workecatalog`);
+
+            });
+        }else if(this.props.musicProfile.typeWork === 'Add Music'){
+            apicall.removeWorkMusicAdd(this.props.userProfile.UserId,this.props.musicProfile.index,function(dataCallback){
+                temp.setState({loading:false})
+                temp.removeWorkConfirmation();
+                temp.props.closeProfile();
+                temp.props.history.push(`/workecatalog`);
+
+            });
+        }else{
+            apicall.removeWorkMusicModify(this.props.userProfile.UserId,this.props.musicProfile.index,function(dataCallback){
+                temp.setState({loading:false})
+                temp.removeWorkConfirmation();
+                temp.props.closeProfile();
+                temp.props.history.push(`/workecatalog`);
+
+            });
+        }
 
     }
 

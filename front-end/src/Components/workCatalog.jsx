@@ -32,29 +32,94 @@ class WorkUsers extends Component {
         this.setState({loading:true})
         tableArray= [];
         let this1=this;
-        apicall.viewWorkBook(this.props.userProfile.UserId,function(dataWork){
-            console.log(dataWork)
-            dataWork.registration.map((dataRegistration,key)=>{
-                dataRegistration.Type = 'Book'
+        apicall.viewWorkBook(this.props.userProfile.UserId,function(dataWorkBook){
+            dataWorkBook.registration.map((dataRegistration,key)=>{
+                dataRegistration.typecategory = 'Book'
                 dataRegistration.typeWork = 'Add Book'
                 dataRegistration.index=key;
                 tableArray.push(dataRegistration)
             })
-            dataWork.erase.map((dataErase,key)=>{
-                dataErase.Type = 'Book'
+            dataWorkBook.erase.map((dataErase,key)=>{
+                dataErase.typecategory = 'Book'
                 dataErase.typeWork = 'Delete Book'
                 dataErase.index=key;
                 tableArray.push(dataErase)
 
             })
-            dataWork.updates.map((dataUpdates,key)=>{
-                dataUpdates.Type = 'Book'
+            dataWorkBook.updates.map((dataUpdates,key)=>{
+                dataUpdates.typecategory = 'Book'
                 dataUpdates.typeWork = 'Modify Book'
                 dataUpdates.index=key;
                 tableArray.push(dataUpdates)
             })
-            this1.setState({loading:false})
-            this1.forceUpdate();
+            apicall.viewWorkMagazine(this1.props.userProfile.UserId,function(dataWorkMagazine){
+                dataWorkMagazine.registration.map((dataRegistration,key)=>{
+                    dataRegistration.typecategory = 'Magazine'
+                    dataRegistration.typeWork = 'Add Magazine'
+                    dataRegistration.index=key;
+                    tableArray.push(dataRegistration)
+                })
+                dataWorkMagazine.erase.map((dataErase,key)=>{
+                    dataErase.typecategory = 'Magazine'
+                    dataErase.typeWork = 'Delete Magazine'
+                    dataErase.index=key;
+                    tableArray.push(dataErase)
+
+                })
+                dataWorkMagazine.updates.map((dataUpdates,key)=>{
+                    dataUpdates.typecategory = 'Magazine'
+                    dataUpdates.typeWork = 'Modify Magazine'
+                    dataUpdates.index=key;
+                    tableArray.push(dataUpdates)
+                })
+                apicall.viewWorkMusic(this1.props.userProfile.UserId,function(dataWorkMusic){
+                    dataWorkMusic.registration.map((dataRegistration,key)=>{
+                        dataRegistration.typecategory = 'Music'
+                        dataRegistration.typeWork = 'Add Music'
+                        dataRegistration.index=key;
+                        tableArray.push(dataRegistration)
+                    })
+                    dataWorkMusic.erase.map((dataErase,key)=>{
+                        dataErase.typecategory = 'Music'
+                        dataErase.typeWork = 'Delete Music'
+                        dataErase.index=key;
+                        tableArray.push(dataErase)
+
+                    })
+                    dataWorkMusic.updates.map((dataUpdates,key)=>{
+                        dataUpdates.typecategory = 'Music'
+                        dataUpdates.typeWork = 'Modify Music'
+                        dataUpdates.index=key;
+                        tableArray.push(dataUpdates)
+                    })
+                    apicall.viewWorkMovie(this1.props.userProfile.UserId,function(dataWorkMovie){
+                        dataWorkMovie.registration.map((dataRegistration,key)=>{
+                            dataRegistration.typecategory = 'Movie'
+                            dataRegistration.typeWork = 'Add Movie'
+                            dataRegistration.index=key;
+                            tableArray.push(dataRegistration)
+                        })
+                        dataWorkMovie.erase.map((dataErase,key)=>{
+                            dataErase.typecategory = 'Movie'
+                            dataErase.typeWork = 'Delete Movie'
+                            dataErase.index=key;
+                            tableArray.push(dataErase)
+
+                        })
+                        dataWorkMovie.updates.map((dataUpdates,key)=>{
+                            dataUpdates.typecategory = 'Movie'
+                            dataUpdates.typeWork = 'Modify Movie'
+                            dataUpdates.index=key;
+                            tableArray.push(dataUpdates)
+                        })
+                        this1.setState({loading:false})
+                        this1.forceUpdate();
+
+                    });
+
+                });
+
+            });
 
         });
     }
@@ -75,9 +140,15 @@ class WorkUsers extends Component {
         let temp2 = this;
         this.setState({ modal1Visible:false });
         apicall.commitBook(this.props.userProfile.UserId,function(data){
-            temp2.setState({loading:false})
-            temp2.commitConfirmation();
-            temp.history.push(`/ecatalog`);
+            apicall.commitMagazine(temp.userProfile.UserId,function(data){
+                apicall.commitMusic(temp.userProfile.UserId,function(data){
+                    apicall.commitMovie(temp.userProfile.UserId,function(data){
+                        temp2.setState({loading:false})
+                        temp2.commitConfirmation();
+                        temp.history.push(`/ecatalog`);
+                    })
+                })
+            })
         })
     }
     commitConfirmation = () => {
@@ -108,7 +179,7 @@ class WorkUsers extends Component {
             let columnItems =[
                 {value : 'typeWork', render : 'Action', type : 'number'},
                 {value : 'Title', render : 'Title', type : 'text'},
-                {value : 'Type', render : 'Type', type : 'text'},
+                {value : 'typecategory', render : 'Type', type : 'text'},
 
             ];
             let tableItems = [];
@@ -116,7 +187,7 @@ class WorkUsers extends Component {
                 let arrData=[
                     {value : itemData.typeWork, render : itemData.typeWork, type : 'text'},
                     {value : itemData.Title, render : itemData.Title, type : 'text'},
-                    {value : itemData.Type, render : itemData.Type, type : 'text'},
+                    {value : itemData.typecategory, render : itemData.typecategory, type : 'text'},
                     itemData
                 ]
                 tableItems.push(arrData);
