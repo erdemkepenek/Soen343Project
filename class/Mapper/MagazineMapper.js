@@ -21,6 +21,9 @@ class MagazineMapper {
       callback(result[0]);
     }
   }
+  emptyIdentityMap(){
+	this.MagazineIdentityMap.empty();
+  }
   addItem(id, item, callback) {
 	console.log("[MagazineMapper] addItem()");
     this.MagazineUnitOfWork.addNew(id, item);

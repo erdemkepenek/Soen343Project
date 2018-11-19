@@ -9,7 +9,7 @@ class LoanMapper {
     this.LoanIdentitymap = new IdentityMap();
   }
   viewAllLoans(callback) {
-    console.log("[LoanMapper] viewLoans()");
+    console.log("[LoanMapper] viewAllLoans()");
     let IDM = this.LoanIdentitymap;
     var result = IDM.getData();
     //console.log(result);
@@ -22,21 +22,17 @@ class LoanMapper {
       callback(result[0].data);
     }
   }
-
+  emptyIdentityMap(){
+	this.LoanIdentitymap.empty();
+  }
   //The below method helps to view loans of one specific user
   viewUserLoans(userId, callback) {
-    console.log("[LoanMapper] viewLoans()");
+    console.log("[LoanMapper] viewUserLoans");
     let IDM = this.LoanIdentitymap;
-    var result = IDM.getData();
-    //console.log(result);
-    if (result.length == 0) {
-      this.LoanTDG.viewUserLoans(userId, function (msg) {
+    this.LoanTDG.viewUserLoans(userId, function (msg) {
         IDM.putData(msg);
         callback(msg.data);
-      });
-    } else {
-      callback(result[0].data);
-    }
+    });
   }
   addLoanItem(userId, item, callback) {
     console.log("[LoanMapper] addLoantItem()");

@@ -23,6 +23,9 @@ class BookMapper {
       callback(result[0]);
     }
   }
+  emptyIdentityMap(){
+	this.BookIdentityMap.empty();
+  }
   addItem(id, item, callback) {
 	console.log("[BookMapper] addItem()"); 
     this.BookUnitOfWork.addNew(id, item);

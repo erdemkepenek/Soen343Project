@@ -22,6 +22,9 @@ class MovieMapper {
       callback(result[0]);
     }
   }
+  emptyIdentityMap(){
+	this.MovieIdentityMap.empty();
+  }
   addItem(id, item, callback) {
 	console.log("[MovieMapper] addItem()");
     this.MovieUnitOfWork.addNew(id, item);

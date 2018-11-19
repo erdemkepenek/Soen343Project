@@ -22,6 +22,9 @@ class MusicMapper {
       callback(result[0]);
     }
   }
+  emptyIdentityMap(){
+	this.MusicIdentityMap.empty();
+  }
   addItem(id, item, callback) {
 	console.log("[MusicMapper] addItem()");
     this.MusicUnitOfWork.addNew(id, item);

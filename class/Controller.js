@@ -387,6 +387,7 @@ class Controller {
 					//if confirmation for transaction needed;
 				});
 			}
+			
 		   confirmation(msg);
 		}
 	  });
@@ -414,6 +415,10 @@ class Controller {
 				});
 			}
 		}
+		this.BookMapper.emptyIdentityMap();
+		this.MusicMapper.emptyIdentityMap();
+		this.MagazineMapper.emptyIdentityMap();
+		this.MovieMapper.emptyIdentityMap();
 		confirmation(msg);
 	})
   }
