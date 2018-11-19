@@ -170,6 +170,27 @@ class MusicProfile extends Component {
             duration:6,
         });
     };
+    addCartConfirmation = () => {
+        notification.success({
+            message: 'Sucess',
+            description: 'Music has been added to Cart!',
+            duration: 6,
+        });
+    };
+    removeCartConfirmation = () => {
+        notification.success({
+            message: 'Sucess',
+            description: 'Music has been removed from Cart',
+            duration: 6,
+        });
+    };
+    returnConfirmation = () => {
+        notification.success({
+            message: 'Sucess',
+            description: 'Music has been returned successfully!',
+            duration: 6,
+        });
+    };
 
     addMusic=()=>{
 
@@ -286,11 +307,35 @@ class MusicProfile extends Component {
 
         });
     }
-    return=()=>{
+    return = () => {
+        this.setState({ loading: true })
+        let data = this.props.musicProfile;
+        data.category = 'music';
+        let temp = this;
+        console.log(data)
+        apicall.rentalReturn(this.props.userProfile.UserId, data, function (dataCallback) {
+            console.log(dataCallback)
+            temp.setState({ loading: false })
+            temp.returnConfirmation();
+            temp.props.closeProfile();
+            temp.props.history.push(`/ecatalog`);
 
+        });
     }
-    addToCart=()=>{
+    addToCart = () => {
+        this.setState({ loading: true })
+        let data = this.props.musicProfile;
+        data.category = 'music';
+        let temp = this;
+        console.log(data)
+        apicall.addCart(this.props.userProfile.UserId, data, function (dataCallback) {
+            console.log(dataCallback)
+            temp.setState({ loading: false })
+            temp.addCartConfirmation();
+            temp.props.closeProfile();
+            temp.props.history.push(`/ecatalog`);
 
+        });
     }
     handleModal=(e,modal1Visible)=> {
         e.preventDefault()
@@ -334,6 +379,19 @@ class MusicProfile extends Component {
             });
         }
 
+    }
+
+    removeFromCart = () => {
+        this.setState({ loading: true })
+        let temp = this;
+        apicall.removeCart(this.props.userProfile.UserId, this.props.musicProfile.index, function (dataCallback) {
+            temp.setState({ loading: false })
+            temp.removeCartConfirmation();
+            temp.props.closeProfile();
+            temp.props.history.push(`/ecatalog`);
+            temp.forceUpdate();
+
+        });
     }
 
     render() {
