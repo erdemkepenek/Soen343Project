@@ -379,8 +379,16 @@ class Controller {
 	  console.log("[Controller] loanReturnDirect()");
 	  this.DirectLoanReturnMapper.addReturnItem(userId,item);
 	  //Direct commit
-	  this.DirectLoanReturnMapper.commit(userId, function(msg){
-		  confirmation(msg);
+	  let temp = this.TransactionHistory;
+	  this.DirectLoanReturnMapper.commit(userId, function(msg, items){
+		  for(var i = 0;i<msg.returned.length;i++){
+			if(msg.returned[i].success=="true"){
+				temp.addActivity(items.id,"return",msg.returned[i].itemId,function(msg){
+					//if confirmation for transaction needed;
+				});
+			}
+		   confirmation(msg);
+		}
 	  });
   }
   
