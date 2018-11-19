@@ -335,7 +335,7 @@ class AddUser extends Component {
                                 placeholder='Select one of the options...'
                                 value={this.state.type}
                                 error={this.state.errorType}
-                                disabled={this.props.work || this.props.userProfile.UserId===this.props.userProfile.UserId}
+                                disabled={this.props.work || (this.props.profile?this.props.userProfile.UserId===this.props.profile.UserId : false)}
                                 onChange={this.changeType}
                                 options={optionsType}
                             />

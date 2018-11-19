@@ -341,7 +341,7 @@ class BookProfile extends Component {
                 publisher: this.props.catalog[this.props.catalog.length-1].Publisher,
                 language: this.props.catalog[this.props.catalog.length-1].Language,
                 ISBN10: this.props.catalog[this.props.catalog.length-1]['ISBN-10'],
-                ISBN13: this.props.catalog[this.props.bookProfile.index-1]['ISBN-13'],
+                ISBN13: this.props.catalog[this.props.catalog.length-1]['ISBN-13'],
                 quantity: this.props.catalog[this.props.catalog.length-1].Quantity,
                 available: this.props.catalog[this.props.catalog.length-1].available,});
             this.props.history.push(`/ecatalog/${this.props.catalog[this.props.catalog.length-1].Title}`);
@@ -527,7 +527,7 @@ class BookProfile extends Component {
                                 <div className="MainContainer-upper-container-second-text">
                                     {this.props.bookProfile ?
                                         (this.props.userProfile.type === 0 || this.props.rent || this.props.work ?
-                                            "You can see the details of Music" :
+                                            "You can see the details of Book" :
                                             "You can edit a book")
                                         : "You can add a new book to the system!"}
 
@@ -674,7 +674,7 @@ class BookProfile extends Component {
                                 fluid
                                 size="large"
                                 onClick={this.removeFromCart}>
-                                Remove Movie from Cart
+                                Remove Book from Cart
                             </Button>: '' }
                         </Form>
                         {this.props.rent || this.props.cart || !this.props.bookProfile || this.props.work ?
