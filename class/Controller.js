@@ -377,6 +377,10 @@ class Controller {
   }
   loanReturnDirect(userId, item,confirmation){
 	  console.log("[Controller] loanReturnDirect()");
+      let temp_BookMapper =this.BookMapper
+      let temp_MagazineMapper= this.MagazineMapper;
+      let temp_MovieMapper= this.MovieMapper
+      let temp_MusicMapper = this.MusicMapper
 	  this.DirectLoanReturnMapper.addReturnItem(userId,item);
 	  //Direct commit
 	  let temp = this.TransactionHistory;
@@ -387,7 +391,10 @@ class Controller {
 					//if confirmation for transaction needed;
 				});
 			}
-			
+			temp_BookMapper.emptyIdentityMap();
+			temp_MusicMapper.emptyIdentityMap();
+			temp_MagazineMapper.emptyIdentityMap();
+			temp_MovieMapper.emptyIdentityMap();
 		   confirmation(msg);
 		}
 	  });
@@ -395,7 +402,11 @@ class Controller {
   
   loanCommit(userId,confirmation){
 	let temp = this.TransactionHistory;
-	console.log("[Controller] loanCommit()");
+	let temp_BookMapper =this.BookMapper
+    let temp_MagazineMapper= this.MagazineMapper;
+    let temp_MovieMapper= this.MovieMapper
+    let temp_MusicMapper = this.MusicMapper
+      console.log("[Controller] loanCommit()");
 	this.LoanMapper.commit(userId, function(msg, items){
 		//console.log(items);
 		//console.log(msg);
@@ -415,10 +426,10 @@ class Controller {
 				});
 			}
 		}
-		this.BookMapper.emptyIdentityMap();
-		this.MusicMapper.emptyIdentityMap();
-		this.MagazineMapper.emptyIdentityMap();
-		this.MovieMapper.emptyIdentityMap();
+		temp_BookMapper.emptyIdentityMap();
+		temp_MusicMapper.emptyIdentityMap();
+		temp_MagazineMapper.emptyIdentityMap();
+		temp_MovieMapper.emptyIdentityMap();
 		confirmation(msg);
 	})
   }

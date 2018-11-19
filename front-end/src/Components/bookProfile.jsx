@@ -381,12 +381,6 @@ class BookProfile extends Component {
             this.forceUpdate();
         }
     }
-    return = () => {
-
-    }
-    addToCart = () => {
-
-    }
     handleModal = (e, modal1Visible) => {
         e.preventDefault()
         this.setState({ modal1Visible, deleteID: '' });
@@ -430,6 +424,70 @@ class BookProfile extends Component {
         }
 
     }
+    return=()=>{
+        this.setState({ loading: true })
+        let data=this.props.bookProfile;
+        data.category='book';
+        let temp = this;
+        console.log(data)
+        apicall.rentalReturn(this.props.userProfile.UserId, data, function (dataCallback) {
+            console.log(dataCallback)
+            temp.setState({ loading: false })
+            temp.returnConfirmation();
+            temp.props.closeProfile();
+            temp.props.history.push(`/ecatalog`);
+
+        });
+
+    }
+    addToCart=()=>{
+        this.setState({ loading: true })
+        let data=this.props.bookProfile;
+        data.category='book';
+        let temp = this;
+        console.log(data)
+        apicall.addCart(this.props.userProfile.UserId, data, function (dataCallback) {
+            console.log(dataCallback)
+            temp.setState({ loading: false })
+            temp.addCartConfirmation();
+            temp.props.closeProfile();
+            temp.props.history.push(`/ecatalog`);
+
+        });
+    }
+    removeFromCart=()=>{
+        this.setState({ loading: true })
+        let temp = this;
+        apicall.removeCart(this.props.userProfile.UserId, this.props.bookProfile.index, function (dataCallback) {
+            temp.setState({ loading: false })
+            temp.removeCartConfirmation();
+            temp.props.closeProfile();
+            temp.props.history.push(`/ecatalog`);
+            temp.forceUpdate();
+
+        });
+    }
+    addCartConfirmation = () => {
+        notification.success({
+            message: 'Sucess',
+            description: 'Book has been added to Cart!',
+            duration: 6,
+        });
+    };
+    removeCartConfirmation = () => {
+        notification.success({
+            message: 'Sucess',
+            description: 'Book has been removed from Cart',
+            duration: 6,
+        });
+    };
+    returnConfirmation = () => {
+        notification.success({
+            message: 'Sucess',
+            description: 'Book has been returned successfully!',
+            duration: 6,
+        });
+    };
 
     render() {
         console.log(this.props.bookProfile);
@@ -611,6 +669,13 @@ class BookProfile extends Component {
                                         >
                                             {this.props.rent ? "Return Book" : "Add Book to Cart"}
                                         </Button>) : '')}
+                            {this.props.cart ?<Button
+                                className={"login-button"}
+                                fluid
+                                size="large"
+                                onClick={this.removeFromCart}>
+                                Remove Movie from Cart
+                            </Button>: '' }
                         </Form>
                         {this.props.rent || this.props.cart || !this.props.bookProfile || this.props.work ?
                             '' :

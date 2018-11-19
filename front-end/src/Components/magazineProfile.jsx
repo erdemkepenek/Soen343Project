@@ -460,18 +460,7 @@ class MagazineProfile extends Component {
                         onClick={this.addToCart}>
                         Add Magazine to Cart
                                         </Button></Tooltip> :
-                    <Button
-                      className={"login-button"}
-                      fluid
-                      size="large"
-                      onClick={
-                        this.props.rent
-                          ? this.return
-                          : this.addToCart
-                      }
-                    >
-                      {this.props.rent ? "Return Magazine" : "Add Magazine to Cart"}
-                    </Button>) : '')}
+                  ''): '')}
             </Form>
             {this.props.rent || this.props.cart || !this.props.magazineProfile || this.props.work ?
               '' :

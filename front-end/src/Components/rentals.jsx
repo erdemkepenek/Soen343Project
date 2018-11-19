@@ -14,12 +14,6 @@ import ApiCalls from '../class/apiCalls'
 
 let apicall = new ApiCalls;
 let tableArray= []
-const options = [
-    { key: 1, text: 'Book', value: "Book" },
-    { key: 2, text: 'Magazine', value: "Magazine" },
-    { key: 3, text: 'Music', value: "Music" },
-    { key: 4, text: 'Movie', value: "Movie" },
-]
 
 class Rentals extends Component {
     constructor(props) {
