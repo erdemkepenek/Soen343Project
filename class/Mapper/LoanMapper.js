@@ -8,7 +8,6 @@ class LoanMapper {
     this.LoanUnitOfWork = new UnitOfWork();
     this.LoanIdentitymap = new IdentityMap();
   }
-
   viewAllLoans(callback) {
     console.log("[LoanMapper] viewLoans()");
     let IDM = this.LoanIdentitymap;
@@ -79,7 +78,9 @@ class LoanMapper {
     }
     let updates = items.updates;
     for (var i = 0; i < updates.length; i++) {
+	  let item_id = updates[i].itemId;
       this.LoanTDG.returnItem(userId, updates[i].itemId, function (msg) {
+		msg.itemId=item_id;
         g_msg.returned.push(msg);
       });
     }
