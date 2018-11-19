@@ -393,6 +393,64 @@ class MusicProfile extends Component {
 
         });
     }
+    previous = ()=>{
+        if(this.props.musicProfile.index !== 0){
+            this.props.changeProfile(this.props.catalog[this.props.musicProfile.index-1])
+            this.setState({
+                Title: this.props.catalog[this.props.musicProfile.index-1].Title,
+                artist: this.props.catalog[this.props.musicProfile.index-1].Artist,
+                label: this.props.catalog[this.props.musicProfile.index-1].Label,
+                musicType: this.props.catalog[this.props.musicProfile.index-1].Type,
+                releaseDate: moment(this.props.catalog[this.props.musicProfile.index-1].ReleaseDate).format("YYYY-MM-DD"),
+                ASIN: this.props.catalog[this.props.musicProfile.index-1].ASIN,
+                quantity: this.props.catalog[this.props.musicProfile.index-1].Quantity,
+                available: this.props.catalog[this.props.musicProfile.index-1].available,});
+            this.props.history.push(`/ecatalog/${this.props.catalog[this.props.musicProfile.index-1].Title}`);
+            this.forceUpdate();
+        }else{
+            this.props.changeProfile(this.props.catalog[this.props.catalog.length-1])
+            this.setState({
+                Title: this.props.catalog[this.props.catalog.length-1].Title,
+                artist: this.props.catalog[this.props.catalog.length-1].Artist,
+                label: this.props.catalog[this.props.catalog.length-1].Label,
+                musicType: this.props.catalog[this.props.catalog.length-1].Type,
+                releaseDate: moment(this.props.catalog[this.props.catalog.length-1].ReleaseDate).format("YYYY-MM-DD"),
+                ASIN: this.props.catalog[this.props.catalog.length-1].ASIN,
+                quantity: this.props.catalog[this.props.catalog.length-1].Quantity,
+                available: this.props.catalog[this.props.catalog.length-1].available,});
+            this.props.history.push(`/ecatalog/${this.props.catalog[this.props.catalog.length-1].Title}`);
+            this.forceUpdate();
+        }
+    }
+    next = ()=>{
+        if(this.props.musicProfile.index !== this.props.catalog.length-1){
+            this.props.changeProfile(this.props.catalog[this.props.musicProfile.index+1]);
+            this.setState({
+                Title: this.props.catalog[this.props.musicProfile.index+1].Title,
+                artist: this.props.catalog[this.props.musicProfile.index+1].Artist,
+                label: this.props.catalog[this.props.musicProfile.index+1].Label,
+                musicType: this.props.catalog[this.props.musicProfile.index+1].Type,
+                releaseDate: moment(this.props.catalog[this.props.musicProfile.index+1].ReleaseDate).format("YYYY-MM-DD"),
+                ASIN: this.props.catalog[this.props.musicProfile.index+1].ASIN,
+                quantity: this.props.catalog[this.props.musicProfile.index+1].Quantity,
+                available: this.props.catalog[this.props.musicProfile.index+1].available,});
+            this.props.history.push(`/ecatalog/${this.props.catalog[this.props.musicProfile.index+1].Title}`);
+            this.forceUpdate();
+        }else{
+            this.props.changeProfile(this.props.catalog[0]);
+            this.setState({
+                Title: this.props.catalog[0].Title,
+                artist: this.props.catalog[0].Artist,
+                label: this.props.catalog[0].Label,
+                musicType: this.props.catalog[0].Type,
+                releaseDate: moment(this.props.catalog[0].ReleaseDate).format("YYYY-MM-DD"),
+                ASIN: this.props.catalog[0].ASIN,
+                quantity: this.props.catalog[0].Quantity,
+                available: this.props.catalog[0].available,});
+            this.props.history.push(`/ecatalog/${this.props.catalog[0].Title}`);
+            this.forceUpdate();
+        }
+    }
 
     render() {
         console.log(this.props.musicProfile);
@@ -557,12 +615,19 @@ class MusicProfile extends Component {
                                         >
                                             {this.props.rent ? "Return Music" : "Add Music to Cart"}
                                         </Button>): '')}
+                            {this.props.cart ?<Button
+                                className={"login-button"}
+                                fluid
+                                size="large"
+                                onClick={this.removeFromCart}>
+                                Remove Music from Cart
+                            </Button>: '' }
                         </Form>
                         {this.props.rent || this.props.cart || !this.props.musicProfile || this.props.work?
                             '':
                             <div className='nextprevButton-container'>
-                                <Button icon='long arrow alternate left' content='Previus Item' onClick={this.backToCatalog}/>
-                                <Button icon='long arrow alternate right' labelPosition='right' content='Next Item' onClick={this.backToCatalog}/>
+                                <Button icon='long arrow alternate left' content='Previus Item' onClick={this.previous}/>
+                                <Button icon='long arrow alternate right' labelPosition='right' content='Next Item' onClick={this.next}/>
                             </div>}
                     </div>
 
@@ -574,7 +639,8 @@ class MusicProfile extends Component {
 }
 function mapStateToProps(state){
     return {
-        userProfile: state.AdminReducer.userProfile
+        userProfile: state.AdminReducer.userProfile,
+        catalog: state.AdminReducer.catalog,
     };
 
 }

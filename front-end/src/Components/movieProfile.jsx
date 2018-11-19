@@ -104,8 +104,8 @@ class MovieProfile extends Component {
     }
 
    editmovie=()=>{
-        let {Title,director,actors,producers, subtitles, language, dubbed, releaseDate, runTime,copy } = this.state;
-        if(!Title || !director || !actors || !producers || !subtitles|| !language || !dubbed|| !releaseDate || !runTime){
+        let {Title,director,actors,producers, subtitles, language, releaseDate, runTime,copy,dubbed } = this.state;
+        if(!Title || !director || !actors || !producers || !subtitles|| !language || !releaseDate || !runTime){
             if(!Title){
                 this.setState({errorTitle: true})
             }
@@ -123,9 +123,6 @@ class MovieProfile extends Component {
             }
             if(!language){
                 this.setState({errorLanguage: true})
-            }
-            if(!dubbed){
-                this.setState({errorDubbed: true})
             }
             if(!releaseDate){
                 this.setState({errorReleaseDate: true})
@@ -212,8 +209,8 @@ class MovieProfile extends Component {
     };
 
     addmovie=()=>{
-        let {Title,director,actors,producers, subtitles, language, dubbed, releaseDate, runTime,copy} = this.state;
-        if(!Title || !director || !actors || !producers || !subtitles|| !language || !dubbed|| !releaseDate || !runTime){
+        let {Title,director,actors,producers, subtitles, language, releaseDate, runTime,copy,dubbed} = this.state;
+        if(!Title || !director || !actors || !producers || !subtitles|| !language || !releaseDate || !runTime){
             if(!Title){
                 this.setState({errorTitle: true})
             }
@@ -231,9 +228,6 @@ class MovieProfile extends Component {
             }
             if(!language){
                 this.setState({errorLanguage: true})
-            }
-            if(!dubbed){
-                this.setState({errorDubbed: true})
             }
             if(!releaseDate){
                 this.setState({errorReleaseDate: true})
@@ -539,7 +533,7 @@ class MovieProfile extends Component {
                                 <div className="MainContainer-upper-container-second-text">
                                 {this.props.movieProfile?
                                     (this.props.userProfile.type ===0 || this.props.rent || this.props.work?
-                                        "You can see the details of magazine":
+                                        "You can see the details of Movie":
                                     "You can edit a Movie") :
                                     "You can add a new movie to the system!"}
                                     

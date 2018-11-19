@@ -321,6 +321,60 @@ class MagazineProfile extends Component {
     console.log(this.props.magazineProfile.index)
 
   }
+    previous = ()=>{
+        if(this.props.magazineProfile.index !== 0){
+            this.props.changeProfile(this.props.catalog[this.props.magazineProfile.index-1])
+            this.setState({
+                Title: this.props.catalog[this.props.magazineProfile.index-1].Title,
+                publisher: this.props.catalog[this.props.magazineProfile.index-1].Publisher,
+                language: this.props.catalog[this.props.magazineProfile.index-1].Language,
+                ISBN10: this.props.catalog[this.props.magazineProfile.index-1]['ISBN-10'],
+                ISBN13: this.props.catalog[this.props.magazineProfile.index-1]['ISBN-13'],
+                quantity: this.props.catalog[this.props.magazineProfile.index-1].Quantity,
+                available: this.props.catalog[this.props.magazineProfile.index-1].available,});
+            this.props.history.push(`/ecatalog/${this.props.catalog[this.props.magazineProfile.index-1].Title}`);
+            this.forceUpdate();
+        }else{
+            this.props.changeProfile(this.props.catalog[this.props.catalog.length-1])
+            this.setState({
+                Title: this.props.catalog[this.props.catalog.length-1].Title,
+                publisher: this.props.catalog[this.props.catalog.length-1].Publisher,
+                language: this.props.catalog[this.props.catalog.length-1].Language,
+                ISBN10: this.props.catalog[this.props.catalog.length-1]['ISBN-10'],
+                ISBN13: this.props.catalog[this.props.catalog.length-1]['ISBN-13'],
+                quantity: this.props.catalog[this.props.catalog.length-1].Quantity,
+                available: this.props.catalog[this.props.catalog.length-1].available,});
+            this.props.history.push(`/ecatalog/${this.props.catalog[this.props.catalog.length-1].Title}`);
+            this.forceUpdate();
+        }
+    }
+    next = ()=>{
+        if(this.props.magazineProfile.index !== this.props.catalog.length-1){
+            this.props.changeProfile(this.props.catalog[this.props.magazineProfile.index+1]);
+            this.setState({
+                Title: this.props.catalog[this.props.magazineProfile.index+1].Title,
+                publisher: this.props.catalog[this.props.magazineProfile.index+1].Publisher,
+                language: this.props.catalog[this.props.magazineProfile.index+1].Language,
+                ISBN10: this.props.catalog[this.props.magazineProfile.index+1]['ISBN-10'],
+                ISBN13: this.props.catalog[this.props.magazineProfile.index+1]['ISBN-13'],
+                quantity: this.props.catalog[this.props.magazineProfile.index+1].Quantity,
+                available: this.props.catalog[this.props.magazineProfile.index+1].available,});
+            this.props.history.push(`/ecatalog/${this.props.catalog[this.props.magazineProfile.index+1].Title}`);
+            this.forceUpdate();
+        }else{
+            this.props.changeProfile(this.props.catalog[0]);
+            this.setState({
+                Title: this.props.catalog[0].Title,
+                publisher: this.props.catalog[0].Publisher,
+                language: this.props.catalog[0].Language,
+                ISBN10: this.props.catalog[0]['ISBN-10'],
+                ISBN13: this.props.catalog[0]['ISBN-13'],
+                quantity: this.props.catalog[0].Quantity,
+                available: this.props.catalog[0].available,});
+            this.props.history.push(`/ecatalog/${this.props.catalog[0].Title}`);
+            this.forceUpdate();
+        }
+    }
 
   render() {
     console.log(this.props.magazineProfile);
@@ -360,7 +414,7 @@ class MagazineProfile extends Component {
                 <div className="MainContainer-upper-container-second-text">
                   {this.props.magazineProfile ?
                     (this.props.userProfile.type === 0 || this.props.rent || this.props.work ?
-                      "You can see the details of Music" :
+                      "You can see the details of Magazine" :
                       "You can edit a magazine")
                     : "You can add a new magazine to the system!"}
 
@@ -465,8 +519,8 @@ class MagazineProfile extends Component {
             {this.props.rent || this.props.cart || !this.props.magazineProfile || this.props.work ?
               '' :
               <div className='nextprevButton-container'>
-                <Button icon='long arrow alternate left' content='Previus Item' onClick={this.backToCatalog} />
-                <Button icon='long arrow alternate right' labelPosition='right' content='Next Item' onClick={this.backToCatalog} />
+                  <Button icon='long arrow alternate left' content='Previus Item' onClick={this.previous}/>
+                  <Button icon='long arrow alternate right' labelPosition='right' content='Next Item' onClick={this.next}/>
               </div>}
           </div>
 
@@ -479,6 +533,7 @@ class MagazineProfile extends Component {
 function mapStateToProps(state) {
   return {
     userProfile: state.AdminReducer.userProfile,
+      catalog: state.AdminReducer.catalog,
   };
 
 }
