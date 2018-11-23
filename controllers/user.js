@@ -3,15 +3,26 @@ const Controller = require("../class/Controller.js");
 const router = express.Router();
 
 myController = new Controller();
+// COMP 346 style,
+let admin_login_lock = 1;
 
 router.post("/login", function (req, res) {
     let user = req.body;
     res.setHeader('Content-Type', 'application/json');
 	myController.userLogin(user.email,user.password,function(msg){	console.log(msg)
 		if(msg.success === 'true'){
-            myController.logActivityMapperAdd(msg.data.UserId,"login",function(msg_log){
-                res.send(JSON.stringify(msg));
-            })
+			if( (msg.data.type===1 && admin_login_lock===1) || msg.data.type===0 ){
+				if(msg.data.type===1){
+					//take lock
+					admin_login_lock = 0;
+				}
+				myController.logActivityMapperAdd(msg.data.UserId,"login",function(msg_log){
+					res.send(JSON.stringify(msg));
+				})
+			}
+			else{
+				res.send(JSON.stringify({success:"false",message:"An admin is already logged in"}));
+			}
 		}else{
             res.send(JSON.stringify(msg));
 		}
@@ -23,6 +34,10 @@ router.post("/login", function (req, res) {
 router.post("/logout", function (req, res) {
     let data = req.body;
     res.setHeader('Content-Type', 'application/json');
+	if(data.data.type=1){
+		//Release lock;
+		admin_login_lock=1;
+	}
     myController.logActivityMapperAdd(data.data.UserId,"logout",function(msg){
         res.send(JSON.stringify(msg));
     })

@@ -10,11 +10,12 @@ import {Redirect} from "react-router";
 import DataTable from '../Components/Common/table/table'
 import RedirectItem from "./redirectItem"
 import ApiCalls from '../class/apiCalls'
-import {Modal, notification} from "antd";
+import {Modal, notification, Tooltip} from "antd";
 let apicall = new ApiCalls;
 
 let tableArray= []
-
+let rentals=[];
+let loanNumber=0;
 class Cart extends Component {
     constructor(props) {
         super(props);
@@ -41,13 +42,41 @@ class Cart extends Component {
                 registrationData.index=key
                 tableArray.push(registrationData)
             })
-            this1.setState({loading:false})
+            this1.loadRentalsClient();
             this1.forceUpdate();
         });
     }
 
     closeProfile=()=>{
         this.setState({profile: ""})
+    }
+    loadRentalsClient=()=>{
+        rentals= [];
+        let this1= this;
+        loanNumber=0
+        apicall.viewRentalsClient(this.props.userProfile.UserId,function(dataRentals){
+            dataRentals.books.map((bookData)=>{
+                bookData.typecategory='Book'
+                rentals.push(bookData)
+            })
+            dataRentals.magazines.map((magazineData)=>{
+                magazineData.typecategory='Magazine'
+                rentals.push(magazineData)
+            })
+            dataRentals.music.map((musicData)=>{
+                musicData.typecategory='Music'
+                rentals.push(musicData)
+            })
+            dataRentals.movies.map((movieData)=>{
+                movieData.typecategory='Movie'
+                rentals.push(movieData)
+            })
+            loanNumber = rentals.length + tableArray.length;
+            this1.forceUpdate();
+            this1.setState({loading:false})
+
+        });
+
     }
     openProfile=(data)=>{
         console.log(data);
@@ -76,6 +105,9 @@ class Cart extends Component {
         e.preventDefault()
         this.setState({ modal1Visible });
     }
+    empty=()=>{
+
+    }
 
     render() {
         if(!this.props.userProfile) {
@@ -103,6 +135,7 @@ class Cart extends Component {
                 ]
                 tableItems.push(arrData);
             })
+            console.log(loanNumber)
             return (
                 <div className='main-container'>
                     <Modal
@@ -126,7 +159,11 @@ class Cart extends Component {
                                 </div>
                             </div>
                             <div className='MainContainer-upper-container-button'>
-                                <Button content='Commit All' onClick={(e)=>this.handleModal(e,true)} disabled={tableItems.length===0}/>
+                                {loanNumber >5 ?
+                                <Tooltip className={"login-button2"} placement="top" title="There is a limit of renting 5 items" arrowPointAtCenter>
+                                <Button content='Commit All' onClick={this.empty}/>
+                                </Tooltip>:
+                                <Button content='Commit All' onClick={(e)=>this.handleModal(e,true)} disabled={tableItems.length===0 || this.state.loading}/>}
                             </div>
 
                         </div>

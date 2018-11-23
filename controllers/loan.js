@@ -19,19 +19,27 @@ router.post("/cart/remove", function (req, res) {
         res.send(JSON.stringify(msg));
     });
 });
-//Use this API call if needed
 router.post("/return/remove", function (req, res) {
     let data = req.body;
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify("hello"));
-});
-//Direct access commit (auto commit) for returnin an Item ONLY
-router.post("/return", function (req, res) {
-    let data = req.body;
-    res.setHeader('Content-Type', 'application/json');
-	myController.loanReturnDirect(data.userId,data.item,function(msg){
+	myController.rentalReturnRemove(data.userId,data.index,function(msg){
 		res.send(JSON.stringify(msg));
 	})
+});
+router.post("/return/add", function (req, res) {
+    let data = req.body;
+    res.setHeader('Content-Type', 'application/json');
+    myController.rentalReturnAdd(data.userId,data.item,function(msg){
+        res.send(JSON.stringify(msg));
+    })
+});
+router.post("/return/view", function (req, res) {
+    let data = req.body;
+    res.setHeader('Content-Type', 'application/json');
+    myController.rentalUncomittedWork(data.userId,function(msg){
+        res.send(JSON.stringify(msg));
+    })
 });
 router.post("/view/all", function (req, res) {
     let data = req.body;
@@ -58,6 +66,14 @@ router.post("/commit", function (req, res) {
     let data = req.body;
     res.setHeader('Content-Type', 'application/json');
     myController.loanCommit(data.userId, function (msg) {
+        res.send(JSON.stringify(msg));
+    })
+});
+router.post("/return/commit", function (req, res) {
+    console.log("hleJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJjjlo")
+    let data = req.body;
+    res.setHeader('Content-Type', 'application/json');
+    myController.rentalReturnCommit(data.userId, function (msg) {
         res.send(JSON.stringify(msg));
     })
 });

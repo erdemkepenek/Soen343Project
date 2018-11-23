@@ -87,6 +87,9 @@ class Rentals extends Component {
         });
 
     }
+    workrentals=()=>{ //sds
+        this.props.history.push(`/workRentals`);
+    }
 
     closeProfile=()=>{
         this.setState({profile: ""})
@@ -159,6 +162,10 @@ class Rentals extends Component {
                                 <div className="MainContainer-upper-container-second-text">
                                     You can select one of the item to see their details and to return!
                                 </div>
+                            </div>
+                            <div className='MainContainer-upper-container-button'>
+                                {this.props.userProfile.type ===0 ?
+                                <Button content='Work Rentals' onClick={this.workrentals}/> : ''}
                             </div>
 
 

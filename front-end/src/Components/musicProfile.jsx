@@ -187,7 +187,7 @@ class MusicProfile extends Component {
     returnConfirmation = () => {
         notification.success({
             message: 'Sucess',
-            description: 'Music has been returned successfully!',
+            description: 'Music has been added to the work Rentals!',
             duration: 6,
         });
     };
@@ -318,7 +318,7 @@ class MusicProfile extends Component {
             temp.setState({ loading: false })
             temp.returnConfirmation();
             temp.props.closeProfile();
-            temp.props.history.push(`/ecatalog`);
+            temp.props.history.push(`/rentals`);
 
         });
     }
@@ -451,6 +451,25 @@ class MusicProfile extends Component {
             this.forceUpdate();
         }
     }
+    removeFromRentReturn=()=>{
+        this.setState({ loading: true })
+        let temp = this;
+        apicall.removeRentalReturnWork(this.props.userProfile.UserId, this.props.musicProfile.index, function (dataCallback) {
+            temp.setState({ loading: false })
+            temp.removeRentalReturnConfirmation();
+            temp.props.closeProfile();
+            temp.props.history.push(`/workrentals`);
+            temp.forceUpdate();
+
+        });
+    }
+    removeRentalReturnConfirmation = () => {
+        notification.success({
+            message: 'Sucess',
+            description: 'Movie has been removed from Work Rentals',
+            duration: 6,
+        });
+    };
 
     render() {
         console.log(this.props.musicProfile);
@@ -590,17 +609,17 @@ class MusicProfile extends Component {
                                     onChange={this.changeCopy}
                                     label={this.props.musicProfile ? 'Number of Copies would you like to Add:' : 'Number of Copies will be added as Default:' }
                                     type= "number"/>:''}
-                            {this.props.userProfile.type ===1 && !this.props.rent?
+                            {this.props.userProfile.type ===1 && !this.props.rent && !this.props.workRent?
                             <Button className='login-button' fluid size='large' onClick={this.props.musicProfile?(this.props.work? this.removeFromWork: this.editMusic) :this.addMusic}>
                             {this.props.musicProfile? (this.props.work? "Remove From Work": "Edit Music") : "Add Music"}
-                            </Button>: (!this.props.cart && this.props.userProfile.type=== 0?
+                            </Button>: (!this.props.cart && this.props.userProfile.type=== 0 && !this.props.workRent?
                                     (!this.props.rent && this.state.available===0 ?
                                         <Tooltip placement="top" title="There is no copy available" arrowPointAtCenter>
                                             <Button
                                                 className={"login-button2"}
                                                 fluid
                                                 size="large"
-                                                onClick={this.addToCart}>
+                                                onClick={this.state.available===0 ? '' : this.addToCart}>
                                                 Add Music to Cart
                                             </Button></Tooltip>:
                                         <Button
@@ -621,6 +640,13 @@ class MusicProfile extends Component {
                                 size="large"
                                 onClick={this.removeFromCart}>
                                 Remove Music from Cart
+                            </Button>: '' }
+                            {this.props.workRent ?<Button
+                                className={"login-button"}
+                                fluid
+                                size="large"
+                                onClick={this.removeFromRentReturn}>
+                                Remove Music from Work Rentals
                             </Button>: '' }
                         </Form>
                         {this.props.rent || this.props.cart || !this.props.musicProfile || this.props.work?

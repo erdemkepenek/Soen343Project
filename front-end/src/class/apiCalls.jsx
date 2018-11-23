@@ -752,7 +752,39 @@ class ApiCalls extends Component {
         );
     }
     rentalReturn=(userId,item,callback)=> {
-        axios.post('/loan/return',{userId:userId,item:item}).then(
+        axios.post('/loan/return/add',{userId:userId,item:item}).then(
+            function (response, err) {
+                console.log(response)
+                if(response.data){
+                    callback(response.data);
+                }
+            }.bind(this)
+        );
+    }
+    viewRentalReturnWork=(userId,callback)=> {
+        axios.post('/loan/return/view',{userId:userId}).then(
+            function (response, err) {
+                console.log(response)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data);
+                }
+            }.bind(this)
+        );
+    }
+    removeRentalReturnWork=(userId,index,callback)=> {
+        axios.post('/loan/return/remove',{userId:userId,index:index}).then(
+            function (response, err) {
+                console.log(response)
+                if(response.data){
+                    console.log(response.data)
+                    callback(response.data);
+                }
+            }.bind(this)
+        );
+    }
+    commitRentalReturnWork=(userId,callback)=> {
+        axios.post('/loan/return/commit',{userId:userId}).then(
             function (response, err) {
                 console.log(response)
                 if(response.data){

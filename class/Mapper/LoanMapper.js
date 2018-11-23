@@ -49,7 +49,7 @@ class LoanMapper {
   }
   removeReturnItem(id, index_) {
     console.log("[UserMapper] removeReturnItem()");
-    this.BookUnitOfWork.removeDirty(id, index_);
+    this.LoanUnitOfWork.removeDirty(id, index_);
   }
   viewUncommittedWork(id, callback) {
     console.log("[LoanMapper] viewUncommittedWork()");

@@ -435,7 +435,7 @@ class BookProfile extends Component {
             temp.setState({ loading: false })
             temp.returnConfirmation();
             temp.props.closeProfile();
-            temp.props.history.push(`/ecatalog`);
+            temp.props.history.push(`/rentals`);
 
         });
 
@@ -484,10 +484,29 @@ class BookProfile extends Component {
     returnConfirmation = () => {
         notification.success({
             message: 'Sucess',
-            description: 'Book has been returned successfully!',
+            description: 'Book has been added to the work Rentals!',
             duration: 6,
         });
     };
+    removeRentalReturnConfirmation = () => {
+        notification.success({
+            message: 'Sucess',
+            description: 'Movie has been removed from Work Rentals',
+            duration: 6,
+        });
+    };
+    removeFromRentReturn=()=>{
+        this.setState({ loading: true })
+        let temp = this;
+        apicall.removeRentalReturnWork(this.props.userProfile.UserId, this.props.bookProfile.index, function (dataCallback) {
+            temp.setState({ loading: false })
+            temp.removeRentalReturnConfirmation();
+            temp.props.closeProfile();
+            temp.props.history.push(`/workrentals`);
+            temp.forceUpdate();
+
+        });
+    }
 
     render() {
         console.log(this.props.bookProfile);
@@ -644,17 +663,17 @@ class BookProfile extends Component {
                                     onChange={this.changeCopy}
                                     label={this.props.bookProfile ? 'Number of Copies would you like to Add:' : 'Number of Copies will be added as Default:'}
                                     type="number" /> : ''}
-                            {this.props.userProfile.type === 1 && !this.props.rent ?
+                            {this.props.userProfile.type === 1 && !this.props.rent && !this.props.workRent?
                                 <Button className='login-button' fluid size='large' onClick={this.props.bookProfile ? (this.props.work ? this.removeFromWork : this.editBook) : this.addBook}>
                                     {this.props.bookProfile ? (this.props.work ? "Remove From Work" : "Edit Book") : "Add Book"}
-                                </Button> : (!this.props.cart && this.props.userProfile.type === 0 ?
+                                </Button> : (!this.props.cart && this.props.userProfile.type === 0 && !this.props.workRent ?
                                     (!this.props.rent && this.state.available === 0 ?
                                         <Tooltip placement="top" title="There is no copy available" arrowPointAtCenter>
                                             <Button
                                                 className={"login-button2"}
                                                 fluid
                                                 size="large"
-                                                onClick={this.addToCart}>
+                                                onClick={this.state.available===0 ? '' : this.addToCart}>
                                                 Add Book to Cart
                                         </Button></Tooltip> :
                                         <Button
@@ -675,6 +694,13 @@ class BookProfile extends Component {
                                 size="large"
                                 onClick={this.removeFromCart}>
                                 Remove Book from Cart
+                            </Button>: '' }
+                            {this.props.workRent ?<Button
+                                className={"login-button"}
+                                fluid
+                                size="large"
+                                onClick={this.removeFromRentReturn}>
+                                Remove Book from Work Rentals
                             </Button>: '' }
                         </Form>
                         {this.props.rent || this.props.cart || !this.props.bookProfile || this.props.work ?

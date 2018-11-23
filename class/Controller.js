@@ -17,8 +17,7 @@ class Controller {
     this.LogActivity = new LogActivityMapper();
     this.UserMapper = new UserMapper();
 	this.LoanMapper = new LoanMapper();
-	//Special Usage of LoanMapper to directly return item by adding auto commit
-	this.DirectLoanReturnMapper = new LoanMapper();
+	this.ReturnRentalMapper = new LoanMapper();
 
   }
 
@@ -375,16 +374,31 @@ class Controller {
 		  confirmation(msg);
 	  })
   }
-  loanReturnDirect(userId, item,confirmation){
-	  console.log("[Controller] loanReturnDirect()");
-      let temp_BookMapper =this.BookMapper
+  rentalReturnAdd(userId, item,confirmation){
+	  console.log("[Controller] rentalReturnAdd()");
+	  this.ReturnRentalMapper.addReturnItem(userId,item);
+      confirmation({ status: "true", message: "no message" });
+  }
+  rentalReturnRemove(userId, index,confirmation){
+	  console.log("[Controller] rentalReturnRemove()");
+	  this.ReturnRentalMapper.removeReturnItem(userId,index);
+      confirmation({ status: "true", message: "no message" });
+  }
+  rentalUncomittedWork(userId,confirmation){
+        console.log("[Controller] rentalUncomittedWork()");
+        this.ReturnRentalMapper.viewUncommittedWork(userId, function(msg){
+            confirmation(msg);
+        })
+    }
+  rentalReturnCommit(userId,confirmation){
+	  console.log("[Controller] rentalReturnCommit()");
+	  let temp_BookMapper =this.BookMapper
       let temp_MagazineMapper= this.MagazineMapper;
       let temp_MovieMapper= this.MovieMapper
       let temp_MusicMapper = this.MusicMapper
-	  this.DirectLoanReturnMapper.addReturnItem(userId,item);
 	  //Direct commit
 	  let temp = this.TransactionHistory;
-	  this.DirectLoanReturnMapper.commit(userId, function(msg, items){
+	  this.ReturnRentalMapper.commit(userId, function(msg, items){
 		  for(var i = 0;i<msg.returned.length;i++){
 			if(msg.returned[i].success=="true"){
 				temp.addActivity(items.id,"return",msg.returned[i].itemId,function(msg){
@@ -399,7 +413,6 @@ class Controller {
 		}
 	  });
   }
-  
   loanCommit(userId,confirmation){
 	let temp = this.TransactionHistory;
 	let temp_BookMapper =this.BookMapper

@@ -506,14 +506,7 @@ class MagazineProfile extends Component {
                   {this.props.magazineProfile ? (this.props.work ? "Remove From Work" : "Edit Magazine") : "Add Magazine"}
                 </Button> : (!this.props.cart && this.props.userProfile.type === 0 ?
                   (!this.props.rent && this.state.available === 0 ?
-                    <Tooltip placement="top" title="There is no copy available" arrowPointAtCenter>
-                      <Button
-                        className={"login-button2"}
-                        fluid
-                        size="large"
-                        onClick={this.addToCart}>
-                        Add Magazine to Cart
-                                        </Button></Tooltip> :
+                   '' :
                   ''): '')}
             </Form>
             {this.props.rent || this.props.cart || !this.props.magazineProfile || this.props.work ?

@@ -55,7 +55,7 @@ class LoanTDG {
       }
     }
     //Used to check if a User has reached his allwed number of items to loan
-    let sqlCheck = 'select count(itemId) as loans from Loan  where UserId = ' + userId +' group by UserId';
+    let sqlCheck = 'select count(Loan.UserId) as loans from Loan right join User on Loan.UserId = User.UserId where User.UserId = ' + userId+' group by User.UserId';
 
     //Used to insert an item in the loan table and change the items availability
     let sql =
