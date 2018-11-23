@@ -377,11 +377,19 @@ class Controller {
   rentalReturnAdd(userId, item,confirmation){
 	  console.log("[Controller] rentalReturnAdd()");
 	  this.ReturnRentalMapper.addReturnItem(userId,item);
+      confirmation({ status: "true", message: "no message" });
   }
   rentalReturnRemove(userId, index,confirmation){
 	  console.log("[Controller] rentalReturnRemove()");
 	  this.ReturnRentalMapper.removeReturnItem(userId,index);
+      confirmation({ status: "true", message: "no message" });
   }
+  rentalUncomittedWork(userId,confirmation){
+        console.log("[Controller] rentalUncomittedWork()");
+        this.ReturnRentalMapper.viewUncommittedWork(userId, function(msg){
+            confirmation(msg);
+        })
+    }
   rentalReturnCommit(userId,confirmation){
 	  console.log("[Controller] rentalReturnCommit()");
 	  let temp_BookMapper =this.BookMapper

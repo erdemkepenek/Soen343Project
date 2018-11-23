@@ -200,10 +200,17 @@ class MovieProfile extends Component {
             duration: 6,
         });
     };
+    removeRentalReturnConfirmation = () => {
+        notification.success({
+            message: 'Sucess',
+            description: 'Movie has been removed from Work Rentals',
+            duration: 6,
+        });
+    };
     returnConfirmation = () => {
         notification.success({
             message: 'Sucess',
-            description: 'Movie has been returned successfully!',
+            description: 'Movie has been added to the work Rentals!',
             duration: 6,
         });
     };
@@ -326,7 +333,7 @@ class MovieProfile extends Component {
             temp.setState({ loading: false })
             temp.returnConfirmation();
             temp.props.closeProfile();
-            temp.props.history.push(`/ecatalog`);
+            temp.props.history.push(`/rentals`);
 
         });
 
@@ -491,6 +498,18 @@ class MovieProfile extends Component {
                 temp.forceUpdate();
 
             });
+    }
+    removeFromRentReturn=()=>{
+        this.setState({ loading: true })
+        let temp = this;
+        apicall.removeRentalReturnWork(this.props.userProfile.UserId, this.props.movieProfile.index, function (dataCallback) {
+            temp.setState({ loading: false })
+            temp.removeRentalReturnConfirmation();
+            temp.props.closeProfile();
+            temp.props.history.push(`/workrentals`);
+            temp.forceUpdate();
+
+        });
     }
 
     render() {
@@ -667,10 +686,10 @@ class MovieProfile extends Component {
                                     onChange={this.changeCopy}
                                     label={this.props.movieProfile ? 'Number of Copies would you like to Add:' : 'Number of Copies will be added as Default:' }
                                     type= "number"/>:''}
-                            {this.props.userProfile.type ===1 && !this.props.rent?
+                            {this.props.userProfile.type ===1 && !this.props.rent && !this.props.workRent?
                             <Button className='login-button' fluid size='large' onClick={this.props.movieProfile?(this.props.work? this.removeFromWork: this.editmovie) :this.addmovie}>
                             {this.props.movieProfile? (this.props.work? "Remove From Work":"Edit Movie") : "Add Movie"}
-                            </Button>:(!this.props.cart && this.props.userProfile.type=== 0 ?
+                            </Button>:(!this.props.cart && this.props.userProfile.type=== 0 && !this.props.workRent?
                                     (!this.props.rent && this.state.available===0?
                                         <Tooltip placement="top" title="There is no copy available" arrowPointAtCenter>
                                             <Button
@@ -698,6 +717,13 @@ class MovieProfile extends Component {
                                 size="large"
                                 onClick={this.removeFromCart}>
                                 Remove Movie from Cart
+                            </Button>: '' }
+                            {this.props.workRent ?<Button
+                                className={"login-button"}
+                                fluid
+                                size="large"
+                                onClick={this.removeFromRentReturn}>
+                                Remove Movie from Work Rentals
                             </Button>: '' }
                         </Form>
                         {this.props.rent || this.props.cart || !this.props.movieProfile || this.props.work ?

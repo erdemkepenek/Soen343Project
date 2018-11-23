@@ -30,14 +30,14 @@ router.post("/return/remove", function (req, res) {
 router.post("/return/add", function (req, res) {
     let data = req.body;
     res.setHeader('Content-Type', 'application/json');
-	myController.rentalReturnAdd(data.userId,data.item,function(msg){
-		res.send(JSON.stringify(msg));
-	})
+    myController.rentalReturnAdd(data.userId,data.item,function(msg){
+        res.send(JSON.stringify(msg));
+    })
 });
-router.post("return/commit", function (req, res) {
+router.post("/return/view", function (req, res) {
     let data = req.body;
     res.setHeader('Content-Type', 'application/json');
-    myController.rentalReturnCommit(data.userId, function (msg) {
+    myController.rentalUncomittedWork(data.userId,function(msg){
         res.send(JSON.stringify(msg));
     })
 });
@@ -66,6 +66,14 @@ router.post("/commit", function (req, res) {
     let data = req.body;
     res.setHeader('Content-Type', 'application/json');
     myController.loanCommit(data.userId, function (msg) {
+        res.send(JSON.stringify(msg));
+    })
+});
+router.post("/return/commit", function (req, res) {
+    console.log("hleJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJjjlo")
+    let data = req.body;
+    res.setHeader('Content-Type', 'application/json');
+    myController.rentalReturnCommit(data.userId, function (msg) {
         res.send(JSON.stringify(msg));
     })
 });

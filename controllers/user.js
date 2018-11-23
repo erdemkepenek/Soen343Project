@@ -11,8 +11,8 @@ router.post("/login", function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 	myController.userLogin(user.email,user.password,function(msg){	console.log(msg)
 		if(msg.success === 'true'){
-			if( (msg.data.type=1 && admin_login_lock=1) || msg.data.type=0 ){
-				if(msg.data.type=1){
+			if( (msg.data.type===1 && admin_login_lock===1) || msg.data.type===0 ){
+				if(msg.data.type===1){
 					//take lock
 					admin_login_lock = 0;
 				}

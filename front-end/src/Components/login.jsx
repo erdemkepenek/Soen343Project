@@ -50,7 +50,7 @@ class Login extends Component {
             apicall.login(email,password,function(data){
                 temp2.setState({loading:false})
                 if(data.success === 'false'){
-                    temp2.loginError();
+                    temp2.loginError(data.message);
                 }else {
                     temp.dispatch({type: 'addUserProfile', data: data.data});
                     localStorage.setItem('jwtToken', JSON.stringify(data.data));
@@ -72,10 +72,10 @@ class Login extends Component {
             duration: 6,
         });
     };
-    loginError = () => {
+    loginError = (data) => {
         notification.error({
             message: 'Error',
-            description: 'You have entered wrong username or password!',
+            description: data+'!',
             duration:6,
         });
     };

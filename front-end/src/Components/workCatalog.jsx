@@ -16,7 +16,7 @@ import {Modal, notification,Tooltip} from "antd";
 let apicall = new ApiCalls;
 
 let tableArray = [];
-class WorkUsers extends Component {
+class WorkCatalog extends Component {
     constructor(props) {
         super(props);
         this.state = {profile:'',
@@ -240,4 +240,4 @@ function mapStateToProps(state){
     };
 
 }
-export default withRouter(connect(mapStateToProps)(WorkUsers));
+export default withRouter(connect(mapStateToProps)(WorkCatalog));

@@ -26,6 +26,8 @@ import Book from './Components/bookProfile'
 import Page404 from './Components/404page'
 import WorkUser from './Components/workUsers'
 import WorkCatalog from './Components/workCatalog'
+import WorkRentals from './Components/workRentals'
+
 class App extends Component {
     componentDidMount(){
         /*this.props.dispatch({type: 'addUserProfile', data: 'hello' });*/
@@ -39,6 +41,8 @@ class App extends Component {
         <Route exact path="/signup" component={Signup} />
         <Route exact path="/dashboard" component={Dashboard} />
         <Route exact path="/cart" component={Cart} />
+      <Route exact path="/workrentals" component={WorkRentals} />
+      <Route exact path="/workrentals/:email" component={WorkRentals} />
       <Route exact path="/cart/:title" component={Cart} />
         <Route exact path="/settings" component={Settings} />
         <Route exact path="/rentals" component={Rentals} />
