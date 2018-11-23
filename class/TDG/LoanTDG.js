@@ -29,7 +29,8 @@ class LoanTDG {
     };
   }
 
-
+  //@requires({userId != null}, {itemDesc != null}, {category != null}, {callback != null})
+  //@ensures({callback.msg.success == "true"}, {callback.msg.data == rows}, {callback.msg.message == "no message"})
   loanItem(userId, itemDesc, category, callback) {
     let loanDate = this.getCurrentDateWithAddition(0);
     var returnDate;
@@ -53,23 +54,53 @@ class LoanTDG {
           break;
       }
     }
+    //Used to check if a User has reached his allwed number of items to loan
+    let sqlCheck = 'select count(itemId) as loans from Loan  where UserId = ' + userId +' group by UserId';
+
+    //Used to insert an item in the loan table and change the items availability
     let sql =
       "set @item_id = getIDPh(" + itemDesc + ",'" + category + "');" +
       "update `Items` set available = 0 where id = @item_id;" +
       "INSERT INTO `Loan` (`UserId`, `itemId`, `loanDate`, `returnDate`) VALUES (" + userId + ", @item_id, '" + loanDate + "', '" + returnDate + "');"+
-	  "select @item_id;"
+    "select @item_id;"
+    
     console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
     console.log(sql);
     console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
     this.runQuery(function (conn, completedQuery) {
-      conn.query(sql, (err, rows, fields) => {
+      conn.query(sqlCheck, (err, rows, fields) => {
         if (!err) {
-			console.log(rows);
+			//console.log(rows);
           let msg = {};
           msg.success = "true";
           msg.message = "no message";
           msg.data = rows;
-          callback(msg);
+          if (msg.data[0].loans >= 5) {
+            msg.message = "Limit reached, you are not allowed to hold more than 5 items";
+            console.log('Limit reached');
+            callback(msg);
+          }
+          else 
+          {
+          //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+          conn.query(sql, (err, rows, fields) => {
+            if (!err) {
+              console.log(rows);
+              let msg = {};
+              msg.success = "true";
+              msg.data = rows;
+              callback(msg);
+            } else {
+              console.log(err);
+              let msg = {};
+              msg.success = "false";
+              msg.message = err.sqlMessage;
+              callback(msg);
+            }
+            completedQuery("[LoanTDG] loanItem()");
+          });
+          //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        }
         } else {
           console.log(err);
           let msg = {};
@@ -82,6 +113,8 @@ class LoanTDG {
     });
   }
 
+  //@requires({userId != null}, {itemId != null}, {callback != null})
+  //@ensures({callback.msg.success == "true"}, {callback.msg.data == rows}, {callback.msg.message == "no message"})
   returnItem(userId, itemId, callback) {
     let returnDate = this.getCurrentDate;
     let sql =
