@@ -29,7 +29,8 @@ class LoanTDG {
     };
   }
 
-
+  //@requires({userId != null}, {itemDesc != null}, {category != null}, {callback != null})
+  //@ensures({callback.msg.success == "true"}, {callback.msg.data == rows}, {callback.msg.message == "no message"})
   loanItem(userId, itemDesc, category, callback) {
     let loanDate = this.getCurrentDateWithAddition(0);
     var returnDate;
@@ -112,6 +113,8 @@ class LoanTDG {
     });
   }
 
+  //@requires({userId != null}, {itemId != null}, {callback != null})
+  //@ensures({callback.msg.success == "true"}, {callback.msg.data == rows}, {callback.msg.message == "no message"})
   returnItem(userId, itemId, callback) {
     let returnDate = this.getCurrentDate;
     let sql =
