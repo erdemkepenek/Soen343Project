@@ -10,7 +10,6 @@ const MagazineTDG = require("./class/TDG/MagazineTDG.js");
 const TransactionHistoryMapper = require("./class/Mapper/TransactionHistoryMapper.js");
 const LogActivityMapper = require("./class/Mapper/LogActivityMapper.js");
 const userTDG = require("./class/TDG/UserTDG.js");
-const logActivityTDG = require("./class/TDG/logActivityTDG.js");
 const transactionHistoryTDG = require("./class/TDG/transactionHistoryTDG.js");
 const LoanTDG = require("./class/TDG/LoanTDG.js");
 const itemTDG_ = require("./class/Mapper/LogActivityMapper.js");
