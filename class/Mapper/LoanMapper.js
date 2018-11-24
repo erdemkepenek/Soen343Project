@@ -2,6 +2,7 @@ const LoanTDG = require("../TDG/LoanTDG.js");
 const IdentityMap = require("../IdentityMap.js");
 const UnitOfWork = require("../UnitOfWork.js");
 
+
 class LoanMapper {
   constructor() {
     this.LoanTDG = new LoanTDG();

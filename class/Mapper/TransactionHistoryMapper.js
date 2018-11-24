@@ -1,6 +1,7 @@
 const TransactionHistoryTDG = require("../TDG/TransactionHistoryTDG.js");
 const IdentityMap = require("../IdentityMap.js");
 
+
 class TransactionHistoryMapper {
   constructor() {
     this.TransactionHistoryTDG = new TransactionHistoryTDG();

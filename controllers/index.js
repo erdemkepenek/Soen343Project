@@ -6,10 +6,10 @@ myController = new Controller();
 
 router.use('/auth', require('./auth.js'));
 router.use('/operation', require('./operation.js'));
-router.use('/book', require('./book.js'));
-router.use('/music', require('./music.js'));
-router.use('/movie', require('./movie.js'));
-router.use('/magazine', require('./magazine.js'));
+router.use('/book', require('./Book.js'));
+router.use('/music', require('./Music.js'));
+router.use('/movie', require('./Movie.js'));
+router.use('/magazine', require('./Magazine.js'));
 router.use('/user', require('./user.js'));
 router.use('/loan', require('./loan.js'));
 router.use('/history', require('./history.js'));
